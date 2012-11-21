@@ -96,8 +96,8 @@ document.onkeydown = function(event) {
     switch (key) {
     case 73: translateCursor( 0, -1); break;
     case 74: translateCursor(-1,  0); break;
-    case 75: translateCursor( 0,  1); break;
-    case 76: translateCursor( 1,  0); break;
+    case 75: translateCursor( 0, +1); break;
+    case 76: translateCursor(+1,  0); break;
     };
 };
 };
