@@ -5,19 +5,25 @@ html {
     font-family: sans-serif;
 }
 
-#theTable {
+#theGameContainer {
     margin-left:  auto;
     margin-right: auto;
     margin-top: 1em;
+
+    display: table;
+
+    /* border: 1px solid #ccc;*/
+    border-radius: 9px;
+    background-color: rgba(0, 0, 0, 0.10);
+    padding: 8px;
 }
 
 #theTable {
     border: 0px solid #aaa;
     background-color: #bbb;
     cursor: pointer;
-    border-spacing: 2px;
-    padding: 8px;
-    border-radius: 8px;
+    border-spacing: 1px;
+    padding: 0px;
 }
 
 #theTable thead {
