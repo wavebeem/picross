@@ -1,0 +1,50 @@
+html {
+    background-color: #eee;
+    color: #333;
+
+    font-family: sans-serif;
+}
+
+#theTable {
+    margin-left:  auto;
+    margin-right: auto;
+    margin-top: 1em;
+}
+
+#theTable {
+    border: 0px solid #aaa;
+    background-color: #bbb;
+    cursor: pointer;
+    border-spacing: 2px;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+#theTable thead {
+    display: none;
+}
+
+#theTable td {
+    text-align: center;
+
+    padding: 4px;
+
+    font-size: 24pt;
+
+    width:  32px;
+    height: 32px;
+
+    background-color: #ddd;
+
+    border: 4px solid transparent;
+}
+
+#theTable td.crosshair {
+    background-color: #ccc;
+}
+
+#theTable td.selected {
+    background-color: #aaa;
+
+    border-color: #888;
+}
