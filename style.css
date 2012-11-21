@@ -53,3 +53,7 @@ html {
     border-color: transparent;
     outline: 4px solid #fcaf3e;
 }
+
+#theTable td.filled {
+    background-color: #555;
+}

@@ -1,9 +1,9 @@
 (function() {
 var util = {};
-var table = [];
+var puzzle = [];
 var size = 10;
 
-var cursor = {row: 0, col: 0};
+var cursor = {row: 0, col: 0, isClicked: false};
 
 util.format = function(str /*, ... */) {
     var args = _.toArray(arguments).slice(1);
@@ -19,12 +19,22 @@ var highlight = function(row, col) {
     var classes = {2: 'selected', 1: 'crosshair'};
     _.times(size, function(r) {
         _.times(size, function(c) {
-            var td = table[c][r];
+            var td = puzzle[c][r];
             var R = row === r;
             var C = col === c;
-            td.className = classes[0 + R + C] || '';
+            var cls = classes[0 + R + C];
+            if (cls) {
+                $(td).addClass(cls);
+            }
         });
     });
+};
+
+var selectTile = function() {
+    var c = cursor.col;
+    var r = cursor.row;
+    var tile = puzzle[c][r];
+    $(tile).toggleClass('filled');
 };
 
 util.clamp = function(x, a, b) {
@@ -35,6 +45,8 @@ util.clamp = function(x, a, b) {
 };
 
 var moveCursor = function(row, col) {
+    $('#theTable td').removeClass('crosshair selected');
+
     row = util.clamp(row | 0, 0, size - 1);
     col = util.clamp(col | 0, 0, size - 1);
 
@@ -61,7 +73,7 @@ var loadGame = function() {
             row.push(td[0]);
         });
         tbody.append(tr);
-        table.push(row);
+        puzzle.push(row);
     });
 
     moveCursor(1, 1);
@@ -73,6 +85,9 @@ var loadGame = function() {
         var col = target.data('col') >>> 0;
 
         moveCursor(row, col);
+    }).on('click', 'td', function(event) {
+        console.log('Selecting...');
+        selectTile();
     });
 
     $(document).keydown(function(event) {
@@ -82,6 +97,8 @@ var loadGame = function() {
         case 74: translateCursor(-1,  0); break;
         case 75: translateCursor( 0, +1); break;
         case 76: translateCursor(+1,  0); break;
+        case 32: selectTile();
+        default: console.log('keycode:', key);
         };
     });
 };
