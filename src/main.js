@@ -1,6 +1,47 @@
 (function() {
 var util = {};
-var puzzle = [];
+var puzzle = (function() {
+    var grid = [];
+    var S = 0; // board size
+    var H = 0; // hints size
+
+    var getTile = function(r, c) {
+        return grid[H + c][H + r];
+    };
+    var setTile = function(r, c, t) {
+        grid[H + c][H + r] = t;
+    };
+
+    var init = function(size) {
+        var K;
+        S = size;
+        H = Math.ceil(S/2);
+        K = S + H;
+
+        _.times(K, function(c) {
+            var tbody = $('#theTableBody');
+            var tr = $('<tr>');
+            var row = [];
+            _.times(K, function(r) {
+                var td = $('<td>');
+                td.data('row', r - H);
+                td.data('col', c - H);
+                var isHint = r < H || c < H;
+                if (isHint) {
+                    td.addClass('hint');
+                    td.text(_.random(1, 4));
+                }
+                tr.append(td);
+                row.push(td[0]);
+            });
+            tbody.append(tr);
+            grid.push(row);
+        });
+    };
+
+    return {init: init, getTile: getTile, setTile: setTile};
+})();
+
 var size = 10;
 var hintsSize = Math.ceil(size/2);
 
@@ -8,9 +49,9 @@ var cursor = {row: 0, col: 0, isClicked: false};
 
 var highlight = function(row, col) {
     var classes = {2: 'selected', 1: 'crosshair'};
-    _.times(size + hintsSize, function(r) {
-        _.times(size + hintsSize, function(c) {
-            var td = puzzle[c][r];
+    _.times(size, function(r) {
+        _.times(size, function(c) {
+            var td = puzzle.getTile(r, c);
             var R = row === r;
             var C = col === c;
             var cls = classes[0 + R + C];
@@ -27,7 +68,7 @@ var highlight = function(row, col) {
 var selectTile = function() {
     var c = cursor.col;
     var r = cursor.row;
-    var tile = puzzle[c][r];
+    var tile = puzzle.getTile(r, c);
     $(tile).toggleClass('filled');
 };
 
@@ -51,7 +92,7 @@ var moveCursor = function(row, col) {
 
     var c = cursor.col;
     var r = cursor.row;
-    var tile = $(puzzle[c][r]);
+    var tile = $(puzzle.getTile(r, c));
     if (cursor.isClicked && ! tile.hasClass('filled')) {
         selectTile();
     }
@@ -64,32 +105,12 @@ var translateCursor = function(drow, dcol) {
 };
 
 var loadGame = function() {
-    _.times(size + hintsSize, function(x) {
-        var tbody = $('#theTableBody');
-        var tr = $('<tr>');
-        var row = [];
-        _.times(size + hintsSize, function(y) {
-            var td = $('<td>');
-            td.data('row', y);
-            td.data('col', x);
-            var isHint = x >= size || y >= size;
-            if (isHint) {
-                td.addClass('hint');
-                td.text(x + y);
-            }
-            tr.append(td);
-            row.push(td[0]);
-        });
-        tbody.append(tr);
-        puzzle.push(row);
-    });
+    puzzle.init(size);
 
     moveCursor(1, 1);
 
-    $('#theTable').on('mouseenter', 'td', function(event) {
+    $('#theTable').on('mouseenter', 'td.tile', function(event) {
         var target = $(event.target);
-
-        console.log(target);
 
         var row = target.data('row') >>> 0;
         var col = target.data('col') >>> 0;
@@ -107,16 +128,23 @@ var loadGame = function() {
     $(document).keydown(function(event) {
         var key = event.which;
         var keyWasHit = true;
+        var modifierHeld = event.ctrlKey || event.altKey || event.metaKey;
+
+        if (modifierHeld)
+            return;
+
         switch (key) {
         case 73: translateCursor( 0, -1); break;
         case 74: translateCursor(-1,  0); break;
         case 75: translateCursor( 0, +1); break;
         case 76: translateCursor(+1,  0); break;
         case 32: cursor.isClicked = true; selectTile(); break;
-        default: console.log('keycode:', key);
+        default:
             console.log('keycode:', key);
             keyWasHit = false;
+            break;
         }
+
 
         if (keyWasHit) {
             event.preventDefault();
@@ -126,11 +154,17 @@ var loadGame = function() {
     $(document).keyup(function(event) {
         var key = event.which;
         var keyWasHit = true;
+        var modifierHeld = event.ctrlKey || event.altKey || event.metaKey;
+
+        if (modifierHeld)
+            return;
+
         switch (key) {
         case 32: cursor.isClicked = false; break;
         default:
             console.log('keycode:', key);
             keyWasHit = false;
+            break;
         }
 
         if (keyWasHit) {
