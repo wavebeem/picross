@@ -1,5 +1,5 @@
 html {
-    background-color: #eee;
+    background-color: #f8f8f8;
     color: #333;
 
     font-family: sans-serif;
@@ -13,17 +13,17 @@ html {
     display: table;
 
     /* border: 1px solid #ccc;*/
-    background-color: rgba(0, 0, 0, 0.10);
+    background-color: rgba(0, 0, 0, 0.25);
     border-radius: 9px;
     padding:       9px;
 }
 
 #theTable {
-    border: 1px solid #eee;
+    /* border: 1px solid rgba(0, 0, 0, 0.10);*/
     background-color: #ddd;
     cursor: pointer;
     border-spacing: 3px;
-    padding: 0px;
+    padding: 4px;
     border-radius: 4px;
 }
 
@@ -32,14 +32,15 @@ html {
 }
 
 #theTable td {
-    text-align: center;
+    background-color: #eee;
+}
 
+#theTable th,
+#theTable td {
     padding: 0px;
 
-    width:  24px;
-    height: 24px;
-
-    background-color: #eee;
+    width:  32px;
+    height: 32px;
 
     border: 4px solid transparent;
 
@@ -58,14 +59,51 @@ html {
     background-color: #bbb;
 }
 
-#theTable td.hint {
+#theTable th.placeholder {
+    visibility: hidden;
+}
+
+#theTable th.horizontal .number {
+}
+
+#theTable th .hintBackground {
+    margin: 2px;
+    background-color: rgba(0, 0, 0, 0.10);
+    border-radius: 8px;
+    width:  24px;
+    height: 24px;
+
+    vertical-align: middle;
+    text-align: center;
+    display: inline-block;
+}
+
+#theTable th .hintBackground .hintNumber {
+    line-height: 24px;
+    display: inline;
+}
+
+#theTable th {
+    vertical-align: bottom;
+    text-align: center;
     background-color: transparent;
     border-color: transparent;
     font-family: 'Lucida Grande', 'Luxi Sans', sans-serif;
     font-weight: bold;
     font-size: 90%;
     color: #888;
-    text-shadow: 0px 1px 4px white;
+    /* text-shadow: 0px 1px 1px white;*/
+}
+
+#theTable th.horizontal {
+    text-align: right;
+    width: 160px;
+}
+
+#theTable th.crosshair {
+    background-color: #729fcf;
+    color: #fff;
+    /* text-shadow: 0px 1px 1px black;*/
 }
 
 /*#theTable td.filled.crosshair {

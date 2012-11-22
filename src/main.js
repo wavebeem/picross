@@ -6,33 +6,53 @@ var puzzle = (function() {
     var H = 0; // hints size
 
     var getTile = function(r, c) {
-        return grid[H + c][H + r];
+        return grid[1 + r][1 + c];
     };
     var setTile = function(r, c, t) {
-        grid[H + c][H + r] = t;
+        grid[1 + r][1 + c] = t;
     };
 
     var init = function(size) {
         var K;
         S = size;
         H = Math.ceil(S/2);
-        K = S + H;
+        K = S + 1;
 
-        _.times(K, function(c) {
+        _.times(K, function(r) {
             var tbody = $('#theTableBody');
             var tr = $('<tr>');
             var row = [];
-            _.times(K, function(r) {
-                var td = $('<td>');
-                td.data('row', r - H);
-                td.data('col', c - H);
-                var isHint = r < H || c < H;
+            _.times(K, function(c) {
+                var isHint  = r === 0 || c === 0;
+                var isEmpty = r === 0 && c === 0;
+                var tx = $(isHint? '<th>' : '<td>');
+                tx.data('row', r - 1);
+                tx.data('col', c - 1);
+
+                tx.addClass('row' + (r - 1));
+                tx.addClass('col' + (c - 1));
+
                 if (isHint) {
-                    td.addClass('hint');
-                    td.text(_.random(1, 4));
+                    tx.addClass('hint');
+                    tx.addClass(r === 0? 'vertical' : 'horizontal');
+                    // tx.text(_.random(1, 4));
+                    _.times(_.random(1, H), function() {
+                        var holder = $('<div>');
+                        var num = $('<p>');
+                        holder.addClass('hintBackground');
+                        num.text(_.random(1, 10));
+                        num.addClass('hintNumber');
+                        holder.append(num);
+                        tx.append(holder);
+                    });
                 }
-                tr.append(td);
-                row.push(td[0]);
+
+                if (isEmpty) {
+                    tx.addClass('placeholder');
+                }
+
+                tr.append(tx);
+                row.push(tx[0]);
             });
             tbody.append(tr);
             grid.push(row);
@@ -49,8 +69,10 @@ var cursor = {row: 0, col: 0, isClicked: false};
 
 var highlight = function(row, col) {
     var classes = {2: 'selected', 1: 'crosshair'};
-    _.times(size, function(r) {
-        _.times(size, function(c) {
+    _.times(size + 1, function(r) {
+        r--;
+        _.times(size + 1, function(c) {
+            c--;
             var td = puzzle.getTile(r, c);
             var R = row === r;
             var C = col === c;
@@ -81,6 +103,7 @@ util.clamp = function(x, a, b) {
 
 var moveCursor = function(row, col) {
     $('#theTable td').removeClass('crosshair selected');
+    $('#theTable th').removeClass('crosshair selected');
 
     row = util.clamp(row | 0, 0, size - 1);
     col = util.clamp(col | 0, 0, size - 1);
@@ -107,13 +130,16 @@ var translateCursor = function(drow, dcol) {
 var loadGame = function() {
     puzzle.init(size);
 
-    moveCursor(1, 1);
+    moveCursor(0, 0);
 
-    $('#theTable').on('mouseenter', 'td.tile', function(event) {
+    $('#theTable').on('mouseenter', '*', function(event) {
         var target = $(event.target);
 
-        var row = target.data('row') >>> 0;
-        var col = target.data('col') >>> 0;
+        var row = target.data('row');
+        var col = target.data('col');
+
+        if (_.isUndefined(row)) row = cursor.row;
+        if (_.isUndefined(col)) col = cursor.col;
 
         moveCursor(row, col);
     }).on('mousedown', function(event) {
@@ -134,10 +160,10 @@ var loadGame = function() {
             return;
 
         switch (key) {
-        case 73: translateCursor( 0, -1); break;
-        case 74: translateCursor(-1,  0); break;
-        case 75: translateCursor( 0, +1); break;
-        case 76: translateCursor(+1,  0); break;
+        case 73: translateCursor(-1,  0); break;
+        case 74: translateCursor( 0, -1); break;
+        case 75: translateCursor(+1,  0); break;
+        case 76: translateCursor( 0, +1); break;
         case 32: cursor.isClicked = true; selectTile(); break;
         default:
             console.log('keycode:', key);
