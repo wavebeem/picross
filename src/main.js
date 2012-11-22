@@ -2,29 +2,23 @@
 var util = {};
 var puzzle = [];
 var size = 10;
+var hintsSize = Math.ceil(size/2);
 
 var cursor = {row: 0, col: 0, isClicked: false};
 
-util.format = function(str /*, ... */) {
-    var args = _.toArray(arguments).slice(1);
-    var i = 0;
-    var n = args.length;
-    return str.replace(/{\d+}/g, function(tok) {
-        var num = tok.substring(1, tok.length - 1);
-        return args[num];
-    });
-};
-
 var highlight = function(row, col) {
     var classes = {2: 'selected', 1: 'crosshair'};
-    _.times(size, function(r) {
-        _.times(size, function(c) {
+    _.times(size + hintsSize, function(r) {
+        _.times(size + hintsSize, function(c) {
             var td = puzzle[c][r];
             var R = row === r;
             var C = col === c;
             var cls = classes[0 + R + C];
             if (cls) {
                 $(td).addClass(cls);
+                if (r < size && c < size) {
+                    $(td).addClass('tile');
+                }
             }
         });
     });
@@ -70,14 +64,19 @@ var translateCursor = function(drow, dcol) {
 };
 
 var loadGame = function() {
-    _.times(size, function(x) {
+    _.times(size + hintsSize, function(x) {
         var tbody = $('#theTableBody');
         var tr = $('<tr>');
         var row = [];
-        _.times(size, function(y) {
+        _.times(size + hintsSize, function(y) {
             var td = $('<td>');
             td.data('row', y);
             td.data('col', x);
+            var isHint = x >= size || y >= size;
+            if (isHint) {
+                td.addClass('hint');
+                td.text(x + y);
+            }
             tr.append(td);
             row.push(td[0]);
         });
