@@ -1,5 +1,5 @@
 html {
-    background-color: #eee;
+    background-color: #ccc;
     color: #333;
 
     font-family: sans-serif;
@@ -13,17 +13,18 @@ html {
     display: table;
 
     /* border: 1px solid #ccc;*/
-    border-radius: 16px;
     background-color: rgba(0, 0, 0, 0.10);
-    padding: 16px;
+    border-radius: 9px;
+    padding:       9px;
 }
 
 #theTable {
-    border: 1px solid #fff;
-    background-color: #eee;
+    border: 1px solid #eee;
+    background-color: #ddd;
     cursor: pointer;
-    border-spacing: 0px;
-    padding: 0px;
+    border-spacing: 3px;
+    padding: 1px;
+    border-radius: 4px;
 }
 
 #theTable thead {
@@ -35,25 +36,30 @@ html {
 
     padding: 4px;
 
-    font-size: 24pt;
-
     width:  48px;
     height: 48px;
 
-    background-color: #fff;
+    background-color: #eee;
 
-    border: 1px dashed #eee;
+    /* border: 1px solid rgba(128, 128, 128, 0.10);*/
+    border: 4px solid transparent;
+
+    border-radius: 4px;
 }
 
 #theTable td.crosshair {
-    background-color: #f8f8f8;
+    background-color: #ffffff;
 }
 
 #theTable td.selected {
-    border-color: transparent;
-    outline: 4px solid #fcaf3e;
+    border-color: #729fcf;
+    /* outline: 4px solid #fcaf3e;*/
 }
 
 #theTable td.filled {
-    background-color: #555;
+    background-color: #bbb;
+}
+
+#theTable td.filled.crosshair {
+    background-color: #ccc;
 }
