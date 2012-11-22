@@ -23,7 +23,7 @@ html {
     background-color: #ddd;
     cursor: pointer;
     border-spacing: 3px;
-    padding: 1px;
+    padding: 0px;
     border-radius: 4px;
 }
 
@@ -53,13 +53,12 @@ html {
 
 #theTable td.selected {
     border-color: #729fcf;
-    /* outline: 4px solid #fcaf3e;*/
 }
 
 #theTable td.filled {
     background-color: #bbb;
 }
 
-#theTable td.filled.crosshair {
+/*#theTable td.filled.crosshair {
     background-color: #ccc;
-}
+}*/

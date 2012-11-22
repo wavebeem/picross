@@ -54,10 +54,19 @@ var moveCursor = function(row, col) {
     cursor.col = col;
 
     highlight(row, col);
+
+    var c = cursor.col;
+    var r = cursor.row;
+    var tile = $(puzzle[c][r]);
+    if (cursor.isClicked && ! tile.hasClass('filled')) {
+        selectTile();
+    }
 };
 
 var translateCursor = function(drow, dcol) {
-    moveCursor(cursor.row + drow, cursor.col + dcol);
+    var r = cursor.row + drow;
+    var c = cursor.col + dcol;
+    moveCursor(r, c);
 };
 
 var loadGame = function() {
@@ -78,28 +87,56 @@ var loadGame = function() {
 
     moveCursor(1, 1);
 
-    $('#theTable').on('mousemove', 'td', function(event) {
+    $('#theTable').on('mouseenter', 'td', function(event) {
         var target = $(event.target);
+
+        console.log(target);
 
         var row = target.data('row') >>> 0;
         var col = target.data('col') >>> 0;
 
         moveCursor(row, col);
-    }).on('click', 'td', function(event) {
-        console.log('Selecting...');
+    }).on('mousedown', function(event) {
+        cursor.isClicked = true;
         selectTile();
+        event.preventDefault();
+    });
+    $(document).on('mouseup', function(event) {
+        cursor.isClicked = false;
     });
 
     $(document).keydown(function(event) {
-        var key = event.keyCode;
+        var key = event.which;
+        var keyWasHit = true;
         switch (key) {
         case 73: translateCursor( 0, -1); break;
         case 74: translateCursor(-1,  0); break;
         case 75: translateCursor( 0, +1); break;
         case 76: translateCursor(+1,  0); break;
-        case 32: selectTile();
+        case 32: cursor.isClicked = true; selectTile(); break;
         default: console.log('keycode:', key);
-        };
+            console.log('keycode:', key);
+            keyWasHit = false;
+        }
+
+        if (keyWasHit) {
+            event.preventDefault();
+        }
+    });
+
+    $(document).keyup(function(event) {
+        var key = event.which;
+        var keyWasHit = true;
+        switch (key) {
+        case 32: cursor.isClicked = false; break;
+        default:
+            console.log('keycode:', key);
+            keyWasHit = false;
+        }
+
+        if (keyWasHit) {
+            event.preventDefault();
+        }
     });
 };
 
