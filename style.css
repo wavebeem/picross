@@ -24,6 +24,8 @@ html {
     cursor: pointer;
     border-spacing: 3px;
     padding: 4px;
+    padding-right:  0px;
+    padding-bottom: 0px;
     border-radius: 4px;
 }
 
@@ -45,6 +47,12 @@ html {
     border: 4px solid transparent;
 
     border-radius: 4px;
+
+    text-align: center;
+
+    font-size:   28px;
+    line-height; 32px;
+    vertical-align: middle;
 }
 
 #theTable td.crosshair.hint {
@@ -93,6 +101,13 @@ html {
     font-size: 90%;
     color: #888;
     /* text-shadow: 0px 1px 1px white;*/
+}
+
+#theTable td.maybe {
+    /* background-color: rgba(192, 0, 0, 0.10);*/
+    text-shadow: 0px 0px 1px black;
+    color: #888;
+    font-weight: bold;
 }
 
 #theTable th.horizontal {

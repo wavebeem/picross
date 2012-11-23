@@ -65,7 +65,7 @@ var puzzle = (function() {
 var size = 10;
 var hintsSize = Math.ceil(size/2);
 
-var cursor = {row: 0, col: 0, isClicked: false};
+var cursor = {row: 0, col: 0, isClicked: false, hintMode: false};
 
 var highlight = function(row, col) {
     var classes = {2: 'selected', 1: 'crosshair'};
@@ -91,7 +91,8 @@ var selectTile = function() {
     var c = cursor.col;
     var r = cursor.row;
     var tile = puzzle.getTile(r, c);
-    $(tile).toggleClass('filled');
+    $(tile).toggleClass(cursor.hintMode? 'maybe' : 'filled');
+    $(tile).text(cursor.hintMode? '\u00d7' : '');
 };
 
 util.clamp = function(x, a, b) {
@@ -107,6 +108,7 @@ var moveCursor = function(row, col) {
 
     row = util.clamp(row | 0, 0, size - 1);
     col = util.clamp(col | 0, 0, size - 1);
+
 
     cursor.row = row;
     cursor.col = col;
@@ -164,7 +166,8 @@ var loadGame = function() {
         case 74: translateCursor( 0, -1); break;
         case 75: translateCursor(+1,  0); break;
         case 76: translateCursor( 0, +1); break;
-        case 32: cursor.isClicked = true; selectTile(); break;
+        case 65: cursor.isClicked = true; cursor.hintMode = true;  selectTile(); break;
+        case 32: cursor.isClicked = true; cursor.hintMode = false; selectTile(); break;
         default:
             console.log('keycode:', key);
             keyWasHit = false;
@@ -186,7 +189,8 @@ var loadGame = function() {
             return;
 
         switch (key) {
-        case 32: cursor.isClicked = false; break;
+        case 65: cursor.isClicked = false; cursor.hintMode = false; break;
+        case 32: cursor.isClicked = false; cursor.hintMode = true;  break;
         default:
             console.log('keycode:', key);
             keyWasHit = false;
