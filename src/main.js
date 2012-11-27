@@ -174,7 +174,6 @@ var loadGame = function() {
             break;
         }
 
-
         if (keyWasHit) {
             event.preventDefault();
         }
