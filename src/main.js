@@ -8,9 +8,6 @@ var puzzle = (function() {
     var getTile = function(r, c) {
         return grid[1 + r][1 + c];
     };
-    var setTile = function(r, c, t) {
-        grid[1 + r][1 + c] = t;
-    };
 
     var init = function(size) {
         var K;
@@ -19,47 +16,52 @@ var puzzle = (function() {
         K = S + 1;
 
         _.times(K, function(r) {
-            var tbody = $('#theTableBody');
-            var tr = $('<tr>');
             var row = [];
             _.times(K, function(c) {
-                var isHint  = r === 0 || c === 0;
-                var isEmpty = r === 0 && c === 0;
-                var tx = $(isHint? '<th>' : '<td>');
-                tx.data('row', r - 1);
-                tx.data('col', c - 1);
+                var R = (r === 0);
+                var C = (c === 0);
+                var isHint  = R || C;
+                var isEmpty = R && C;
+                var cell = {
+                    type:      'normal',
+                    crosshair: false,
+                    selected:  false,
+                    crosshair: false,
+                    filled:    false,
+                    hints:     []
+                };
 
-                tx.addClass('row' + (r - 1));
-                tx.addClass('col' + (c - 1));
-
-                if (isHint) {
-                    tx.addClass('hint');
-                    tx.addClass(r === 0? 'vertical' : 'horizontal');
-                    // tx.text(_.random(1, 4));
+                if (isEmpty) {
+                    cell.type = 'placeholder';
+                }
+                else if (isHint) {
+                    cell.type = 'hint';
+                    cell.orientation = (R ? 'vertical' : 'horizontal');
+                    cell.hints = [];
                     _.times(_.random(1, H), function() {
-                        var holder = $('<div>');
-                        var num = $('<p>');
-                        holder.addClass('hintBackground');
-                        num.text(_.random(1, 10));
-                        num.addClass('hintNumber');
-                        holder.append(num);
-                        tx.append(holder);
+                        cell.hints.push(_.random(1, 10));
                     });
                 }
 
-                if (isEmpty) {
-                    tx.addClass('placeholder');
-                }
-
-                tr.append(tx);
-                row.push(tx[0]);
+                row.push(cell);
             });
-            tbody.append(tr);
             grid.push(row);
         });
     };
 
-    return {init: init, getTile: getTile, setTile: setTile};
+    var eachTile = function(fun, includeHints) {
+        var start = includeHints ? -1 : 0;
+        var r, c;
+        for (r = start; r < S; r++) {
+            for (c = start; c < S; c++) {
+                fun(getTile(r, c), r, c);
+            }
+        }
+    };
+
+    var getSize = function() { return S };
+
+    return {init: init, tile: getTile, eachTile: eachTile, size: getSize};
 })();
 
 var size = 10;
@@ -68,31 +70,24 @@ var hintsSize = Math.ceil(size/2);
 var cursor = {row: 0, col: 0, isClicked: false, hintMode: false};
 
 var highlight = function(row, col) {
-    var classes = {2: 'selected', 1: 'crosshair'};
-    _.times(size + 1, function(r) {
-        r--;
-        _.times(size + 1, function(c) {
-            c--;
-            var td = puzzle.getTile(r, c);
-            var R = row === r;
-            var C = col === c;
-            var cls = classes[0 + R + C];
-            if (cls) {
-                $(td).addClass(cls);
-                if (r < size && c < size) {
-                    $(td).addClass('tile');
-                }
-            }
-        });
-    });
+    puzzle.eachTile(function(tile, r, c) {
+        var R = row === r;
+        var C = col === c;
+        var isSelected  = (R && C);
+        var isCrosshair = (R || C);
+        var isHint      = (r < 0 || c < 0);
+        tile.type       = isHint ? 'hint' : tile.type;
+        tile.crosshair  = isCrosshair;
+        tile.selected   = isSelected;
+    }, true);
 };
 
 var selectTile = function() {
     var c = cursor.col;
     var r = cursor.row;
-    var tile = puzzle.getTile(r, c);
-    $(tile).toggleClass(cursor.hintMode? 'maybe' : 'filled');
-    $(tile).text(cursor.hintMode? '\u00d7' : '');
+    var tile = puzzle.tile(r, c);
+    tile.type = (cursor.hintMode ? 'maybe' : 'filled');
+    draw();
 };
 
 util.clamp = function(x, a, b) {
@@ -103,12 +98,13 @@ util.clamp = function(x, a, b) {
 };
 
 var moveCursor = function(row, col) {
-    $('#theTable td').removeClass('crosshair selected');
-    $('#theTable th').removeClass('crosshair selected');
+    puzzle.eachTile(function(tile, r, c) {
+        tile.crosshair = false;
+        tile.selected  = false;
+    }, true);
 
     row = util.clamp(row | 0, 0, size - 1);
     col = util.clamp(col | 0, 0, size - 1);
-
 
     cursor.row = row;
     cursor.col = col;
@@ -117,10 +113,13 @@ var moveCursor = function(row, col) {
 
     var c = cursor.col;
     var r = cursor.row;
-    var tile = $(puzzle.getTile(r, c));
-    if (cursor.isClicked && ! tile.hasClass('filled')) {
+    var tile = puzzle.tile(r, c);
+
+    if (cursor.isClicked && tile.type !== 'filled') {
         selectTile();
     }
+
+    draw();
 };
 
 var translateCursor = function(drow, dcol) {
@@ -129,8 +128,79 @@ var translateCursor = function(drow, dcol) {
     moveCursor(r, c);
 };
 
+var table = {getTile: _.noop};
+var createTable = function() {
+    var tbody = $('#theTableBody');
+    var data  = [];
+    _.times(puzzle.size() + 1, function(r) {
+        var tr  = $('<tr>');
+        var row = [];
+        _.times(puzzle.size() + 1, function(c) {
+            var isHint = (r === 0 || c === 0);
+            var tx = $(isHint ? '<th>' : '<td>');
+
+            var tile = puzzle.tile(r - 1, c - 1);
+            if (isHint) {
+                _.forEach(tile.hints, function(hint) {
+                    var div = $('<div>');
+                    var p = $('<p>');
+                    div.addClass('hintBackground');
+                    p.addClass('hintNumber');
+                    p.text('' + hint);
+                    div.append(p);
+                    tx.append(div);
+                });
+            }
+
+            tx.data('row', r - 1);
+            tx.data('col', c - 1);
+            tr.append(tx);
+            row.push(tx);
+        });
+        tbody.append(tr);
+        data.push(row);
+    });
+
+    var getTile = function(r, c) {
+        return data[1 + r][1 + c];
+    };
+
+    var eachTile = function(fun, includeHints) {
+        var S = puzzle.size();
+        var start = includeHints ? -1 : 0;
+        var r, c;
+        for (r = start; r < S; r++) {
+            for (c = start; c < S; c++) {
+                fun(getTile(r, c), r, c);
+            }
+        }
+    };
+
+    table = {tile: getTile, eachTile: eachTile};
+};
+
+var draw = function() {
+    table.eachTile(function(tile, r, c) {
+        tile.prop('className', '');
+        data = puzzle.tile(r, c);
+
+        if (data.hints.length <= 0) {
+            tile.text('');
+        }
+
+        tile.addClass(data.type);
+        if (data['selected' ])   tile.addClass('selected');
+        if (data['crosshair'])   tile.addClass('crosshair');
+        if (data['orientation']) tile.addClass(data['orientation']);
+        if (data.type === 'maybe') tile.text('\u00d7');
+    }, true);
+};
+
 var loadGame = function() {
     puzzle.init(size);
+
+    createTable();
+    draw();
 
     moveCursor(0, 0);
 
@@ -151,6 +221,7 @@ var loadGame = function() {
     });
     $(document).on('mouseup', function(event) {
         cursor.isClicked = false;
+        event.preventDefault();
     });
 
     $(document).keydown(function(event) {
@@ -177,6 +248,7 @@ var loadGame = function() {
         if (keyWasHit) {
             event.preventDefault();
         }
+        draw();
     });
 
     $(document).keyup(function(event) {
@@ -199,6 +271,7 @@ var loadGame = function() {
         if (keyWasHit) {
             event.preventDefault();
         }
+        draw();
     });
 };
 
