@@ -112,13 +112,17 @@ html {
 #theTable th {
     vertical-align: bottom;
     text-align: center;
-    background-color: transparent;
+    background-color: #d4d4d4;
     border-color: transparent;
     font-family: 'Lucida Grande', 'Luxi Sans', sans-serif;
     font-weight: bold;
     font-size: 90%;
     color: #888;
     /* text-shadow: 0px 1px 1px white;*/
+}
+
+#theTable th.placeholder {
+    background-color: transparent;
 }
 
 #theTable td.maybe {

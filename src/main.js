@@ -188,10 +188,18 @@ var draw = function() {
             tile.text('');
         }
 
+        var isPlaceHolder = (r === -1 && c === -1);
+
         tile.addClass(data.type);
+
+        tile.addClass('row-' + r);
+        tile.addClass('col-' + c);
+
+        if (isPlaceHolder)       tile.addClass('placeholder');
         if (data['selected' ])   tile.addClass('selected');
         if (data['crosshair'])   tile.addClass('crosshair');
         if (data['orientation']) tile.addClass(data['orientation']);
+
         if (data.type === 'maybe') tile.text('\u00d7');
     }, true);
 };
