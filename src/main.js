@@ -86,7 +86,11 @@ var selectTile = function() {
     var c = cursor.col;
     var r = cursor.row;
     var tile = puzzle.tile(r, c);
-    tile.type = (cursor.hintMode ? 'maybe' : 'filled');
+    var hint = cursor.hintMode;
+    var map = cursor.hintMode
+        ? {maybe: 'normal', filled: 'filled', normal: 'maybe'}
+        : {maybe: 'filled', filled: 'normal', normal: 'filled'};
+    tile.type = map[tile.type];
     draw();
 };
 
@@ -95,6 +99,10 @@ util.clamp = function(x, a, b) {
     var min = Math.min;
 
     return min(max(x, a), b);
+};
+
+util.now = function() {
+    return new Date().getTime();
 };
 
 var moveCursor = function(row, col) {
@@ -180,6 +188,7 @@ var createTable = function() {
 };
 
 var draw = function() {
+    var before = util.now();
     table.eachTile(function(tile, r, c) {
         tile.prop('className', '');
         data = puzzle.tile(r, c);
@@ -188,12 +197,19 @@ var draw = function() {
             tile.text('');
         }
 
-        var isPlaceHolder = (r === -1 && c === -1);
+        var R = (r === -1);
+        var C = (c === -1);
+        var isPlaceHolder = R && C;
+        var isHint        = R || C;
 
         tile.addClass(data.type);
 
         tile.addClass('row-' + r);
         tile.addClass('col-' + c);
+
+        if (isHint) {
+            tile.addClass((R ? c : r) % 2 === 0 ? 'even' : 'odd');
+        }
 
         if (isPlaceHolder)       tile.addClass('placeholder');
         if (data['selected' ])   tile.addClass('selected');
@@ -202,6 +218,9 @@ var draw = function() {
 
         if (data.type === 'maybe') tile.text('\u00d7');
     }, true);
+    var after = util.now();
+
+    console.log('draw() took', after - before, 'ms');
 };
 
 var loadGame = function() {
@@ -212,7 +231,7 @@ var loadGame = function() {
 
     moveCursor(0, 0);
 
-    $('#theTable').on('mouseenter', '*', function(event) {
+    var mouseEnterHandler = function(event) {
         var target = $(event.target);
 
         var row = target.data('row');
@@ -222,7 +241,12 @@ var loadGame = function() {
         if (_.isUndefined(col)) col = cursor.col;
 
         moveCursor(row, col);
-    }).on('mousedown', function(event) {
+    };
+
+    var theTable = $('#theTable');
+    theTable.on('mouseenter', 'td', mouseEnterHandler);
+    theTable.on('mouseenter', 'th', mouseEnterHandler);
+    theTable.on('mousedown', function(event) {
         cursor.isClicked = true;
         selectTile();
         event.preventDefault();
@@ -232,14 +256,21 @@ var loadGame = function() {
         event.preventDefault();
     });
 
+    var kbd = {};
     $(document).keydown(function(event) {
         var key = event.which;
         var keyWasHit = true;
         var modifierHeld = event.ctrlKey || event.altKey || event.metaKey;
 
+        if (kbd[key])
+            return;
+
+        kbd[key] = true;
+
         if (modifierHeld)
             return;
 
+        console.log('Processing key DOWN');
         switch (key) {
         case 73: translateCursor(-1,  0); break;
         case 74: translateCursor( 0, -1); break;
@@ -259,14 +290,17 @@ var loadGame = function() {
         draw();
     });
 
-    $(document).keyup(function(event) {
+    var onkeyup = function(event) {
         var key = event.which;
         var keyWasHit = true;
         var modifierHeld = event.ctrlKey || event.altKey || event.metaKey;
 
+        kbd[key] = false;
+
         if (modifierHeld)
             return;
 
+        console.log('Processing key UP');
         switch (key) {
         case 65: cursor.isClicked = false; cursor.hintMode = false; break;
         case 32: cursor.isClicked = false; cursor.hintMode = true;  break;
@@ -280,7 +314,8 @@ var loadGame = function() {
             event.preventDefault();
         }
         draw();
-    });
+    };
+    $(document).keyup(onkeyup);
 };
 
 $(loadGame);
