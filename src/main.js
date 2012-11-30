@@ -94,11 +94,11 @@ var selectTile = function() {
     draw();
 };
 
-util.clamp = function(x, a, b) {
-    var max = Math.max;
-    var min = Math.min;
+var max = Math.max;
+var min = Math.min;
 
-    return min(max(x, a), b);
+util.clamp = function(x, a, b) {
+    return min(max(x | 0, a), b);
 };
 
 util.now = function() {
@@ -106,13 +106,14 @@ util.now = function() {
 };
 
 var moveCursor = function(row, col) {
+    console.log('Moving cursor to', row, col);
     puzzle.eachTile(function(tile, r, c) {
         tile.crosshair = false;
         tile.selected  = false;
     }, true);
 
-    row = util.clamp(row | 0, 0, size - 1);
-    col = util.clamp(col | 0, 0, size - 1);
+    row = util.clamp(row, 0, size - 1);
+    col = util.clamp(col, 0, size - 1);
 
     cursor.row = row;
     cursor.col = col;
@@ -190,37 +191,43 @@ var createTable = function() {
 var draw = function() {
     var before = util.now();
     table.eachTile(function(tile, r, c) {
-        tile.prop('className', '');
+        var newClass = '';
         data = puzzle.tile(r, c);
-
-        if (data.hints.length <= 0) {
-            tile.text('');
-        }
 
         var R = (r === -1);
         var C = (c === -1);
+
         var isPlaceHolder = R && C;
         var isHint        = R || C;
 
-        tile.addClass(data.type);
+        var maybe = (data.type === 'maybe');
 
-        tile.addClass('row-' + r);
-        tile.addClass('col-' + c);
+        newClass += data.type + ' ';
 
         if (isHint) {
-            tile.addClass((R ? c : r) % 2 === 0 ? 'even' : 'odd');
+            newClass += ((R ? c : r) % 2 === 0) ? 'even ' : 'odd ';
         }
 
-        if (isPlaceHolder)       tile.addClass('placeholder');
-        if (data['selected' ])   tile.addClass('selected');
-        if (data['crosshair'])   tile.addClass('crosshair');
-        if (data['orientation']) tile.addClass(data['orientation']);
+        newClass += 'row_' + r + ' ';
+        newClass += 'col_' + c + ' ';
 
-        if (data.type === 'maybe') tile.text('\u00d7');
+        if ((r + 1) === puzzle.size()) newClass += 'row_n ';
+        if ((c + 1) === puzzle.size()) newClass += 'col_n ';
+
+        if (isPlaceHolder)       newClass += 'placeholder ';
+        if (data['selected' ])   newClass += 'selected ';
+        if (data['crosshair'])   newClass += 'crosshair ';
+        if (data['orientation']) newClass += data['orientation'] + ' ';
+
+        if (data.hints.length <= 0) {
+            tile.text(maybe ? '\u00d7' : '');
+        }
+
+        tile.prop('className', newClass);
     }, true);
     var after = util.now();
 
-    console.log('draw() took', after - before, 'ms');
+    // console.log('draw() took', after - before, 'ms');
 };
 
 var loadGame = function() {
@@ -244,8 +251,7 @@ var loadGame = function() {
     };
 
     var theTable = $('#theTable');
-    theTable.on('mouseenter', 'td', mouseEnterHandler);
-    theTable.on('mouseenter', 'th', mouseEnterHandler);
+    theTable.on('mouseenter', 'td, th', mouseEnterHandler);
     theTable.on('mousedown', function(event) {
         cursor.isClicked = true;
         selectTile();
