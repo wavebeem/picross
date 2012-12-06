@@ -7,14 +7,24 @@
     <link rel='stylesheet' type='text/css' href='style.css'>
     <script type='text/javascript' src='lib/jquery.js'></script>
     <script type='text/javascript' src='lib/underscore.js'></script>
+    <script type='text/javascript' src='src/util.js'></script>
+    <script type='text/javascript' src='src/GameModel.js'></script>
+    <script type='text/javascript' src='src/GameView.js'></script>
+    <script type='text/javascript' src='src/GameController.js'></script>
     <script type='text/javascript' src='src/main.js'></script>
 </head>
 <body>
-<div id='theGameContainer'>
-    <table id='theTable'>
-        <tbody id='theTableBody'>
-        </tbody>
-    </table>
+<div id='container'>
+    <canvas id='game'>
+        <p>
+            Your web browser needs canvas support to run this game.
+        </p>
+        <p>
+            Try upgrading to
+            <a href='http://www.google.com/chrome'>Google Chrome</a> or
+            <a href='http://www.mozilla.org/en-US/firefox/new/'>Mozilla Firefox</a> today.
+        </p>
+    </canvas>
 </div>
 </body>
 </html>

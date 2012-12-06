@@ -1,11 +1,11 @@
 html {
-    background-color: #f8f8f8;
+    background-color: #f4f4f4;
     color: #333;
 
     font-family: sans-serif;
 }
 
-#theGameContainer {
+#container {
     margin-left:  auto;
     margin-right: auto;
     margin-top: 1em;
@@ -13,181 +13,18 @@ html {
     display: table;
 
     /* border: 1px solid #ccc;*/
-    background-color: rgba(0, 0, 0, 0.25);
-    border-radius: 9px;
-    padding:       9px;
+    background-color: rgba(0, 0, 0, 0.10);
+    border-radius: 3px;
+    padding:       3px;
+
+    line-height: 0px;
 }
 
-#theTable {
-    /* border: 1px solid rgba(0, 0, 0, 0.10);*/
-    background-color: #ddd;
+#game {
+    /* border-radius: 4px;*/
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    /* box-shadow: 0px 0px 1px 1px rgba(255, 255, 255, 0.15);*/
+    /* border: 1px solid rgba(255, 255, 255, 0.15);*/
+    /* box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.15);*/
     cursor: pointer;
-    border-collapse: separate;
-    border-spacing: 0px;
-    padding: 3px;
-    padding-bottom: 3px;
-    padding-right:  3px;
-    border: 1px solid #aaa;
 }
-
-#theTable thead {
-    display: none;
-}
-
-#theTable td {
-    background-color: #eee;
-    border: 3px solid #ddd;
-    border-bottom-width: 0px;
-    border-right-width:  0px;
-}
-
-#theTable td.row_0 {
-    border-top-width: 0px;
-}
-
-#theTable td.col_0 {
-    border-left-width: 0px;
-}
-
-#theTable th,
-#theTable td {
-    padding: 0px;
-
-    white-space: nowrap;
-
-    width:  32px;
-    height: 32px;
-
-    border-radius: 0px;
-
-    text-align: center;
-
-    font-size:   24px;
-    line-height: 24px;
-    vertical-align: middle;
-
-    /* box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.15) inset;*/
-}
-
-#theTable td.crosshair.hint {
-    background-color: #fff;
-}
-
-#theTable td.row_0 {
-    border-top-width: 3px;
-}
-
-#theTable td.col_0 {
-    border-left-width: 3px;
-}
-
-/*#theTable td.row_n {
-    border-bottom-width: 3px;
-}
-
-#theTable td.col_n {
-    border-right-width: 3px;
-}*/
-
-#theTable td.filled {
-    background-color: #bbb;
-}
-
-#theTable th.placeholder {
-    /* visibility: hidden;*/
-    border-bottom-width: 3px;
-    border-right-width:  3px;
-}
-
-#theTable th {
-    border: 0px solid #ddd;
-}
-
-#theTable th.vertical {
-    border-radius: 0px;
-    /* border-top-left-radius:  8px;*/
-    /* border-top-right-radius: 8px;*/
-    /* border-right-width: 3px;*/
-    /* border-top-width:   3px;*/
-}
-
-#theTable th.horizontal {
-    border-radius: 0px;
-    /* border-top-left-radius:    8px;*/
-    /* border-bottom-left-radius: 8px;*/
-    /* border-bottom-width: 3px;*/
-    /* border-left-width:   3px;*/
-}
-
-#theTable th.vertical .hintBackground {
-    display: block;
-    margin-bottom: 4px;
-    margin-left:  auto;
-    margin-right: auto;
-}
-
-#theTable th .hintBackground {
-    margin: 2px;
-    /* background-color: rgba(0, 0, 0, 0.10);*/
-    /* border-radius: 8px;*/
-    width:  24px;
-    height: 24px;
-
-    vertical-align: middle;
-    text-align: center;
-    display: inline-block;
-}
-
-#theTable th .hintBackground .hintNumber {
-    line-height: 24px;
-    display: inline;
-}
-
-#theTable th {
-    vertical-align: bottom;
-    text-align: center;
-    background-color: transparent;
-    /* border-color: transparent;*/
-    font-family: 'Lucida Grande', 'Luxi Sans', sans-serif;
-    font-weight: bold;
-    font-size: 90%;
-    color: #888;
-    text-shadow: 0px 1px 1px white;
-}
-
-#theTable th.even {
-    background-color: #d4d4d4;
-}
-
-#theTable th.placeholder {
-    background-color: transparent;
-}
-
-#theTable td.maybe {
-    /* background-color: rgba(192, 0, 0, 0.10);*/
-    text-shadow: 0px 0px 1px #888;
-    color: #888;
-    font-weight: bold;
-}
-
-#theTable th.horizontal {
-    text-align: right;
-}
-
-#theTable th.crosshair {
-    background-color: #729fcf;
-    color: #fff;
-    text-shadow: 0px 0px 1px black;
-}
-
-#theTable td.crosshair {
-}
-
-#theTable td.selected {
-    /* border-color: #729fcf;*/
-    box-shadow: 0px 0px 0px 3px #729fcf inset;
-}
-
-/*#theTable td.filled.crosshair {
-    background-color: #ccc;
-}*/
