@@ -13,14 +13,21 @@ _.extend(Cell.prototype, {
 
 _.extend(GameModel.prototype, {
     size: 10,
+    x: 50,
+    y: 50,
     init: function() {
+        var S = this.size;
         this.puzzle = [];
-        _(size).times(function() {
+        _(S).times(function() {
             var row = [];
-            _(size).times(function() {
+            _(S).times(function() {
                 row.push({});
             });
         });
+    },
+    setPosition: function(x, y) {
+        this.x = x;
+        this.y = y;
     },
 });
 

@@ -10,17 +10,40 @@ var bindHandler = function(context, element, name) {
 _.extend(GameController.prototype, {
     init: function(opts) {
         _.extend(this, opts);
+
         var self = this;
+
         this.$canvas = $('#game');
-        bindHandler(this, this.$canvas, 'mousemove');
-        bindHandler(this, this.$canvas, 'mousedown');
-        bindHandler(this, this.$canvas, 'contextmenu');
-        bindHandler(this, $(document),  'mouseup');
+
+        var events = [
+            'mousemove',
+            'touchstart',
+            'mousedown',
+            'contextmenu',
+        ];
+
+        _(events).each(function(name) {
+            bindHandler(self, self.$canvas, name);
+        });
+
+        bindHandler(this, $(document), 'mouseup');
     },
     mousemove: function(event) {
-        var x = event.clientX;
-        var y = event.clientY;
+        var off = $(event.target).parent().offset();
+        var x = event.pageX - off.left;
+        var y = event.pageY - off.top;
         // console.log('moved', x, y);
+        this.model.setPosition(x, y);
+        this.view.draw();
+    },
+    touchstart: function(event) {
+        var touch = event.targetTouches[0];
+        var off = $(event.target).parent().offset();
+        var x = touch.pageX - off.left;
+        var y = touch.pageY - off.top;
+        // console.log('moved', x, y);
+        this.model.setPosition(x, y);
+        this.view.draw();
     },
     mousedown: function(event) {
         var x = event.clientX;
@@ -37,7 +60,6 @@ _.extend(GameController.prototype, {
         var button = event.which;
         // console.log('released button', button);
         event.preventDefault();
-        this.view.doTheWave();
     },
 });
 

@@ -1,14 +1,14 @@
 GameView = (function() {
-function GameView() {
-    this.init();
+function GameView(opts) {
+    this.init(opts);
 }
 
 var gray = function(n) {
     return 'rgb(' + [n, n, n] + ')';
 };
 
-var colors = _.map(_.range(1, 90), function(n) {
-    return gray(n * 2 + 90);
+var colors = _.map(_.range(0, 2), function(n) {
+    return gray(n * 10 + 240);
 });
 
 var i = 0;
@@ -17,9 +17,10 @@ var color = function(n) {
 };
 
 _.extend(GameView.prototype, {
-    tileSize: 32,
+    tileSize: 24,
     puzzleSize: 10,
-    init: function() {
+    init: function(opts) {
+        _.extend(this, opts);
         this.$canvas = $('#game');
         this.canvas = this.$canvas.get(0);
         this.canvasSize = this.tileSize * this.puzzleSize;
@@ -28,6 +29,7 @@ _.extend(GameView.prototype, {
         this.ctx = this.canvas.getContext('2d');
     },
     draw: function() {
+        var A = util.now();
         var ctx = this.ctx;
 
         ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
@@ -36,16 +38,16 @@ _.extend(GameView.prototype, {
         var S = this.tileSize;
         _.times(K, function(x) {
             _.times(K, function(y) {
-                ctx.fillStyle = color(i + x + y);
+                ctx.fillStyle = color(x + i++);
                 ctx.fillRect(S * x, S * y, S, S);
             });
         });
-        i++;
-    },
-    doTheWave: function() {
-        var self = this;
-        var id = setInterval(function() { self.draw() }, 20);
-        setTimeout(function() { clearInterval(id) }, 3000);
+
+        var w = 16;
+        ctx.fillStyle = 'rgba(192, 0, 0, 0.50)';
+        ctx.fillRect(this.model.x - w/2, this.model.y - w/2, w, w);
+        var B = util.now();
+        console.log((B - A) + ' ms');
     },
 });
 
