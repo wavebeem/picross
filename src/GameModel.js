@@ -17,17 +17,37 @@ _.extend(GameModel.prototype, {
     y: 50,
     init: function() {
         var S = this.size;
-        this.puzzle = [];
+        var puzzle = [];
         _(S).times(function() {
             var row = [];
             _(S).times(function() {
-                row.push({});
+                var cell = new Cell();
+
+                if (_.random(100) < 10) {
+                    cell.state = 'marked';
+                }
+
+                row.push(cell);
             });
+            puzzle.push(row);
         });
+        this.puzzle = puzzle;
     },
     setPosition: function(x, y) {
         this.x = x;
         this.y = y;
+    },
+    eachCell: function(fun, context) {
+        if (! fun)
+            return;
+
+        var puzzle = this.puzzle;
+        var S = this.size;
+        _.times(S, function(x) {
+            _.times(S, function(y) {
+                fun.call(context, x, y, puzzle[y][x]);
+            });
+        });
     },
 });
 

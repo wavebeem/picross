@@ -17,16 +17,21 @@ var color = function(n) {
 };
 
 _.extend(GameView.prototype, {
-    tileSize: 24,
-    puzzleSize: 10,
+    tileSize: 32,
     init: function(opts) {
         _.extend(this, opts);
         this.$canvas = $('#game');
         this.canvas = this.$canvas.get(0);
-        this.canvasSize = this.tileSize * this.puzzleSize;
+        this.canvasSize = this.tileSize * this.model.size;
         this.canvas.width  = this.canvasSize;
         this.canvas.height = this.canvasSize;
-        this.ctx = this.canvas.getContext('2d');
+        var ctx = this.canvas.getContext('2d');
+        var S = this.tileSize;
+        // ctx.lineWidth = 3;
+        ctx.lineWidth = Math.max((S * 0.10) | 0, 1);
+        ctx.lineCap   = 'round';
+        ctx.lineJoin  = 'round';
+        this.ctx = ctx;
     },
     draw: function() {
         var A = util.now();
@@ -34,14 +39,30 @@ _.extend(GameView.prototype, {
 
         ctx.clearRect(0, 0, this.canvasSize, this.canvasSize);
 
-        var K = this.puzzleSize;
         var S = this.tileSize;
-        _.times(K, function(x) {
-            _.times(K, function(y) {
-                ctx.fillStyle = color(x + i++);
-                ctx.fillRect(S * x, S * y, S, S);
-            });
+        ctx.beginPath();
+        this.model.eachCell(function(x, y, cell) {
+            var X = S * x;
+            var Y = S * y;
+
+            ctx.fillStyle = color(x + y);
+            ctx.fillRect(X, Y, S, S);
+
+            // Draw an X to indicate the square is marked
+            if (cell.state === 'marked') {
+                // Offset from edge of square
+                var O = Math.max((S * 0.20) | 0, 1);
+                // var O = 9;
+
+                ctx.strokeStyle = gray(150);
+
+                ctx.moveTo(X     + O, Y     + O);
+                ctx.lineTo(X + S - O, Y + S - O);
+                ctx.moveTo(X + S - O, Y     + O);
+                ctx.lineTo(X     + O, Y + S - O);
+            }
         });
+        ctx.stroke();
 
         var w = 16;
         ctx.fillStyle = 'rgba(192, 0, 0, 0.50)';

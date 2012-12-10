@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    var modl = new GameModel();
-    var view = new GameView({model: modl});
-    var cont = new GameController({model: modl, view: view});
-    view.draw();
+    var m = new GameModel();
+    var v = new GameView({model: m});
+    var c = new GameController({model: m, view: v});
+    v.draw();
 });
