@@ -12,6 +12,8 @@ var color = function(n) {
     return colors[n % colors.length];
 };
 
+var blue = '#729fcf';
+
 _.extend(GameView.prototype, {
     tileSize: 24,
     borderSize: 3,
@@ -22,9 +24,10 @@ _.extend(GameView.prototype, {
         var TS = this.tileSize;
         var BS = this.borderSize;
         var MS = this.model.size;
-        this.canvasSize = (TS + BS) * MS - BS;
-        this.canvas.width  = this.canvasSize;
-        this.canvas.height = this.canvasSize;
+        var CS = (TS + BS) * MS - BS;
+        this.canvasSize    = CS;
+        this.canvas.width  = CS;
+        this.canvas.height = CS;
         this.ctx = this.canvas.getContext('2d');
     },
     draw: function() {
@@ -57,10 +60,10 @@ _.extend(GameView.prototype, {
             // Draw an X to indicate the square is marked
             if (cell.state === 'marked') {
                 // Offset from edge of square
-                var O = Math.max((S * 0.20) | 0, 1);
+                var O = Math.max((S * 0.30) | 0, 1);
                 // var O = 9;
 
-                ctx.strokeStyle = gray(150);
+                ctx.strokeStyle = gray(175);
                 ctx.lineWidth = Math.max((S * 0.10) | 0, 3);
                 ctx.lineCap   = 'round';
                 ctx.lineJoin  = 'round';
@@ -73,12 +76,7 @@ _.extend(GameView.prototype, {
         });
         ctx.stroke();
 
-        // ctx.fillStyle = '#9BB4CF';
         ctx.fillStyle = gray(210);
-        ctx.lineWidth = G;
-        ctx.lineCap   = 'butt';
-        ctx.lineJoin  = 'miter';
-        ctx.beginPath();
         _(N - 1).times(function(x) {
             var X = x + 1;
             if (X >= 5 && X % 5 === 0) {
@@ -91,14 +89,18 @@ _.extend(GameView.prototype, {
                 ctx.fillRect(0, y * S + T, Q, G);
             }
         });
-        ctx.stroke();
 
         var cx = this.model.x;
         var cy = this.model.y;
 
-        var w = 16;
-        ctx.fillStyle = 'rgba(174, 202, 232, 0.90)';
-        ctx.fillRect(cx * S, cy * S, T, T);
+        var X = cx * S;
+        var Y = cy * S;
+        var t = T - G;
+        ctx.fillStyle = blue;
+        ctx.fillRect(X + 0, Y + 0, T, G);
+        ctx.fillRect(X + 0, Y + 0, G, T);
+        ctx.fillRect(X + t, Y + 0, G, T);
+        ctx.fillRect(X + 0, Y + t, T, G);
         var B = util.now();
         // console.log((B - A) + ' ms');
     },
