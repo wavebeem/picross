@@ -9,12 +9,13 @@ function Cell(opts) {
 
 _.extend(Cell.prototype, {
     state: 'empty',
+    crosshair: false,
 });
 
 _.extend(GameModel.prototype, {
-    size: 10,
-    x: 50,
-    y: 50,
+    size: 20,
+    x: 0,
+    y: 0,
     init: function() {
         var S = this.size;
         var puzzle = [];
@@ -26,6 +27,9 @@ _.extend(GameModel.prototype, {
                 if (_.random(100) < 10) {
                     cell.state = 'marked';
                 }
+                else if (_.random(100) < 5) {
+                    cell.state = 'filled';
+                }
 
                 row.push(cell);
             });
@@ -34,8 +38,13 @@ _.extend(GameModel.prototype, {
         this.puzzle = puzzle;
     },
     setPosition: function(x, y) {
+        this.puzzle[this.y][this.x].crosshair = false;
         this.x = x;
         this.y = y;
+        this.puzzle[this.y][this.x].crosshair = true;
+    },
+    getCell: function(x, y) {
+        return this.puzzle[y][x];
     },
     eachCell: function(fun, context) {
         if (! fun)

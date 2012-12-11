@@ -4,7 +4,9 @@ function GameController(opts) {
 }
 
 var bindHandler = function(context, element, name) {
-    element.on(name, function(event) { context[name](event) });
+    element.on(name, function(event) {
+        context[name](event);
+    });
 };
 
 _.extend(GameController.prototype, {
@@ -28,12 +30,22 @@ _.extend(GameController.prototype, {
 
         bindHandler(this, $(document), 'mouseup');
     },
+    positionForXY: function(x, y) {
+        var S  = this.view.tileSize;
+        var B  = this.view.borderSize;
+        var G  = S + B;
+        var cx = ((x/G) | 0) - 0;
+        var cy = ((y/G) | 0) - 0;
+        cx = Math.min(cx, this.model.size - 1);
+        cy = Math.min(cy, this.model.size - 1);
+        return {x: cx, y: cy};
+    },
     mousemove: function(event) {
         var off = $(event.target).parent().offset();
         var x = event.pageX - off.left;
         var y = event.pageY - off.top;
-        // console.log('moved', x, y);
-        this.model.setPosition(x, y);
+        var p = this.positionForXY(x, y);
+        this.model.setPosition(p.x, p.y);
         this.view.draw();
     },
     touchstart: function(event) {
@@ -42,14 +54,17 @@ _.extend(GameController.prototype, {
         var x = touch.pageX - off.left;
         var y = touch.pageY - off.top;
         // console.log('moved', x, y);
-        this.model.setPosition(x, y);
         this.view.draw();
     },
     mousedown: function(event) {
-        var x = event.clientX;
-        var y = event.clientY;
+        var off = $(event.target).parent().offset();
+        var x = event.pageX - off.left;
+        var y = event.pageY - off.top;
         var button = event.which;
         // console.log('pressed button', button);
+        var p = this.positionForXY(x, y);
+        var cell = this.model.getCell(p.x, p.y);
+        cell.state = 'filled';
         event.preventDefault();
     },
     contextmenu: function(event) {
