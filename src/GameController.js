@@ -10,6 +10,10 @@ var bindHandler = function(context, element, name) {
 };
 
 _.extend(GameController.prototype, {
+    buttonMap: {
+        1: 'filled',
+        3: 'marked',
+    },
     init: function(opts) {
         _.extend(this, opts);
 
@@ -30,6 +34,12 @@ _.extend(GameController.prototype, {
 
         bindHandler(this, $(document), 'mouseup');
     },
+    maybeDraw: function() {
+        if (this.model.isDirty) {
+            this.view.draw();
+            this.model.isDirty = false;
+        }
+    },
     positionForXY: function(x, y) {
         var S  = this.view.tileSize;
         var B  = this.view.borderSize;
@@ -46,7 +56,7 @@ _.extend(GameController.prototype, {
         var y = event.pageY - off.top;
         var p = this.positionForXY(x, y);
         this.model.setPosition(p.x, p.y);
-        this.view.draw();
+        this.maybeDraw();
     },
     touchstart: function(event) {
         var touch = event.targetTouches[0];
@@ -54,7 +64,8 @@ _.extend(GameController.prototype, {
         var x = touch.pageX - off.left;
         var y = touch.pageY - off.top;
         // console.log('moved', x, y);
-        this.view.draw();
+        this.maybeDraw();
+        event.preventDefault();
     },
     mousedown: function(event) {
         var off = $(event.target).parent().offset();
@@ -63,8 +74,10 @@ _.extend(GameController.prototype, {
         var button = event.which;
         // console.log('pressed button', button);
         var p = this.positionForXY(x, y);
-        var cell = this.model.getCell(p.x, p.y);
-        cell.state = 'filled';
+        if (this.buttonMap[button]) {
+            this.model.setCellStateAt(p.x, p.y, this.buttonMap[button]);
+        }
+        this.maybeDraw();
         event.preventDefault();
     },
     contextmenu: function(event) {

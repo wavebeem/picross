@@ -16,6 +16,7 @@ _.extend(GameModel.prototype, {
     size: 20,
     x: 0,
     y: 0,
+    isDirty: false,
     init: function() {
         var S = this.size;
         var puzzle = [];
@@ -38,13 +39,25 @@ _.extend(GameModel.prototype, {
         this.puzzle = puzzle;
     },
     setPosition: function(x, y) {
-        this.puzzle[this.y][this.x].crosshair = false;
+        var P = this.puzzle;
+        var Y = this.y;
+        var X = this.x;
+        if (y === Y && x === X)
+            return;
+
+        P[Y][X].crosshair = false;
+        P[y][x].crosshair = true;
         this.x = x;
         this.y = y;
-        this.puzzle[this.y][this.x].crosshair = true;
+        this.isDirty = true;
     },
-    getCell: function(x, y) {
-        return this.puzzle[y][x];
+    setCellStateAt: function(x, y, state) {
+        var cell = this.puzzle[y][x];
+        if (cell.state === state)
+            return;
+
+        cell.state = state;
+        this.isDirty = true;
     },
     eachCell: function(fun, context) {
         if (! fun)

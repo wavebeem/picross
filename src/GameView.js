@@ -101,8 +101,9 @@ _.extend(GameView.prototype, {
         ctx.fillRect(X + 0, Y + 0, G, T);
         ctx.fillRect(X + t, Y + 0, G, T);
         ctx.fillRect(X + 0, Y + t, T, G);
+
         var B = util.now();
-        // console.log((B - A) + ' ms');
+        console.log((B - A) + ' ms');
     },
 });
 
