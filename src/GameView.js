@@ -75,6 +75,7 @@ _.extend(GameView.prototype, {
             }
         });
         ctx.stroke();
+        ctx.closePath();
 
         ctx.fillStyle = gray(210);
         _(N - 1).times(function(x) {
