@@ -134,7 +134,7 @@ _.extend(GameView.prototype, {
         ctx.closePath();
 
         var B = util.now();
-        console.log((B - A) + ' ms');
+        // console.log((B - A) + ' ms');
     },
 });
 
