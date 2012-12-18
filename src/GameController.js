@@ -10,39 +10,64 @@ var bindHandler = function(context, element, name) {
 };
 
 var K = {
+    MINUS_:  173,
+    EQUALS_:  61,
+
     MINUS:  189,
     EQUALS: 187,
     ZERO:    48,
-
-    MINUS_:  173,
-    EQUALS_:  61,
 
     UP:      38,
     DOWN:    40,
     LEFT:    37,
     RIGHT:   39,
+
+    SPACE:   32,
+
+    Z:  90,
 };
 
+var mungeKeymap = function(keymapName) {
+    var pairs = _.pairs(this[keymapName]);
+    var map   = {};
+    this[keymapName] = map;
+    _.each(pairs, function(pair) {
+        var a = pair[0];
+        var b = pair[1];
+        // console.log(a, b);
+        map[K[a]] = b;
+    });
+    _(['MINUS', 'EQUALS']).each(function(name) {
+        map[name + '_'] = map[name];
+    });
+}
+
 _.extend(GameController.prototype, {
-    buttonMap: {
-        1: 'filled',
-        2: 'empty',
-        3: 'marked',
+    buttonDownMap: {
+        1: function() { this.model.startMode('fill') },
+        3: function() { this.model.startMode('mark') },
     },
-    keyMap: {
+    buttonUpMap: {
+        1: function() { this.model.startMode(undefined) },
+        3: function() { this.model.startMode(undefined) },
+    },
+    keyDownMap: {
         MINUS:  function() { this.view.shrink() },
         EQUALS: function() { this.view.grow() },
         ZERO:   function() { this.view.resetTileSize() },
 
-        MINUS_:  function() { this.view.shrink() },
-        EQUALS_: function() { this.view.grow() },
+        UP:    function() { this.model.moveDirection('up') },
+        DOWN:  function() { this.model.moveDirection('down') },
+        LEFT:  function() { this.model.moveDirection('left') },
+        RIGHT: function() { this.model.moveDirection('right') },
 
-        UP:    function() { this.model.moveCursor('up') },
-        DOWN:  function() { this.model.moveCursor('down') },
-        LEFT:  function() { this.model.moveCursor('left') },
-        RIGHT: function() { this.model.moveCursor('right') },
+        Z:     function() { this.model.startMode('mark') },
+        SPACE: function() { this.model.startMode('fill') },
     },
-    mode: 0,
+    keyUpMap: {
+        Z:     function() { this.model.startMode(undefined) },
+        SPACE: function() { this.model.startMode(undefined) },
+    },
     repeatInterval: 100,
     repeatDelay: 300,
     init: function(opts) {
@@ -50,36 +75,25 @@ _.extend(GameController.prototype, {
 
         var self = this;
 
-        this.intervals = {};
-        this.timeouts  = {};
+        self.intervals = {};
+        self.timeouts  = {};
 
-        var pairs = _.pairs(this.keyMap);
-        this.keyMap = {};
-        _.each(pairs, function(pair) {
-            var a = pair[0];
-            var b = pair[1];
-            self.keyMap[K[a]] = b;
-        });
-        _(['MINUS', 'EQUALS']).each(function(name) {
-            self.keyMap[name + '_'] = self.keyMap[name];
-        });
+        mungeKeymap.call(self, 'keyDownMap');
+        mungeKeymap.call(self, 'keyUpMap');
 
-        this.keysHeld = {};
+        self.keysHeld = {};
 
-        this.$canvas = $('#game');
-
-        var events = [
-        ];
+        self.$canvas = $('#game');
 
         _([
             'mousemove',
             'mousedown',
-            'contextmenu',
         ]).each(function(name) {
             bindHandler(self, self.$canvas, name);
         });
 
         _([
+            'contextmenu',
             'mouseup',
             'keydown',
             'keyup',
@@ -116,10 +130,10 @@ _.extend(GameController.prototype, {
             return;
         console.log('KEYDOWN ' + k);
         console.log('KEYCODE ' + event.keyCode);
-        var fun = this.keyMap[k];
 
         this.keysHeld[k] = true;
 
+        var fun = this.keyDownMap[k];
         if (fun) {
             if (this.isArrowKey(k)) {
                 this.startRepeating(k, fun);
@@ -127,6 +141,7 @@ _.extend(GameController.prototype, {
             fun.call(this);
             event.preventDefault();
         }
+
         this.maybeDraw();
     },
     keyup: function(event) {
@@ -134,36 +149,54 @@ _.extend(GameController.prototype, {
         console.log('KEYUP   ' + k);
         this.keysHeld[k] = false;
         this.stopRepeating(k);
+
+        var fun = this.keyUpMap[k];
+        if (fun) {
+            fun.call(this);
+            event.preventDefault();
+        }
+
+        this.maybeDraw();
     },
     mousemove: function(event) {
+        // console.log('MOUSEMOVE');
         var off = $(event.target).parent().offset();
         var x = event.pageX - off.left;
         var y = event.pageY - off.top;
         var p = this.positionForXY(x, y);
-        this.model.setPosition(p.x, p.y);
+        this.model.moveTo(p.x, p.y);
         this.maybeDraw();
     },
     mousedown: function(event) {
+        console.log('MOUSEDOWN');
         var off = $(event.target).parent().offset();
         var x = event.pageX - off.left;
         var y = event.pageY - off.top;
         var button = event.which;
         // console.log('pressed button', button);
         var p = this.positionForXY(x, y);
-        if (this.buttonMap[button]) {
-            this.model.setCellStateAt(p.x, p.y, this.buttonMap[button]);
+        this.model.moveTo(p.x, p.y);
+        var fun = this.buttonDownMap[button];
+        if (fun) {
+            fun.call(this);
+            event.preventDefault();
         }
         this.maybeDraw();
-        event.preventDefault();
     },
     contextmenu: function(event) {
+        console.log('CONTEXTMENU');
         // console.log('contextmenu');
         event.preventDefault();
     },
     mouseup: function(event) {
+        console.log('MOUSEUP');
         var button = event.which;
+        var fun = this.buttonUpMap[button];
+        if (fun) {
+            fun.call(this);
+            event.preventDefault();
+        }
         // console.log('released button', button);
-        event.preventDefault();
     },
     startRepeating: function(k, f) {
         var self = this;
@@ -178,12 +211,14 @@ _.extend(GameController.prototype, {
         }, self.repeatDelay);
     },
     stopRepeating: function(k) {
-        var t = this.timeouts [k];
-        var i = this.intervals[k];
+        var T = this.timeouts;
+        var I = this.intervals
+        var t = T[k];
+        var i = I[k];
         if (t) clearTimeout(t);
         if (i) clearInterval(i);
-        this.timeouts [k] = undefined;
-        this.intervals[k] = undefined;
+        T[k] = undefined;
+        I[k] = undefined;
     },
 });
 

@@ -14,7 +14,7 @@ var color = function(n) {
 
 var blue   = '#729fcf';
 // var shadow = 'rgba(0, 0, 0, 0.90)';
-var shadow = 'rgba(128, 128, 128, 0.90)';
+var shadow = 'rgba(128, 128, 128, 0.75)';
 
 _.extend(GameView.prototype, {
     incrementSize: 5,
@@ -119,10 +119,10 @@ _.extend(GameView.prototype, {
         ctx.fillRect(X + 0, Y + t, T, G);
 
         ctx.beginPath();
-        ctx.fillStyle = shadow;
-        ctx.lineWidth = 1.5;
-        ctx.lineCap   = 'butt';
-        ctx.lineJoin  = 'miter';
+        ctx.strokeStyle = shadow;
+        ctx.lineWidth   = 1.5;
+        ctx.lineCap     = 'butt';
+        ctx.lineJoin    = 'miter';
 
         ctx.moveTo(0 , 0 );
         ctx.lineTo(CS, 0 );
