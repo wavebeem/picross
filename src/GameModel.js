@@ -9,7 +9,6 @@ function Cell(opts) {
 
 _.extend(Cell.prototype, {
     state: 'empty',
-    crosshair: false,
 });
 
 _.extend(GameModel.prototype, {
@@ -19,6 +18,11 @@ _.extend(GameModel.prototype, {
     size: 20,
     x: 0,
     y: 0,
+    cellStateToChar: {
+        'filled': '#',
+        'marked': 'x',
+        'empty' : '.',
+    },
     directionDeltas: {
         up:     {dx:  0, dy: -1},
         down:   {dx:  0, dy: +1},
@@ -33,41 +37,13 @@ _.extend(GameModel.prototype, {
         _(S).times(function() {
             var row = [];
             _(S).times(function() {
-                var cell = new Cell();
-
-                // if (_.random(100) < 10) {
-                //     cell.state = 'marked';
-                // }
-                // else if (_.random(100) < 5) {
-                //     cell.state = 'filled';
-                // }
-
-                row.push(cell);
+                row.push(new Cell());
             });
             puzzle.push(row);
         });
         this.puzzle = puzzle;
-    },
-    dumpState: function() {
-        var P     = this.puzzle;
-        var S     = this.size;
-        var txt   = '';
-        var chars = {
-            filled: '@ ',
-            marked: 'x ',
-            empty:  '. ',
-        };
-        txt += '--------+\n';
-        txt += 'MODE    |  ' + this.mode     + '\n';
-        txt += 'ERASER  |  ' + this.eraser   + '\n';
-        txt += 'STROKE  |  ' + this.stroking + '\n';
-        _(S).times(function(y) {
-            _(S).times(function(x) {
-                txt += chars[P[y][x].state];
-            });
-            txt += '\n';
-        });
-        console.log(txt);
+        this.charToCellState = _.invert(this.cellStateToChar);
+        this.undoHistory = [];
     },
     startMode: function(mode) {
         var x = this.x;
@@ -94,10 +70,10 @@ _.extend(GameModel.prototype, {
         };
         var result  = flow[mode][state];
         this.mode   = mode;
-        cell.state  = result;
 
-        // this.dumpState();
-        if (cell.state !== state) {
+        if (result !== state) {
+            this.pushUndoHistory();
+            cell.state  = result;
             this.isDirty = true;
         }
     },
@@ -121,12 +97,10 @@ _.extend(GameModel.prototype, {
 
         this.lastPosition = {x: X, y: Y};
 
-        P[Y][X].crosshair = false;
-        P[y][x].crosshair = true;
         this.x = x;
         this.y = y;
         this.isDirty = true;
-        this.startMode(this.mode, this.stroking);
+        this.startMode(this.mode);
     },
     moveDirection: function(direction) {
         var d = this.directionDeltas[direction];
@@ -135,15 +109,45 @@ _.extend(GameModel.prototype, {
         }
         this.moveTo(this.x + d.dx, this.y + d.dy);
     },
-    setCellState: function(state) {
-        var x = this.x;
-        var y = this.y;
-        var cell = this.puzzle[y][x];
-        if (cell.state === state)
+    serializedPuzzleState: function() {
+        var self = this;
+        var txt = '';
+        var S = self.size - 1;
+        self.eachCell(function(x, y, cell) {
+            txt += self.cellStateToChar[cell.state];
+            if (y === S) {
+                txt += '\n';
+            }
+        });
+        return txt;
+    },
+    undo: function() {
+        this.popUndoHistory();
+    },
+    pushUndoHistory: function() {
+        var state = this.serializedPuzzleState();
+        console.log('PUSHING HISTORY\n', state);
+        this.undoHistory.push(state);
+    },
+    popUndoHistory: function() {
+        if (this.undoHistory.length === 0)
             return;
 
-        cell.state = state;
-        this.isDirty = true;
+        var state = this.undoHistory.pop();
+        this.restoreFromSerializedPuzzleState(state);
+    },
+    restoreFromSerializedPuzzleState: function(state) {
+        var self = this;
+        var lines = state.split('\n');
+        var S = self.size;
+        _(S).times(function(y) {
+            _(S).times(function(x) {
+                self.puzzle[y][x] = new Cell({
+                    state: self.charToCellState[lines[x][y]]
+                });
+            });
+        });
+        self.isDirty = true;
     },
     eachCell: function(fun, context) {
         if (! fun)

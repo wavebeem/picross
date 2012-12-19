@@ -25,6 +25,7 @@ var K = {
     SPACE:   32,
 
     Z:  90,
+    U:  85,
 };
 
 var mungeKeymap = function(keymapName) {
@@ -63,6 +64,8 @@ _.extend(GameController.prototype, {
 
         Z:     function() { this.model.startMode('mark') },
         SPACE: function() { this.model.startMode('fill') },
+
+        U:     function() { this.model.undo() },
     },
     keyUpMap: {
         Z:     function() { this.model.startMode(undefined) },
