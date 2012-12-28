@@ -1,4 +1,4 @@
-GameController = (function() {
+var GameController = (function() {
 function GameController(opts) {
     this.init(opts);
 }
@@ -45,12 +45,12 @@ var mungeKeymap = function(keymapName) {
 
 _.extend(GameController.prototype, {
     buttonDownMap: {
-        1: function() { this.model.startMode('fill') },
-        3: function() { this.model.startMode('mark') },
+        1: function() { this.model.pushUndoHistory(); this.model.startMode('fill') },
+        3: function() { this.model.pushUndoHistory(); this.model.startMode('mark') },
     },
     buttonUpMap: {
-        1: function() { this.model.startMode(undefined) },
-        3: function() { this.model.startMode(undefined) },
+        1: function() { this.model.startMode('none') },
+        3: function() { this.model.startMode('none') },
     },
     keyDownMap: {
         MINUS:  function() { this.view.shrink() },
@@ -62,14 +62,14 @@ _.extend(GameController.prototype, {
         LEFT:  function() { this.model.moveDirection('left') },
         RIGHT: function() { this.model.moveDirection('right') },
 
-        Z:     function() { this.model.startMode('mark') },
-        SPACE: function() { this.model.startMode('fill') },
+        Z:     function() { this.model.pushUndoHistory(); this.model.startMode('mark') },
+        SPACE: function() { this.model.pushUndoHistory(); this.model.startMode('fill') },
 
         U:     function() { this.model.undo() },
     },
     keyUpMap: {
-        Z:     function() { this.model.startMode(undefined) },
-        SPACE: function() { this.model.startMode(undefined) },
+        Z:     function() { this.model.startMode('none') },
+        SPACE: function() { this.model.startMode('none') },
     },
     repeatInterval: 100,
     repeatDelay: 300,
@@ -114,6 +114,7 @@ _.extend(GameController.prototype, {
     maybeDraw: function() {
         if (this.model.isDirty) {
             this.view.draw();
+            this.minimap.draw();
             this.model.isDirty = false;
         }
     },
@@ -162,8 +163,8 @@ _.extend(GameController.prototype, {
         this.maybeDraw();
     },
     mousemove: function(event) {
-        // console.log('MOUSEMOVE');
-        var off = $(event.target).parent().offset();
+        console.log('MOUSEMOVE');
+        var off = $(event.target).offset();
         var x = event.pageX - off.left;
         var y = event.pageY - off.top;
         var p = this.positionForXY(x, y);
@@ -172,7 +173,7 @@ _.extend(GameController.prototype, {
     },
     mousedown: function(event) {
         console.log('MOUSEDOWN');
-        var off = $(event.target).parent().offset();
+        var off = $(event.target).offset();
         var x = event.pageX - off.left;
         var y = event.pageY - off.top;
         var button = event.which;

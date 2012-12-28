@@ -11,10 +11,19 @@
     <script type='text/javascript' src='src/GameModel.js'></script>
     <script type='text/javascript' src='src/GameView.js'></script>
     <script type='text/javascript' src='src/GameController.js'></script>
+    <script type='text/javascript' src='src/MinimapView.js'></script>
     <script type='text/javascript' src='src/main.js'></script>
 </head>
 <body>
-<div id='container'>
+<div id='sidebar'>
+    <canvas id='minimap'></canvas>
+    <ul>
+        <li><a href='#alpha'>Menu</a></li>
+        <li><a href='#beta'>Save</a></li>
+        <li><a href='#gamma'>Quit</a></li>
+    </ul>
+</div>
+<div id='content'>
     <canvas id='game'>
         <p>
             Your web browser needs canvas support to run this game.

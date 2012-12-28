@@ -1,4 +1,4 @@
-GameModel = (function() {
+var GameModel = (function() {
 function GameModel() {
     this.init();
 }
@@ -13,7 +13,7 @@ _.extend(Cell.prototype, {
 
 _.extend(GameModel.prototype, {
     eraser: false,
-    mode: undefined,
+    mode: 'none',
     stroking: false,
     size: 20,
     x: 0,
@@ -62,7 +62,7 @@ _.extend(GameModel.prototype, {
                 marked: 'marked',
                 empty:  'marked',
             },
-            undefined: {
+            none: {
                 filled: 'filled',
                 marked: 'marked',
                 empty:  'empty',
@@ -72,7 +72,6 @@ _.extend(GameModel.prototype, {
         this.mode   = mode;
 
         if (result !== state) {
-            this.pushUndoHistory();
             cell.state  = result;
             this.isDirty = true;
         }
@@ -102,6 +101,9 @@ _.extend(GameModel.prototype, {
         this.isDirty = true;
         this.startMode(this.mode);
     },
+    cellStateAt: function(x, y) {
+        return this.puzzle[y][x].state;
+    },
     moveDirection: function(direction) {
         var d = this.directionDeltas[direction];
         if (! d) {
@@ -125,8 +127,10 @@ _.extend(GameModel.prototype, {
         this.popUndoHistory();
     },
     pushUndoHistory: function() {
+        console.log('PUSHING UNDO HISTORY');
         var state = this.serializedPuzzleState();
-        console.log('PUSHING HISTORY\n', state);
+        // console.log('PUSHING HISTORY');
+        // console.log(state);
         this.undoHistory.push(state);
     },
     popUndoHistory: function() {

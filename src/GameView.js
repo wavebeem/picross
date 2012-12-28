@@ -1,4 +1,4 @@
-GameView = (function() {
+var GameView = (function() {
 function GameView(opts) {
     this.init(opts);
 }

@@ -1,6 +1,7 @@
 $(document).ready(function() {
-    var m = new GameModel();
-    var v = new GameView({model: m});
-    var c = new GameController({model: m, view: v});
-    v.draw();
+    model      = new GameModel();
+    view       = new GameView({model: model});
+    minimap    = new MinimapView({model: model});
+    controller = new GameController({model: model, view: view, minimap: minimap});
+    _([view, minimap]).invoke('draw');
 });
