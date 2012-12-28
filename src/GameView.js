@@ -3,21 +3,6 @@ function GameView(opts) {
     this.init(opts);
 }
 
-var gray = function(n) {
-    return 'rgb(' + [n, n, n] + ')';
-};
-
-var colors = _([250, 250]).map(gray);
-var color = function(n) {
-    return colors[n % colors.length];
-};
-
-var blue   = '#729fcf';
-// var blue   = 'rgba(255, 0, 0, 0.25)';
-// var shadow = 'rgba(0, 0, 0, 0.90)';
-// var shadow = 'rgba(128, 128, 128, 0.75)';
-var shadow = 'rgba(164, 164, 164, 0.75)';
-
 _.extend(GameView.prototype, {
     incrementSize: 5,
     tileSize: 25,
@@ -25,7 +10,7 @@ _.extend(GameView.prototype, {
     init: function(opts) {
         _.extend(this, opts);
         this.$canvas = $('#game');
-        this.canvas = this.$canvas.get(0);
+        this.canvas = this.$canvas[0];
         this.setTileSize(this.tileSize);
         this.ctx = this.canvas.getContext('2d');
     },
@@ -66,11 +51,10 @@ _.extend(GameView.prototype, {
             var Y = S * y;
 
             if (cell.state === 'filled') {
-                ctx.fillStyle = gray(187);
+                ctx.fillStyle = colors.filled;
             }
             else {
-                ctx.fillStyle = color(x + y);
-                // ctx.fillStyle = gray(245);
+                ctx.fillStyle = colors.background;
             }
             ctx.fillRect(X, Y, T, T);
 
@@ -78,9 +62,8 @@ _.extend(GameView.prototype, {
             if (cell.state === 'marked') {
                 // Offset from edge of square
                 var O = Math.max((S * 0.30) | 0, 1);
-                // var O = 9;
 
-                ctx.strokeStyle = gray(175);
+                ctx.strokeStyle = colors.marked;
                 ctx.lineWidth = Math.max((S * 0.10) | 0, 3);
                 ctx.lineCap   = 'round';
                 ctx.lineJoin  = 'round';
@@ -94,7 +77,7 @@ _.extend(GameView.prototype, {
         ctx.stroke();
         ctx.closePath();
 
-        ctx.fillStyle = gray(210);
+        ctx.fillStyle = colors.majorLines;
         _(N - 1).times(function(x) {
             var X = x + 1;
             if (X >= 5 && X % 5 === 0) {
@@ -114,14 +97,14 @@ _.extend(GameView.prototype, {
         var X = cx * S;
         var Y = cy * S;
         var t = T - G;
-        ctx.fillStyle = blue;
+        ctx.fillStyle = colors.highlight;
         ctx.fillRect(X + 0, Y + 0, T, G);
         ctx.fillRect(X + 0, Y + 0, G, T);
         ctx.fillRect(X + t, Y + 0, G, T);
         ctx.fillRect(X + 0, Y + t, T, G);
 
         ctx.beginPath();
-        ctx.strokeStyle = shadow;
+        ctx.strokeStyle = colors.shadow;
         ctx.lineWidth   = 1.5;
         ctx.lineCap     = 'butt';
         ctx.lineJoin    = 'miter';
