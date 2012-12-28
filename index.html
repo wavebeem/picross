@@ -17,11 +17,22 @@
 <body>
 <div id='sidebar'>
     <canvas id='minimap'></canvas>
-    <ul>
-        <li><a href='#alpha'>Menu</a></li>
-        <li><a href='#beta'>Save</a></li>
-        <li><a href='#gamma'>Quit</a></li>
-    </ul>
+    <div class='menu'>
+        <div class='header'>Menu</div>
+        <ul>
+            <li><a href='#alpha'>Puzzles</a></li>
+            <li><a href='#beta'>Save</a></li>
+            <li><a href='#gamma'>Quit</a></li>
+        </ul>
+    </div>
+    <div class='menu'>
+        <div class='header'>Game</div>
+        <ul>
+            <li><a href='#alpha'>Pen</a></li>
+            <li class='selected'><a href='#beta'>Check</a></li>
+            <li><a href='#gamma'>Eraser</a></li>
+        </ul>
+    </div>
 </div>
 <div id='content'>
     <canvas id='game'>

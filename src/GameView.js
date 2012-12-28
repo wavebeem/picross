@@ -7,14 +7,16 @@ var gray = function(n) {
     return 'rgb(' + [n, n, n] + ')';
 };
 
-var colors = _([245, 250]).map(gray);
+var colors = _([250, 250]).map(gray);
 var color = function(n) {
     return colors[n % colors.length];
 };
 
 var blue   = '#729fcf';
+// var blue   = 'rgba(255, 0, 0, 0.25)';
 // var shadow = 'rgba(0, 0, 0, 0.90)';
-var shadow = 'rgba(128, 128, 128, 0.75)';
+// var shadow = 'rgba(128, 128, 128, 0.75)';
+var shadow = 'rgba(164, 164, 164, 0.75)';
 
 _.extend(GameView.prototype, {
     incrementSize: 5,
