@@ -6,6 +6,19 @@
             box-sizing: border-box;
 }
 
+#timer,
+#game {
+    -webkit-touch-callout: none;
+
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+
+    cursor: default;
+}
+
 :focus {
     outline: none;
 }
@@ -56,6 +69,8 @@ body {
     top:    0px;
     left:   0px;
     bottom: 0px;
+
+    font-size: 12pt;
 }
 
 #sidebar { width:       100px; }
@@ -108,12 +123,14 @@ body {
 
 #sidebar .header {
     font-weight: bold;
-    color: #999;
+    color: #aaa;
     text-shadow: 0px 1px 1px white;
     padding-left:  6px;
     padding-right: 6px;
     margin-top:    3px;
     margin-bottom: 3px;
+
+    font-size: 10pt;
 }
 
 #sidebar .menu {
@@ -135,6 +152,26 @@ body {
     display: block;
     padding:      4px;
     padding-left: 9px;
+}
+
+#sidebar #timer {
+    text-align: center;
+
+    font-weight: bold;
+    color: #666;
+    text-shadow: 0px 1px 1px white;
+
+    font-size: 20pt;
+
+    /* font-family:*/
+    /*     'Bitstream Vera Sans Mono',*/
+    /*     'Dejavu Sans Mono',*/
+    /*     'Menlo Sans',*/
+    /*     'Consolas',*/
+    /*     'Lucida Console',*/
+    /*     monospace;*/
+
+    margin-bottom: 20px;
 }
 
 #sidebar ul li:hover {

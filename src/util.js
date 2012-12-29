@@ -20,5 +20,11 @@ return {
     alphaGray: function(n, a) {
         return 'rgba(' + [n, n, n, a] + ')';
     },
+    valueOrElse: function(value, fallback) {
+        return typeof value === 'undefined' ? fallback : value;
+    },
+    zeroPad: function(n) {
+        return (n < 10 ? '0' : '') + n;
+    },
 };
 })();

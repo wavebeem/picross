@@ -12,34 +12,41 @@
     <script type='text/javascript' src='src/GameModel.js'></script>
     <script type='text/javascript' src='src/GameView.js'></script>
     <script type='text/javascript' src='src/GameController.js'></script>
+    <script type='text/javascript' src='src/TimerController.js'></script>
     <script type='text/javascript' src='src/MinimapView.js'></script>
     <script type='text/javascript' src='src/main.js'></script>
 </head>
 <body>
 <div id='sidebar'>
     <canvas id='minimap'></canvas>
+    <div id='timer'>0:00</div>
     <div class='menu'>
         <div class='header'>Menu</div>
         <ul>
-            <li><a href='#alpha'>Puzzles</a></li>
-            <li><a href='#beta'>Save</a></li>
-            <li><a href='#gamma'>Quit</a></li>
+            <li><a href='#'>Puzzles</a></li>
+            <li><a href='#'>Pause</a></li>
+            <li><a href='#'>Help</a></li>
+        </ul>
+    </div>
+    <div class='menu'>
+        <div class='header'>Cursor</div>
+        <ul>
+            <li><a href='#'>Pen</a></li>
+            <li class='selected'><a href='#'>Check</a></li>
+            <li><a href='#'>Eraser</a></li>
         </ul>
     </div>
     <div class='menu'>
         <div class='header'>Game</div>
         <ul>
-            <li><a href='#alpha'>Pen</a></li>
-            <li class='selected'><a href='#beta'>Check</a></li>
-            <li><a href='#gamma'>Eraser</a></li>
+            <li><a href='#'>Undo</a></li>
+            <li><a href='#'>Reset</a></li>
         </ul>
     </div>
 </div>
 <div id='content'>
     <canvas id='game'>
-        <p>
-            Your web browser needs canvas support to run this game.
-        </p>
+        <p>Your web browser needs canvas support to run this game.</p>
         <p>
             Try upgrading to
             <a href='http://www.google.com/chrome'>Google Chrome</a> or
