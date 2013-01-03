@@ -177,6 +177,9 @@ _.extend(GameController.prototype, {
         var x = event.pageX - off.left;
         var y = event.pageY - off.top;
         var button = event.which;
+        if (button === 3) {
+            this.dontShowContextMenu = true;
+        }
         // console.log('pressed button', button);
         var p = this.positionForXY(x, y);
         this.model.moveTo(p.x, p.y);
@@ -190,7 +193,10 @@ _.extend(GameController.prototype, {
     contextmenu: function(event) {
         console.log('CONTEXTMENU');
         // console.log('contextmenu');
-        event.preventDefault();
+        if (this.dontShowContextMenu) {
+            event.preventDefault();
+            this.dontShowContextMenu = false;
+        }
     },
     mouseup: function(event) {
         console.log('MOUSEUP');

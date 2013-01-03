@@ -3,7 +3,7 @@ function MinimapView(opts) {
     this.init(opts);
 }
 
-var shadow = 'rgba(128, 128, 128, 0.75)';
+var shadow = 'rgba(128, 128, 128, 0.95)';
 
 _.extend(MinimapView.prototype, {
     color: '#000',

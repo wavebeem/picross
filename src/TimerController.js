@@ -37,10 +37,12 @@ _.extend(TimerController.prototype, {
 
         sec = util.zeroPad(sec);
         if (hrs > 0) {
+            this.$timer.addClass('hoursShowing');
             min = util.zeroPad(min);
             return '' + hrs + ':' + min + ':' + sec;
         }
         else {
+            this.$timer.removeClass('hoursShowing');
             return min + ':' + sec;
         }
 

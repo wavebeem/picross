@@ -36,6 +36,13 @@ body {
     margin:  0px;
 }
 
+html,
+body,
+#content {
+    min-height: 100%;
+    height:     100%;
+}
+
 #game {
     border: 3px solid #ddd;
     border-radius: 3px;
@@ -52,18 +59,10 @@ body {
 
 #sidebar {
     padding: 0px;
-    /* background-color: #ddd;*/
-    background-color: #ddd;
-    background-image: -webkit-linear-gradient(left,      rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.00));
-    background-image:    -moz-linear-gradient(left,      rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.00));
-    background-image:     -ms-linear-gradient(left,      rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.00));
-    background-image:      -o-linear-gradient(left,      rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.00));
-    background-image:         linear-gradient(to right,  rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.00));
-    /* background-color: rgb(200, 215, 240);*/
+    background-color: #ccc;
 
-    box-shadow: inset -8px 0px 8px -8px rgba(0, 0, 0, 0.15);
-
-    border-right: 1px solid #bbb;
+    border-right: 3px solid white;
+    /* box-shadow: inset -9px 0px 9px -9px rgba(0, 0, 0, 0.25);*/
 
     position: absolute;
     top:    0px;
@@ -71,6 +70,8 @@ body {
     bottom: 0px;
 
     font-size: 12pt;
+
+    overflow: hidden;
 }
 
 #sidebar { width:       100px; }
@@ -78,6 +79,7 @@ body {
 
 #content {
     padding: 10px;
+    /* box-shadow: inset 1px 0px 0px rgba(0, 0, 0, 0.35);*/
 }
 
 #sidebar > * {
@@ -100,13 +102,11 @@ body {
     left:    0px;
     margin:  0px;
 
-    /* border-radius: 3px;*/
-    border-top-left-radius:    9px;
-    border-bottom-left-radius: 9px;
-    border: 0px solid transparent;
+    border-radius: 0px;
+    /* border-top-right-radius:    3px;*/
+    /* border-bottom-right-radius: 3px;*/
 
     border-right: 3px solid transparent;
-    /* border-bottom: 3px solid transparent;*/
 
     margin-bottom: 0px;
 
@@ -115,37 +115,37 @@ body {
 
 #sidebar ul li a {
     font-weight: bold;
-    color: #666;
-    text-shadow: 0px 1px 1px white;
+    color: rgba(0, 0, 0, 0.55);
+    /* text-shadow: 0px 1px 1px white;*/
     cursor: pointer;
     text-decoration: none;
 }
 
 #sidebar .header {
+    display: none;
     font-weight: bold;
-    color: #aaa;
-    text-shadow: 0px 1px 1px white;
+    color: rgba(0, 0, 0, 0.35);
+    border-bottom: 0px solid white;
+    /* border-top: 3px solid white;*/
+    /* box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.25);*/
+    padding-bottom: 6px;
     padding-left:  6px;
     padding-right: 6px;
+    margin-left:   0px;
+    margin-right:  0px;
     margin-top:    3px;
-    margin-bottom: 3px;
+    margin-bottom: 0px;
 
     font-size: 10pt;
 }
 
 #sidebar .menu {
+    border-top: 3px solid white;
     text-align: center;
-    border-top: 1px solid rgba(0, 0, 0, 0.15);
-    background-image: -webkit-linear-gradient(top,       rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.00));
-    background-image:    -moz-linear-gradient(top,       rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.00));
-    background-image:     -ms-linear-gradient(top,       rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.00));
-    background-image:      -o-linear-gradient(top,       rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.00));
-    background-image:         linear-gradient(to bottom, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.00));
-    box-shadow: inset 0px  1px  0px  0px rgba(255, 255, 255, 0.50);
-    /* box-shadow: inset 0px 9px 9px -9px rgba(0, 0, 0, 0.15);*/
-    margin-bottom: 32px;
-    padding-left:  6px;
-    padding-right: 1px;
+    margin-bottom: 9px;
+    padding-top:   9px;
+    padding-left:  0px;
+    padding-right: 0px;
 }
 
 #sidebar ul li a {
@@ -154,66 +154,74 @@ body {
     padding-left: 9px;
 }
 
+#sidebar,
+#sidebar .header {
+    /* border-color: rgba(255, 255, 255, 0.25);*/
+    /* border-color: rgba(0, 0, 0, 0.10);*/
+}
+
+#sidebar {
+    border-color: rgba(0, 0, 0, 0.10);
+}
+
+#sidebar .menu,
+#sidebar .header {
+    border-color: rgba(0, 0, 0, 0.10);
+}
+
 #sidebar #timer {
     text-align: center;
 
     font-weight: bold;
-    color: #666;
-    text-shadow: 0px 1px 1px white;
+    color: rgba(0, 0, 0, 0.50);
+    /* text-shadow: 0px 1px 1px white;*/
 
-    font-size: 20pt;
-
-    /* font-family:*/
-    /*     'Bitstream Vera Sans Mono',*/
-    /*     'Dejavu Sans Mono',*/
-    /*     'Menlo Sans',*/
-    /*     'Consolas',*/
-    /*     'Lucida Console',*/
-    /*     monospace;*/
+    font-size:   20pt;
+    line-height: 20pt;
 
     margin-bottom: 20px;
 }
 
-#sidebar ul li:hover {
-    background-color: #888;
-    /* background-color: #ccc;*/
-    /* background-color: #729fcf;*/
-    /* border-color: #444;*/
-    /* border-color: red;*/
-    /* border-color:        rgba(0, 0, 0, 0.85);*/
-    /* border-color:        rgba(0, 0, 0, 0.15);*/
-    /* border-top-color:    rgba(0, 0, 0, 0.05);*/
-    /* border-bottom-color: rgba(0, 0, 0, 0.30);*/
-    /* box-shadow: inset 0px 0px 9px 0px rgba(0, 0, 0, 0.10);*/
+#sidebar #timer.hoursShowing {
+    font-size: 14pt;
 }
 
 #sidebar ul li:hover a {
     color: #fff;
-    text-shadow: 0px 1px 1px black;
-}
-
-#sidebar ul li.selected {
-    border-color: #3465a4;
-    /* background-color: #888;*/
-    /* background-color: #729fcf;*/
-    /* border-color:        rgba(0, 0, 0, 0.85);*/
-    /* border-color:        rgba(0, 0, 0, 0.15);*/
-    /* border-top-color:    rgba(0, 0, 0, 0.05);*/
-    /* border-bottom-color: rgba(0, 0, 0, 0.30);*/
-    /* box-shadow: inset 0px 0px 9px 0px rgba(0, 0, 0, 0.25);*/
-}
-
-#sidebar ul li.selected:hover {
-    border-color: #444;
-}
-
-#sidebar ul li:hover a {
-    /* color: #fff;*/
     /* text-shadow: 0px 1px 1px black;*/
 }
 
+#sidebar ul li.selected {
+    /* border-color: #fff;*/
+    background-color: #aaa;
+    /* background-color: rgba(0, 0, 0, 0.25);*/
+}
+
+#sidebar ul li:hover {
+    /* background-color: rgba(0, 0, 0, 0.50);*/
+    background-color: #3465a4;
+    /* border-color:     rgba(0, 0, 0, 0.25);*/
+}
+
+#sidebar ul li.selected,
+#sidebar ul li:hover {
+    /* box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.25);*/
+}
+
+#sidebar ul li.selected a {
+    /* color: #000;*/
+    /* text-shadow: 0px 1px 1px black;*/
+}
+
+#sidebar ul li.selected:hover {
+}
+
+#sidebar ul li:hover a {
+    color: #fff;
+}
+
 #minimap {
-    border: 3px solid #ccc;
+    border: 3px solid #bbb;
 
     border-radius: 3px;
 

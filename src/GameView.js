@@ -77,16 +77,33 @@ _.extend(GameView.prototype, {
         ctx.stroke();
         ctx.closePath();
 
-        ctx.fillStyle = colors.majorLines;
+        ctx.fillStyle = colors.minorLines;
         _(N - 1).times(function(x) {
             var X = x + 1;
-            if (X >= 5 && X % 5 === 0) {
+            var major = (X >= 5 && X % 5 === 0);
+            if (! major) {
                 ctx.fillRect(x * S + T, 0, G, Q);
             }
         });
         _(N - 1).times(function(y) {
             var Y = y + 1;
-            if (Y >= 5 && Y % 5 === 0) {
+            var major = (Y >= 5 && Y % 5 === 0);
+            if (! major) {
+                ctx.fillRect(0, y * S + T, Q, G);
+            }
+        });
+        ctx.fillStyle = colors.majorLines;
+        _(N - 1).times(function(x) {
+            var X = x + 1;
+            var major = (X >= 5 && X % 5 === 0);
+            if (major) {
+                ctx.fillRect(x * S + T, 0, G, Q);
+            }
+        });
+        _(N - 1).times(function(y) {
+            var Y = y + 1;
+            var major = (Y >= 5 && Y % 5 === 0);
+            if (major) {
                 ctx.fillRect(0, y * S + T, Q, G);
             }
         });

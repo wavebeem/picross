@@ -12,6 +12,7 @@ return {
     background: gray(250),
     filled:     gray(187),
     marked:     gray(175),
+    minorLines: gray(240),
     majorLines: gray(210),
 };
 })();
