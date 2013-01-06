@@ -1,9 +1,9 @@
-var TimerController = (function() {
-function TimerController(opts) {
+var Timer = (function() {
+function Timer(opts) {
     this.init(opts);
 }
 
-_.extend(TimerController.prototype, {
+_.extend(Timer.prototype, {
     init: function(opts) {
         _.extend(this, opts);
         this.$timer = $('#timer');
@@ -49,5 +49,5 @@ _.extend(TimerController.prototype, {
     },
 });
 
-return TimerController;
+return Timer;
 })();

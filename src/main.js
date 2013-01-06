@@ -3,7 +3,7 @@ $(document).ready(function() {
     var view       = new GameView({model: model});
     var minimap    = new MinimapView({model: model});
     var controller = new GameController({model: model, view: view, minimap: minimap});
-    var timer      = new TimerController();
+    var timer      = new Timer();
     _([view, minimap]).invoke('draw');
     timer.start();
 });
