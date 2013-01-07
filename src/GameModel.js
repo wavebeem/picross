@@ -3,32 +3,28 @@ function GameModel() {
     this.init();
 }
 
-function Cell(opts) {
-    _.extend(this, opts);
-}
+var directionDeltas = {
+    up:     {dx:  0, dy: -1},
+    down:   {dx:  0, dy: +1},
+    left:   {dx: -1, dy:  0},
+    right:  {dx: +1, dy:  0},
+};
 
-_.extend(Cell.prototype, {
-    state: 'empty',
-});
+var cellStateToChar = {
+    'filled': '#',
+    'marked': 'x',
+    'empty' : '.',
+};
+var charToCellState = _.invert(cellStateToChar);
 
 _.extend(GameModel.prototype, {
     eraser: false,
     mode: 'none',
     stroking: false,
-    size: 20,
+    size: 15,
+    hintsSize: 11,
     x: 0,
     y: 0,
-    cellStateToChar: {
-        'filled': '#',
-        'marked': 'x',
-        'empty' : '.',
-    },
-    directionDeltas: {
-        up:     {dx:  0, dy: -1},
-        down:   {dx:  0, dy: +1},
-        left:   {dx: -1, dy:  0},
-        right:  {dx: +1, dy:  0},
-    },
     isDirty: false,
     init: function() {
         this.lastPosition = {x: 0, y: 0};
@@ -37,12 +33,11 @@ _.extend(GameModel.prototype, {
         _(S).times(function() {
             var row = [];
             _(S).times(function() {
-                row.push(new Cell());
+                row.push({ state: 'empty' });
             });
             puzzle.push(row);
         });
         this.puzzle = puzzle;
-        this.charToCellState = _.invert(this.cellStateToChar);
         this.undoHistory = [];
     },
     startMode: function(mode) {
@@ -105,7 +100,7 @@ _.extend(GameModel.prototype, {
         return this.puzzle[y][x].state;
     },
     moveDirection: function(direction) {
-        var d = this.directionDeltas[direction];
+        var d = directionDeltas[direction];
         if (! d) {
             throw new Error('Unknown direction: ' + direction);
         }
@@ -116,7 +111,7 @@ _.extend(GameModel.prototype, {
         var txt = '';
         var S = self.size - 1;
         self.eachCell(function(x, y, cell) {
-            txt += self.cellStateToChar[cell.state];
+            txt += cellStateToChar[cell.state];
             if (y === S) {
                 txt += '\n';
             }
@@ -146,9 +141,9 @@ _.extend(GameModel.prototype, {
         var S = self.size;
         _(S).times(function(y) {
             _(S).times(function(x) {
-                self.puzzle[y][x] = new Cell({
-                    state: self.charToCellState[lines[x][y]]
-                });
+                self.puzzle[y][x] = {
+                    state: charToCellState[lines[x][y]]
+                };
             });
         });
         self.isDirty = true;
@@ -159,8 +154,8 @@ _.extend(GameModel.prototype, {
 
         var puzzle = this.puzzle;
         var S = this.size;
-        _.times(S, function(x) {
-            _.times(S, function(y) {
+        _(S).times(function(x) {
+            _(S).times(function(y) {
                 fun.call(context, x, y, puzzle[y][x]);
             });
         });

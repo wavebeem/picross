@@ -119,11 +119,13 @@ _.extend(GameController.prototype, {
         }
     },
     positionForXY: function(x, y) {
+        x -= this.view.offset;
+        y -= this.view.offset;
         var S  = this.view.tileSize;
         var B  = this.view.borderSize;
         var G  = S + B;
-        var cx = ((x/G) | 0) - 0;
-        var cy = ((y/G) | 0) - 0;
+        var cx = (x/G) | 0;
+        var cy = (y/G) | 0;
         cx = Math.min(cx, this.model.size - 1);
         cy = Math.min(cy, this.model.size - 1);
         return {x: cx, y: cy};

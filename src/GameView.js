@@ -14,19 +14,24 @@ _.extend(GameView.prototype, {
         this.setTileSize(this.tileSize);
         this.ctx = this.canvas.getContext('2d');
     },
-    grow:   function() { this.setTileSize(this.tileSize + this.incrementSize); },
-    shrink: function() { this.setTileSize(this.tileSize - this.incrementSize); },
+    grow:   function() { this.setTileSize(this.tileSize + this.incrementSize) },
+    shrink: function() { this.setTileSize(this.tileSize - this.incrementSize) },
     resetTileSize: function() { this.setTileSize(25) },
     setTileSize: function(x) {
         this.tileSize = util.clamp(x, 15, 60);
         var TS = this.tileSize;
         var BS = this.borderSize;
         var MS = this.model.size;
-        var CS = (TS + BS) * MS - BS;
+        var HS = this.model.hintsSize;
+        var CS = (TS + BS) * (MS + HS) - BS;
+        var offset = (TS + BS) * HS;
+        this.offset = offset;
         this.canvasSize    = CS;
         this.canvas.width  = CS;
         this.canvas.height = CS;
-        this.draw();
+        if (this.ctx) {
+            this.draw();
+        }
     },
     draw: function() {
         var A = util.now();
@@ -41,9 +46,15 @@ _.extend(GameView.prototype, {
         var N = this.model.size;
         var G = this.borderSize;
         var T = this.tileSize;
+        var F = this.offset;
         var S = T + G;
         var Q = S * N;
         var g = G/2;
+
+        ctx.fillStyle = colors.majorLines;
+        ctx.fillRect(F - G, F - G, CS, CS);
+
+        ctx.translate(F, F);
 
         ctx.beginPath();
         this.model.eachCell(function(x, y, cell) {
@@ -119,6 +130,8 @@ _.extend(GameView.prototype, {
         ctx.fillRect(X + 0, Y + 0, G, T);
         ctx.fillRect(X + t, Y + 0, G, T);
         ctx.fillRect(X + 0, Y + t, T, G);
+
+        ctx.translate(-F, -F);
 
         ctx.beginPath();
         ctx.strokeStyle = colors.shadow;

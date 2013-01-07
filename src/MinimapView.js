@@ -5,11 +5,18 @@ function MinimapView(opts) {
 
 var shadow = 'rgba(128, 128, 128, 0.95)';
 
+var sizeMapping = {
+    25: 3,
+    20: 3,
+    15: 4,
+    10: 6,
+};
+
 _.extend(MinimapView.prototype, {
     color: '#000',
-    size: 3,
     init: function(opts) {
         _.extend(this, opts);
+        this.size = sizeMapping[this.model.size];
         this.$canvas = $('#minimap');
         this.canvas = this.$canvas[0];
         this.ctx = this.canvas.getContext('2d');
