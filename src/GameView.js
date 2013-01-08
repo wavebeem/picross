@@ -45,6 +45,8 @@ _.extend(GameView.prototype, {
 
         var F = this.offset;
 
+        this.drawHintsBackground();
+
         ctx.translate(F, F);
 
         this.drawBackground();
@@ -56,6 +58,30 @@ _.extend(GameView.prototype, {
 
         var B = util.now();
         // console.log((B - A) + ' ms');
+    },
+    drawHintsBackground: function() {
+        var N = this.model.size;
+        var G = this.borderSize;
+        var T = this.tileSize;
+        var F = this.offset;
+        var S = T + G;
+        var i;
+
+        var ctx = this.ctx;
+
+        ctx.fillStyle = colors.hintsBG;
+
+        ctx.translate(F, 0);
+        for (i = 1; i < N; i += 2) {
+            ctx.fillRect(i * S, 0, T, F);
+        }
+        ctx.translate(-F, 0);
+
+        ctx.translate(0, F);
+        for (i = 1; i < N; i += 2) {
+            ctx.fillRect(0, i * S, F, T);
+        }
+        ctx.translate(0, -F);
     },
     drawBackground: function() {
         var ctx = this.ctx;

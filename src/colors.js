@@ -14,5 +14,6 @@ return {
     marked:     gray(175),
     minorLines: gray(240),
     majorLines: gray(210),
+    hintsBG:    gray(230),
 };
 })();
