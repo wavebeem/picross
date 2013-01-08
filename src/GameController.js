@@ -121,6 +121,8 @@ _.extend(GameController.prototype, {
     positionForXY: function(x, y) {
         x -= this.view.offset;
         y -= this.view.offset;
+        if (x < 0) x = this.model.x;
+        if (y < 0) y = this.model.y;
         var S  = this.view.tileSize;
         var B  = this.view.borderSize;
         var G  = S + B;

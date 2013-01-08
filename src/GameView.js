@@ -23,7 +23,7 @@ _.extend(GameView.prototype, {
         var BS = this.borderSize;
         var MS = this.model.size;
         var HS = this.model.hintsSize;
-        var CS = (TS + BS) * (MS + HS) - BS;
+        var CS = (TS + BS) * (MS + HS);
         var offset = (TS + BS) * HS;
         this.offset = offset;
         this.canvasSize    = CS;
@@ -43,6 +43,37 @@ _.extend(GameView.prototype, {
 
         ctx.clearRect(0, 0, CS, CS);
 
+        var F = this.offset;
+
+        ctx.translate(F, F);
+
+        this.drawBackground();
+        this.drawSquares();
+        this.drawMajorLines();
+        this.drawCursor();
+
+        ctx.translate(-F, -F);
+
+        var B = util.now();
+        // console.log((B - A) + ' ms');
+    },
+    drawBackground: function() {
+        var ctx = this.ctx;
+
+        var CS = this.canvasSize;
+
+        var G = this.borderSize;
+        var F = this.offset;
+
+        ctx.fillStyle = colors.majorLines;
+        ctx.fillRect(-G, -G, CS, CS);
+
+        ctx.fillStyle = colors.minorLines;
+        ctx.fillRect(0, 0, CS - F - G, CS - F - G);
+    },
+    drawMajorLines: function() {
+        var ctx = this.ctx;
+
         var N = this.model.size;
         var G = this.borderSize;
         var T = this.tileSize;
@@ -52,27 +83,35 @@ _.extend(GameView.prototype, {
         var g = G/2;
 
         ctx.fillStyle = colors.majorLines;
-        ctx.fillRect(F - G, F - G, CS, CS);
-
-        ctx.translate(F, F);
+        var p = 5;
+        for (; p < N; p += 5) {
+            ctx.fillRect((p - 1) * S + T, 0, G, Q);
+            ctx.fillRect(0, (p - 1) * S + T, Q, G);
+        }
+    },
+    drawSquares: function() {
+        var ctx = this.ctx;
+        var T = this.tileSize;
+        var G = this.borderSize;
+        var S = T + G;
 
         ctx.beginPath();
         this.model.eachCell(function(x, y, cell) {
+            var O;
+
             var X = S * x;
             var Y = S * y;
 
-            if (cell.state === 'filled') {
-                ctx.fillStyle = colors.filled;
-            }
-            else {
-                ctx.fillStyle = colors.background;
-            }
+            ctx.fillStyle = colors[cell.state === 'filled'
+                ? 'filled'
+                : 'background'
+            ];
             ctx.fillRect(X, Y, T, T);
 
             // Draw an X to indicate the square is marked
             if (cell.state === 'marked') {
                 // Offset from edge of square
-                var O = Math.max((S * 0.30) | 0, 1);
+                O = Math.max((S * 0.30) | 0, 1);
 
                 ctx.strokeStyle = colors.marked;
                 ctx.lineWidth = Math.max((S * 0.10) | 0, 3);
@@ -87,52 +126,31 @@ _.extend(GameView.prototype, {
         });
         ctx.stroke();
         ctx.closePath();
-
-        ctx.fillStyle = colors.minorLines;
-        _(N - 1).times(function(x) {
-            var X = x + 1;
-            var major = (X >= 5 && X % 5 === 0);
-            if (! major) {
-                ctx.fillRect(x * S + T, 0, G, Q);
-            }
-        });
-        _(N - 1).times(function(y) {
-            var Y = y + 1;
-            var major = (Y >= 5 && Y % 5 === 0);
-            if (! major) {
-                ctx.fillRect(0, y * S + T, Q, G);
-            }
-        });
-        ctx.fillStyle = colors.majorLines;
-        _(N - 1).times(function(x) {
-            var X = x + 1;
-            var major = (X >= 5 && X % 5 === 0);
-            if (major) {
-                ctx.fillRect(x * S + T, 0, G, Q);
-            }
-        });
-        _(N - 1).times(function(y) {
-            var Y = y + 1;
-            var major = (Y >= 5 && Y % 5 === 0);
-            if (major) {
-                ctx.fillRect(0, y * S + T, Q, G);
-            }
-        });
+    },
+    drawCursor: function() {
+        var ctx = this.ctx;
 
         var cx = this.model.x;
         var cy = this.model.y;
 
+        var G = this.borderSize;
+        var T = this.tileSize;
+        var S = T + G;
+
         var X = cx * S;
         var Y = cy * S;
         var t = T - G;
+
         ctx.fillStyle = colors.highlight;
         ctx.fillRect(X + 0, Y + 0, T, G);
         ctx.fillRect(X + 0, Y + 0, G, T);
         ctx.fillRect(X + t, Y + 0, G, T);
         ctx.fillRect(X + 0, Y + t, T, G);
 
-        ctx.translate(-F, -F);
-
+    },
+    drawInsetBorder: function() {
+        var ctx = this.ctx;
+        var CS  = this.canvasSize;
         ctx.beginPath();
         ctx.strokeStyle = colors.shadow;
         ctx.lineWidth   = 1.5;
@@ -147,9 +165,6 @@ _.extend(GameView.prototype, {
 
         ctx.stroke();
         ctx.closePath();
-
-        var B = util.now();
-        // console.log((B - A) + ' ms');
     },
 });
 
