@@ -6,10 +6,11 @@ function MinimapView(opts) {
 var shadow = 'rgba(128, 128, 128, 0.95)';
 
 var sizeMapping = {
-    25: 3,
-    20: 3,
-    15: 4,
-    10: 6,
+    25:  3,
+    20:  3,
+    15:  4,
+    10:  6,
+     5: 12,
 };
 
 _.extend(MinimapView.prototype, {

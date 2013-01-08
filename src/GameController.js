@@ -10,12 +10,10 @@ var bindHandler = function(context, element, name) {
 };
 
 var K = {
-    MINUS_:  173,
-    EQUALS_:  61,
+    O: 79,
+    P: 80,
 
-    MINUS:  189,
-    EQUALS: 187,
-    ZERO:    48,
+    ZERO: 48,
 
     UP:      38,
     DOWN:    40,
@@ -38,9 +36,6 @@ var mungeKeymap = function(keymapName) {
         // console.log(a, b);
         map[K[a]] = b;
     });
-    _(['MINUS', 'EQUALS']).each(function(name) {
-        map[name + '_'] = map[name];
-    });
 }
 
 _.extend(GameController.prototype, {
@@ -53,9 +48,10 @@ _.extend(GameController.prototype, {
         3: function() { this.model.startMode('none') },
     },
     keyDownMap: {
-        MINUS:  function() { this.view.shrink() },
-        EQUALS: function() { this.view.grow() },
-        ZERO:   function() { this.view.resetTileSize() },
+        O: function() { this.view.shrink() },
+        P: function() { this.view.grow() },
+
+        ZERO: function() { this.view.resetTileSize() },
 
         UP:    function() { this.model.moveDirection('up') },
         DOWN:  function() { this.model.moveDirection('down') },

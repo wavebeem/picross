@@ -22,14 +22,18 @@ _.extend(GameModel.prototype, {
     mode: 'none',
     stroking: false,
     size: 15,
-    hintsSize: 11,
     x: 0,
     y: 0,
     isDirty: false,
     init: function() {
-        this.lastPosition = {x: 0, y: 0};
         var S = this.size;
         var puzzle = [];
+
+        this.puzzle = puzzle;
+        this.undoHistory = [];
+        this.lastPosition = {x: 0, y: 0};
+        this.hintsSize = Math.floor(S/2) + 1;
+
         _(S).times(function() {
             var row = [];
             _(S).times(function() {
@@ -37,8 +41,6 @@ _.extend(GameModel.prototype, {
             });
             puzzle.push(row);
         });
-        this.puzzle = puzzle;
-        this.undoHistory = [];
     },
     startMode: function(mode) {
         var x = this.x;
