@@ -14,6 +14,7 @@ return {
     marked:     gray(175),
     minorLines: gray(240),
     majorLines: gray(210),
-    hintsBG:    gray(230),
+    hintsBG:    alphaGray(200, 0.25),
+    hintsFade:  alphaGray(200, 0.00),
 };
 })();

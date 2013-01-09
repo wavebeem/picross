@@ -126,13 +126,21 @@ _.extend(GameView.prototype, {
 
         var ctx = this.ctx;
 
-        ctx.fillStyle = colors.hintsBG;
+        var grad = ctx.createLinearGradient(0, 0, 0, 4*T);
+        grad.addColorStop(0, colors.hintsFade);
+        grad.addColorStop(1, colors.hintsBG);
+        ctx.fillStyle = grad;
 
         ctx.translate(F, 0);
         for (i = 1; i < N; i += 2) {
             ctx.fillRect(i * S, 0, T, F);
         }
         ctx.translate(-F, 0);
+
+        var grad = ctx.createLinearGradient(0, 0, 4*T, 0);
+        grad.addColorStop(0, colors.hintsFade);
+        grad.addColorStop(1, colors.hintsBG);
+        ctx.fillStyle = grad;
 
         ctx.translate(0, F);
         for (i = 1; i < N; i += 2) {
