@@ -161,7 +161,7 @@ _.extend(GameController.prototype, {
         this.maybeDraw();
     },
     mousemove: function(event) {
-        console.log('MOUSEMOVE');
+        // console.log('MOUSEMOVE');
         var off = $(event.target).offset();
         var x = event.pageX - off.left;
         var y = event.pageY - off.top;

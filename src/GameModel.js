@@ -21,7 +21,7 @@ _.extend(GameModel.prototype, {
     eraser: false,
     mode: 'none',
     stroking: false,
-    size: 15,
+    size: 25,
     x: 0,
     y: 0,
     isDirty: false,

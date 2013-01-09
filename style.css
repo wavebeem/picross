@@ -63,6 +63,9 @@ body,
     margin-left:  auto;
     margin-right: auto;
 
+    margin-top:     10px;
+    margin-bottom:  10px;
+
     /* margin-left: 10px;*/
 
     display: table;
@@ -75,7 +78,7 @@ body,
     border-right: 3px solid white;
     /* box-shadow: inset -9px 0px 9px -9px rgba(0, 0, 0, 0.25);*/
 
-    position: absolute;
+    position: fixed;
     top:    0px;
     left:   0px;
     bottom: 0px;

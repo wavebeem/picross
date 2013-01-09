@@ -58,6 +58,7 @@ _.extend(GameView.prototype, {
         ctx.translate(F, F);
 
         this.drawBackground();
+        this.shouldShadeSubsections = true;
         this.drawSquares();
         this.drawMajorLines();
         this.drawCursor();
@@ -66,7 +67,8 @@ _.extend(GameView.prototype, {
         ctx.translate(-F, -F);
 
         var B = util.now();
-        // console.log((B - A) + ' ms');
+        console.log((B - A) + ' ms');
+        util.logFrameTime(B - A);
     },
     drawHints: function() {
         var self = this;
@@ -178,28 +180,29 @@ _.extend(GameView.prototype, {
         var Q = S * N;
         var g = G/2;
 
+        var p;
         var x, y, w, h;
 
-        var p = 5;
-        for (; p < N; p += 5) {
+        ctx.beginPath();
+        ctx.fillStyle = colors.shadeLine;
+        for (p = 5; p < N; p += 5) {
             x = (p - 1) * S + T;
             y = 0;
             w = G;
             h = Q - G;
-            ctx.fillStyle = colors.shadeLine;
-            // ctx.fillRect(x, y, G, h);
-            ctx.fillRect(x - 1, y, G + 2, h);
+            ctx.rect(x - 1, y, G + 2, h);
 
             x = 0;
             y = (p - 1) * S + T;
             w = Q - G;
             h = G;
-            ctx.fillStyle = colors.shadeLine;
-            // ctx.fillRect(x, y, w, G);
-            ctx.fillRect(x, y - 1, w, G + 2);
+            ctx.rect(x, y - 1, w, G + 2);
         }
+        ctx.fill();
+        ctx.closePath();
     },
     drawSquares: function() {
+        var self = this;
         var ctx = this.ctx;
         var T = this.tileSize;
         var G = this.borderSize;
@@ -214,11 +217,26 @@ _.extend(GameView.prototype, {
             var A = X + T - 1;
             var B = Y + T - 1;
 
-            ctx.fillStyle = colors[cell.state === 'filled'
+            var state = cell.state;
+
+            ctx.fillStyle = colors[state === 'filled'
                 ? 'filled'
                 : 'background'
             ];
             ctx.fillRect(X, Y, T, T);
+
+            var odd   = util.odd;
+            var floor = Math.floor;
+
+            if (self.shouldShadeSubsections && state !== 'filled') {
+                var sx = floor(x/5);
+                var sy = floor(y/5);
+
+                if (odd(sx + sy)) {
+                    ctx.fillStyle = colors.cellShade;
+                    ctx.fillRect(X, Y, T, T);
+                }
+            }
 
             ctx.beginPath();
             ctx.fillStyle = colors.shadeCell;
