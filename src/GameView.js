@@ -7,6 +7,10 @@ _.extend(GameView.prototype, {
     incrementSize: 5,
     tileSize: 25,
     borderSize: 3,
+    fontBold: true,
+    fontSize: 14,
+    fontName: 'sans-serif',
+    fontColor: '#666',
     init: function(opts) {
         _.extend(this, opts);
         this.$canvas = $('#game');
@@ -29,6 +33,7 @@ _.extend(GameView.prototype, {
         this.canvasSize    = CS;
         this.canvas.width  = CS;
         this.canvas.height = CS;
+        this.fontSize = Math.round(0.60 * TS);
         if (this.ctx) {
             this.draw();
         }
@@ -46,6 +51,7 @@ _.extend(GameView.prototype, {
         var F = this.offset;
 
         this.drawHintsBackground();
+        this.drawHints();
 
         ctx.translate(F, F);
 
@@ -58,6 +64,57 @@ _.extend(GameView.prototype, {
 
         var B = util.now();
         // console.log((B - A) + ' ms');
+    },
+    drawHints: function() {
+        var self = this;
+        var ctx  = this.ctx;
+
+        var hx = self.model.hintsX;
+        var hy = self.model.hintsY;
+
+        var FS = self.fontSize;
+        var N = this.model.size;
+        var G = this.borderSize;
+        var T = this.tileSize;
+        var F = this.offset;
+        var S = T + G;
+        var i, j;
+
+        ctx.translate(F, 0);
+        for (i = 0; i < N; i++) {
+            M = hx[i].length;
+            for (j = 0; j < M; j++) {
+                self.drawTextInsideRect(
+                    i * S,
+                    (F - T - T) - j * T,
+                    T,
+                    '' + hx[i][j]
+                );
+            }
+        }
+        ctx.translate(-F, 0);
+        ctx.translate(0, F);
+        for (i = 0; i < N; i++) {
+            M = hy[i].length;
+            for (j = 0; j < M; j++) {
+                self.drawTextInsideRect(
+                    (F - T - T) - j * T,
+                    i * S - FS/2,
+                    T,
+                    '' + hy[i][j]
+                );
+            }
+        }
+        ctx.translate(0, -F);
+    },
+    drawTextInsideRect: function(x, y, s, text) {
+        var ctx = this.ctx;
+        ctx.font         = (this.fontBold ? 'bold ' : '') + this.fontSize + 'px ' + this.fontName;
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle    = this.fontColor;
+
+        ctx.fillText(text, x + s/2, y + s/2, s);
     },
     drawHintsBackground: function() {
         var N = this.model.size;

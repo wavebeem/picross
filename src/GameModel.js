@@ -26,6 +26,7 @@ _.extend(GameModel.prototype, {
     y: 0,
     isDirty: false,
     init: function() {
+        var self = this;
         var S = this.size;
         var puzzle = [];
 
@@ -33,6 +34,8 @@ _.extend(GameModel.prototype, {
         this.undoHistory = [];
         this.lastPosition = {x: 0, y: 0};
         this.hintsSize = Math.floor(S/2) + 1;
+        this.hintsX = [];
+        this.hintsY = [];
 
         _(S).times(function() {
             var row = [];
@@ -40,6 +43,17 @@ _.extend(GameModel.prototype, {
                 row.push({ state: 'empty' });
             });
             puzzle.push(row);
+        });
+
+        _(S).times(function() {
+            var xs = [];
+            var ys = [];
+            _(_.random(1, self.hintsSize)).times(function() {
+                xs.push(_.random(1, self.hintsSize));
+                ys.push(_.random(1, self.hintsSize));
+            });
+            self.hintsX.push(xs);
+            self.hintsY.push(ys);
         });
     },
     startMode: function(mode) {

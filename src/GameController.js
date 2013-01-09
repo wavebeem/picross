@@ -10,10 +10,9 @@ var bindHandler = function(context, element, name) {
 };
 
 var K = {
+    I: 73,
     O: 79,
     P: 80,
-
-    ZERO: 48,
 
     UP:      38,
     DOWN:    40,
@@ -48,10 +47,9 @@ _.extend(GameController.prototype, {
         3: function() { this.model.startMode('none') },
     },
     keyDownMap: {
+        I: function() { this.view.resetTileSize() },
         O: function() { this.view.shrink() },
         P: function() { this.view.grow() },
-
-        ZERO: function() { this.view.resetTileSize() },
 
         UP:    function() { this.model.moveDirection('up') },
         DOWN:  function() { this.model.moveDirection('down') },
