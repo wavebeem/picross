@@ -257,19 +257,28 @@ _.extend(GameView.prototype, {
             if (cell.state === 'marked') {
                 // Offset from edge of square
                 O = Math.max((S * 0.30) | 0, 1);
+                o = 1;
 
-                ctx.beginPath();
-
-                ctx.strokeStyle = colors.marked;
                 ctx.lineWidth = Math.max((S * 0.10) | 0, 3);
                 ctx.lineCap   = 'round';
                 ctx.lineJoin  = 'round';
 
+
+                ctx.beginPath();
+                ctx.strokeStyle = colors.shadowX;
+                ctx.moveTo(X + 0 + O, Y + 0 + O + o);
+                ctx.lineTo(X + T - O, Y + T - O + o);
+                ctx.moveTo(X + T - O, Y + 0 + O + o);
+                ctx.lineTo(X + 0 + O, Y + T - O + o);
+                ctx.stroke();
+                ctx.closePath();
+
+                ctx.beginPath();
+                ctx.strokeStyle = colors.marked;
                 ctx.moveTo(X + 0 + O, Y + 0 + O);
                 ctx.lineTo(X + T - O, Y + T - O);
                 ctx.moveTo(X + T - O, Y + 0 + O);
                 ctx.lineTo(X + 0 + O, Y + T - O);
-
                 ctx.stroke();
                 ctx.closePath();
             }

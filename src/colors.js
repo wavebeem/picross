@@ -28,6 +28,7 @@ return {
     hintsBG:    alphaGray(200, 0.25),
     hintsFade:  alphaGray(200, 0.00),
     shadow:     alphaGray(0,   0.25),
+    shadowX:    alphaGray(0,   0.50),
     // cellShade:  alphaGray(0,   0.05),
     cellShade:  rgba(0, 110, 220, 0.05),
 };
