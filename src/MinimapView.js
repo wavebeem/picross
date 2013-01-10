@@ -16,6 +16,7 @@ var sizeMapping = {
 _.extend(MinimapView.prototype, {
     color: '#000',
     init: function(opts) {
+        var self = this;
         _.extend(this, opts);
         this.size = sizeMapping[this.model.size];
         this.$canvas = $('#minimap');
@@ -25,6 +26,9 @@ _.extend(MinimapView.prototype, {
         var S = this.size;
         this.canvas.width  = N * S;
         this.canvas.height = N * S;
+        this.model.events.register('draw', function() {
+            self.draw();
+        });
     },
     draw: function() {
         var self = this;

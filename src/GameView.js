@@ -12,11 +12,15 @@ _.extend(GameView.prototype, {
     fontName: 'sans-serif',
     fontColor: '#666',
     init: function(opts) {
+        var self = this;
         _.extend(this, opts);
         this.$canvas = $('#game');
         this.canvas = this.$canvas[0];
         this.setTileSize(this.tileSize);
         this.ctx = this.canvas.getContext('2d');
+        this.model.events.register('draw', function() {
+            self.draw();
+        });
     },
     grow:   function() { this.setTileSize(this.tileSize + this.incrementSize) },
     shrink: function() { this.setTileSize(this.tileSize - this.incrementSize) },
@@ -41,10 +45,7 @@ _.extend(GameView.prototype, {
         }
     },
     draw: function() {
-        var A = util.now();
         var ctx = this.ctx;
-        if (! ctx)
-            return;
 
         var CS = this.canvasSize;
 
@@ -65,10 +66,6 @@ _.extend(GameView.prototype, {
         this.drawInsetBorder();
 
         ctx.translate(-F, -F);
-
-        var B = util.now();
-        console.log((B - A) + ' ms');
-        util.logFrameTime(B - A);
     },
     drawHints: function() {
         var self = this;

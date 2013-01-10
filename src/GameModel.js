@@ -21,10 +21,9 @@ _.extend(GameModel.prototype, {
     eraser: false,
     mode: 'none',
     stroking: false,
-    size: 25,
+    size: 15,
     x: 0,
     y: 0,
-    isDirty: false,
     init: function() {
         var self = this;
         var S = this.size;
@@ -36,6 +35,7 @@ _.extend(GameModel.prototype, {
         this.hintsSize = Math.floor(S/2) + 1;
         this.hintsX = [];
         this.hintsY = [];
+        this.events = new Events();
 
         _(S).times(function() {
             var row = [];
@@ -84,7 +84,7 @@ _.extend(GameModel.prototype, {
 
         if (result !== state) {
             cell.state  = result;
-            this.isDirty = true;
+            this.events.fire('draw');
         }
     },
     moveTo: function(x, y) {
@@ -109,7 +109,7 @@ _.extend(GameModel.prototype, {
 
         this.x = x;
         this.y = y;
-        this.isDirty = true;
+        this.events.fire('draw');
         this.startMode(this.mode);
     },
     cellStateAt: function(x, y) {
@@ -138,7 +138,7 @@ _.extend(GameModel.prototype, {
         this.popUndoHistory();
     },
     pushUndoHistory: function() {
-        console.log('PUSHING UNDO HISTORY');
+        // console.log('PUSHING UNDO HISTORY');
         var state = this.serializedPuzzleState();
         // console.log('PUSHING HISTORY');
         // console.log(state);
@@ -162,7 +162,7 @@ _.extend(GameModel.prototype, {
                 };
             });
         });
-        self.isDirty = true;
+        this.events.fire('draw');
     },
     eachCell: function(fun, context) {
         if (! fun)

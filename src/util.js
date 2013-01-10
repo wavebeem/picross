@@ -3,9 +3,6 @@ var max = Math.max;
 var min = Math.min;
 var add = function(a, b) { return a + b };
 
-var frameTimes = [];
-var MAX_FRAME_TIMES = 30;
-
 return {
     now: (function() {
         var p = window.performance || {};
@@ -38,16 +35,6 @@ return {
     even: function(x) { return x % 2 === 0 },
     sum: function(x) {
         return _(x).foldl(add, 0);
-    },
-    logFrameTime: function(t) {
-        console.log(t + ' ms');
-        frameTimes.push(t);
-        var n = frameTimes.length;
-        if (n > MAX_FRAME_TIMES) {
-            var avg = util.sum(frameTimes)/n;
-            console.log('AVERAGE FRAME TIME: ' + avg + ' ms');
-            frameTimes = [];
-        }
     },
 };
 })();

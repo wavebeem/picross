@@ -105,13 +105,6 @@ _.extend(GameController.prototype, {
             || k === K.LEFT
             || k === K.RIGHT);
     },
-    maybeDraw: function() {
-        if (this.model.isDirty) {
-            this.view.draw();
-            this.minimap.draw();
-            this.model.isDirty = false;
-        }
-    },
     positionForXY: function(x, y) {
         x -= this.view.offset;
         y -= this.view.offset;
@@ -143,8 +136,6 @@ _.extend(GameController.prototype, {
             fun.call(this);
             event.preventDefault();
         }
-
-        this.maybeDraw();
     },
     keyup: function(event) {
         var k = event.which;
@@ -157,8 +148,6 @@ _.extend(GameController.prototype, {
             fun.call(this);
             event.preventDefault();
         }
-
-        this.maybeDraw();
     },
     mousemove: function(event) {
         // console.log('MOUSEMOVE');
@@ -167,7 +156,6 @@ _.extend(GameController.prototype, {
         var y = event.pageY - off.top;
         var p = this.positionForXY(x, y);
         this.model.moveTo(p.x, p.y);
-        this.maybeDraw();
     },
     mousedown: function(event) {
         console.log('MOUSEDOWN');
@@ -186,7 +174,6 @@ _.extend(GameController.prototype, {
             fun.call(this);
             event.preventDefault();
         }
-        this.maybeDraw();
     },
     contextmenu: function(event) {
         console.log('CONTEXTMENU');
@@ -214,7 +201,6 @@ _.extend(GameController.prototype, {
                 console.log('REPEAT #' + n + ' ' + k);
                 n++;
                 f.call(self);
-                self.maybeDraw();
             }, self.repeatInterval);
         }, self.repeatDelay);
     },

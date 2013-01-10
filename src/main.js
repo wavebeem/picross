@@ -6,4 +6,5 @@ $(document).ready(function() {
     var timer      = new Timer();
     _([view, minimap]).invoke('draw');
     timer.start();
+    window.$V = view;
 });
