@@ -3,7 +3,7 @@ function MinimapView(opts) {
     this.init(opts);
 }
 
-var shadow = 'rgba(128, 128, 128, 0.95)';
+var shadow = colors.shadow;
 
 var sizeMapping = {
     25:  3,
@@ -43,19 +43,19 @@ _.extend(MinimapView.prototype, {
                 ctx.fillRect(S * x, S * y, S, S);
             }
         });
+
+        var Q = CS;
+        var q = Q - 1;
+
+        ctx.fillStyle = shadow;
         ctx.beginPath();
-        ctx.strokeStyle = shadow;
-        ctx.lineWidth   = 1.5;
-        ctx.lineCap     = 'butt';
-        ctx.lineJoin    = 'miter';
 
-        ctx.moveTo(0 , 0 );
-        ctx.lineTo(CS, 0 );
-        ctx.lineTo(CS, CS);
-        ctx.lineTo(0 , CS);
-        ctx.lineTo(0 , 0 );
+        ctx.rect(0, 0, Q, 1);
+        ctx.rect(q, 0, 1, Q);
+        ctx.rect(0, q, Q, 1);
+        ctx.rect(0, 0, 1, Q);
 
-        ctx.stroke();
+        ctx.fill();
         ctx.closePath();
     },
 });
