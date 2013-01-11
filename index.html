@@ -5,6 +5,7 @@
     <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'>
     <meta http-equiv='Content-Type' content='Type=text/html; charset=utf-8'>
     <link rel='stylesheet' type='text/css' href='style.css'>
+    <link rel='stylesheet' type='text/css' href='icons.css'>
     <script type='text/javascript' src='lib/jquery.js'></script>
     <script type='text/javascript' src='lib/underscore.js'></script>
     <script type='text/javascript' src='src/util.js'></script>
@@ -19,16 +20,29 @@
 </head>
 <body>
 <div id='content'>
-    <div id='container'>
+    <div id='zoom-controls' class='container'>
+        <div class='icon-button small'><a href='#' class='icon icon-search'></a></div>
+        <div class='icon-button small'><a href='#' class='icon icon-zoom-in'></a></div>
+        <div class='icon-button small'><a href='#' class='icon icon-zoom-out'></a></div>
+    </div>
+    <div id='main-buttons' class='container'>
+        <div class='icon-button large'><a href='#' class='icon icon-pencil'></a></div>
+        <div class='icon-button large'><a href='#' class='icon icon-close'></a></div>
+        <div class='icon-button large'><a href='#' class='icon icon-pause'></a></div>
+        <div class='icon-button large'><a href='#' class='icon icon-question'></a></div>
+    </div>
+    <div id='map-area' class='container'>
         <canvas id='minimap'></canvas>
+    </div>
+    <div id='timer-area' class='container'>
         <div id='timer'>0:00</div>
     </div>
     <canvas id='game'>
         <p>Your web browser needs canvas support to run this game.</p>
         <p>
-            Try upgrading to
+            Try installing
             <a href='http://www.google.com/chrome'>Google Chrome</a> or
-            <a href='http://www.mozilla.org/en-US/firefox/new/'>Mozilla Firefox</a> today.
+            <a href='http://www.mozilla.org/en-US/firefox/new/'>Mozilla Firefox</a>.
         </p>
     </canvas>
 </div>

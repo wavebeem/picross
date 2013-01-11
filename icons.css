@@ -1,0 +1,50 @@
+@font-face {
+	font-family: 'ui-icons';
+	src:url('fonts/ui-icons.eot');
+	src:url('fonts/ui-icons.eot?#iefix') format('embedded-opentype'),
+		url('fonts/ui-icons.svg#ui-icons') format('svg'),
+		url('fonts/ui-icons.woff') format('woff'),
+		url('fonts/ui-icons.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.icon:before {
+	font-family: 'ui-icons';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+}
+
+.icon-search:before {
+	content: "\e000";
+}
+.icon-zoom-in:before {
+	content: "\e001";
+}
+.icon-zoom-out:before {
+	content: "\e002";
+}
+.icon-pause:before {
+	content: "\e003";
+}
+.icon-close:before {
+	content: "\e004";
+}
+.icon-pencil:before {
+	content: "\e005";
+}
+.icon-pencil-2:before {
+	content: "\e006";
+}
+.icon-undo:before {
+	content: "\e007";
+}
+.icon-undo-2:before {
+	content: "\e008";
+}
+.icon-question:before {
+	content: "\e009";
+}
