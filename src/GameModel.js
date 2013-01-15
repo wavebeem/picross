@@ -49,8 +49,10 @@ _.extend(GameModel.prototype, {
             var xs = [];
             var ys = [];
             _(_.random(1, self.hintsSize)).times(function() {
-                xs.push(_.random(1, self.hintsSize));
-                ys.push(_.random(1, self.hintsSize));
+                // xs.push(_.random(1, self.hintsSize));
+                // ys.push(_.random(1, self.hintsSize));
+                xs.push(_.random(1, 25));
+                ys.push(_.random(1, 25));
             });
             self.hintsX.push(xs);
             self.hintsY.push(ys);

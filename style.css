@@ -77,8 +77,8 @@ body,
     margin-left:  auto;
     margin-right: auto;
 
-    margin-top:     10px;
-    margin-bottom:  10px;
+    margin-top:     20px;
+    margin-bottom:  20px;
     /* z-index: 1;*/
 
     /* margin-left: 10px;*/
@@ -95,12 +95,17 @@ body,
 #timer {
     text-align: center;
 
+    display: inline-block;
+
     font-weight: bold;
-    color: rgba(0, 0, 0, 0.40);
+    color: rgba(0, 0, 0, 0.50);
     /* text-shadow: 0px 1px 1px white;*/
 
-    font-size:   20pt;
-    line-height: 20pt;
+    font-size:   16px;
+    line-height: 16px;
+
+    padding-left:  10px;
+    padding-right: 10px;
 }
 
 #minimap {
@@ -110,7 +115,7 @@ body,
 
     background-color: #fff;
 
-    /* margin-top:    18px;*/
+    /* margin-top:    10px;*/
     /* margin-bottom: 10px;*/
 
     display: table;
@@ -126,46 +131,55 @@ body,
     vertical-align: center;
     text-align: center;
     display: inline-block;
-    background-color: rgba(160, 170, 180, 0.50);
-    border-radius: 100em;
-    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.25);
+    /* display: block;*/
+    /* background-color: rgba(160, 170, 180, 0.50);*/
+    background-color: rgba(190, 200, 210, 0.50);
+    border-radius: 100%;
+    box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.30);
     cursor: pointer;
 }
 
 .icon-button.large:hover {
     box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.75);
-    background-color: rgb(160, 170, 180);
+    /* background-color: rgb(160, 170, 180);*/
+    background-color: rgba(170, 180, 190, 0.50);
 }
 
 .large .icon {
     text-decoration: none;
-    color: #fff;
+    /* color: #fff;*/
+    color: #666;
     /* text-shadow: 0px 0px 1px black;*/
-    text-shadow: 0px 1px 0px rgba(0, 0, 0, 0.50);
+    /* text-shadow:*/
+    /*     0px 1px 0px rgba(0, 0, 0, 0.50),*/
+    /*     0px 0px 1px rgba(0, 0, 0, 0.75);*/
+    text-shadow:
+        0px 1px 0px rgba(255, 255, 255, 0.50),
+        0px 0px 1px rgba(255, 255, 255, 0.75);
 }
 
-#zoom-controls {
-    bottom: 0px;
-    left:   0px;
+#toolbar {
+    top:   0px;
+    right: 0px;
+
+    padding: 4px;
+    padding-right: 8px;
+
+    position: fixed;
+
+    background-color: rgba(190, 200, 210, 0.50);
+
+    border-bottom-left-radius: 8px;
 
     /* padding-right: 20px;*/
     /* padding-top: 12px;*/
     /* border-top-right-radius: 100px;*/
 
-    border-top-right-radius: 10px;
+    /* border-top-right-radius: 10px;*/
 }
 
 #main-buttons {
-    top:   0px;
-    right: 0px;
-
-    /* padding-left: 20px;*/
-    /* padding-bottom: 20px;*/
-    /* border-bottom-left-radius: 100px;*/
-
-    border-bottom-left-radius: 10px;
-
-    background: none;
+    display: inline-block;
 }
 
 #timer-area {
@@ -173,36 +187,55 @@ body,
     right:  0px;
 
     border-top-left-radius: 10px;
+    /* display: inline-block;*/
 }
 
 #map-area {
-    top:  0px;
-    left: 0px;
-
-    border-bottom-right-radius: 10px;
-
-    background: none;
-}
-
-.container {
-    position: fixed;
-    padding: 8px;
-    background: rgba(190, 200, 210, 0.50);
-}
-
-#zoom-controls .icon-button {
     display: inline-block;
 }
 
-#zoom-controls .icon {
-    font-size: 20px;
-    text-decoration: none;
-    color: #444;
-
-    margin-left:  4px;
-    margin-right: 4px;
+#controls {
+    position: fixed;
+    padding: 8px;
+    background: rgba(190, 200, 210, 0.50);
+    top:  0px;
+    left: 100px;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius:  8px;
+    /* display: none;*/
 }
 
-#zoom-controls .icon:hover {
+.separator {
+    display: inline;
+    border-right: 1px solid rgba(0, 0, 0, 0.10);
+    box-shadow: 1px 0px 0px rgba(255, 255, 255, 0.30);
+    margin-left:  5px;
+    margin-right: 5px;
+}
+
+#info {
+    position: fixed;
+    padding: 8px;
+    /* background: rgba(190, 200, 210, 0.50);*/
+    top:    0px;
+    left:   0px;
+    border-bottom-right-radius: 8px;
+}
+
+#toolbar .icon-button {
+    display: inline-block;
+}
+
+#toolbar .icon {
+    font-size:   16px;
+    line-height: 20px;
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.50);
+
+    padding-left:  4px;
+    padding-right: 4px;
+}
+
+#toolbar .icon:hover {
     color: #000;
 }
