@@ -1,10 +1,9 @@
 $(document).ready(function() {
     var model      = new GameModel();
     var view       = new GameView({model: model});
-    var minimap    = new MinimapView({model: model});
-    var controller = new GameController({model: model, view: view, minimap: minimap});
+    var controller = new GameController({model: model, view: view});
     var timer      = new Timer();
-    _([view, minimap]).invoke('draw');
+    view.draw();
     timer.start();
     window.$V = view;
 });

@@ -108,24 +108,11 @@ body,
     padding-right: 10px;
 }
 
-#minimap {
-    border: 3px solid rgba(190, 200, 210, 0.75);
-
-    border-radius: 3px;
-
-    background-color: #fff;
-
-    /* margin-top:    10px;*/
-    /* margin-bottom: 10px;*/
-
-    display: table;
-}
-
 .icon-button.large {
-    font-size:   18px;
-    width:       36px;
-    height:      36px;
-    line-height: 38px;
+    font-size:   28px;
+    width:       46px;
+    height:      46px;
+    line-height: 48px;
     padding: 0px;
     margin: 1px;
     vertical-align: center;
@@ -200,9 +187,10 @@ body,
     padding: 8px;
     background: rgba(190, 200, 210, 0.50);
     top:  0px;
-    left: 100px;
+    left: 0px;
+    /* left: 100px;*/
     border-bottom-right-radius: 8px;
-    border-bottom-left-radius:  8px;
+    /* border-bottom-left-radius:  8px;*/
     /* display: none;*/
 }
 

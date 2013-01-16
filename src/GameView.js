@@ -3,6 +3,14 @@ function GameView(opts) {
     this.init(opts);
 }
 
+var sizeMapping = {
+    25:  3,
+    20:  3,
+    15:  4,
+    10:  6,
+     5: 12,
+};
+
 _.extend(GameView.prototype, {
     incrementSize: 5,
     tileSize: 25,
@@ -58,6 +66,7 @@ _.extend(GameView.prototype, {
 
         ctx.translate(F, F);
 
+        this.drawMinimap();
         this.drawBackground();
         this.shouldShadeSubsections = true;
         this.drawSquares();
@@ -66,6 +75,22 @@ _.extend(GameView.prototype, {
         this.drawInsetBorder();
 
         ctx.translate(-F, -F);
+    },
+    drawMinimap: function() {
+        var self = this;
+        var N  = self.model.size;
+        var S  = sizeMapping[N];
+        var P  = 30;
+        var CS = S * N + P;
+        var ctx = self.ctx;
+        ctx.translate(-CS, -CS);
+        ctx.fillStyle = 'black';
+        self.model.eachCell(function(x, y, cell) {
+            if (cell.state === 'filled') {
+                ctx.fillRect(S * x, S * y, S, S);
+            }
+        });
+        ctx.translate(CS, CS);
     },
     drawHints: function() {
         var self = this;
