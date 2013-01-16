@@ -97,6 +97,9 @@ body,
 
     display: inline-block;
 
+    position: relative;
+    top: -2px;
+
     font-weight: bold;
     color: rgba(0, 0, 0, 0.50);
     /* text-shadow: 0px 1px 1px white;*/
@@ -110,14 +113,16 @@ body,
 
 .icon-button.large {
     font-size:   28px;
-    width:       46px;
-    height:      46px;
-    line-height: 48px;
+    width:       56px;
+    height:      56px;
+    line-height: 58px;
     padding: 0px;
-    margin: 1px;
+    margin: 0px;
     vertical-align: center;
     text-align: center;
     display: inline-block;
+    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.25);
+    background-color: rgba(190, 200, 210, 0.50);
     /* display: block;*/
     /* background-color: rgba(160, 170, 180, 0.50);*/
     /* background-color: rgba(190, 200, 210, 0.50);*/
@@ -126,10 +131,32 @@ body,
     cursor: pointer;
 }
 
+.icon-button.large.lower {
+    position: relative;
+    top: 40px;
+    left: -10px;
+}
+
+.icon-button.large.higher {
+    position: relative;
+    top: 0px;
+}
+
 .icon-button.large:hover {
     box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.75);
-    /* background-color: rgb(160, 170, 180);*/
     background-color: rgba(170, 180, 190, 0.50);
+}
+
+.icon-button.large.selected {
+    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.75);
+    background-color: rgba(130, 140, 150, 0.75);
+}
+
+.icon-button.large.selected .icon {
+    color: rgba(255, 255, 255, 1.00);
+    text-shadow:
+        0px 1px 0px rgba(0, 0, 0, 0.50),
+        0px 0px 1px rgba(0, 0, 0, 0.75);
 }
 
 .large .icon {
@@ -156,6 +183,8 @@ body,
     position: fixed;
 
     background-color: rgba(190, 200, 210, 0.50);
+
+    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.20);
 
     border-bottom-left-radius: 8px;
 
@@ -185,11 +214,11 @@ body,
 #controls {
     position: fixed;
     padding: 8px;
-    background: rgba(190, 200, 210, 0.50);
+    /* background: rgba(190, 200, 210, 0.50);*/
     top:  0px;
     left: 0px;
     /* left: 100px;*/
-    border-bottom-right-radius: 8px;
+    /* border-bottom-right-radius: 8px;*/
     /* border-bottom-left-radius:  8px;*/
     /* display: none;*/
 }
@@ -213,6 +242,16 @@ body,
 
 #toolbar .icon-button {
     display: inline-block;
+    /* border-radius: 100%;*/
+}
+
+#toolbar .icon-button:hover {
+    /* box-shadow: 0px 3px 0px rgba(0, 0, 0, 0.90);*/
+}
+
+#toolbar .icon-button:hover .icon {
+    /* text-shadow: 0px 0px 4px red;*/
+    text-shadow: 0px 0px 1px white;
 }
 
 #toolbar .icon {
