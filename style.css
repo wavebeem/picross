@@ -1,3 +1,4 @@
+/*
 * {
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
@@ -5,6 +6,7 @@
          -o-box-sizing: border-box;
             box-sizing: border-box;
 }
+*/
 
 .container,
 #timer,
@@ -29,14 +31,23 @@
 }
 
 html {
-    background-color: #f4f4f4;
+    background-color: #ccc;
     color: #333;
-
     font-family:
         'Lucida Grande',
         'Segoe UI',
         'Verdana',
         sans-serif;
+}
+
+#content {
+    background-color: #f4f4f4;
+    /* background-color: #fff;*/
+    color: #333;
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    border-top-width:    0px;
+    /* border-bottom-width: 0px;*/
 }
 
 html,
@@ -45,9 +56,13 @@ body {
     margin:  0px;
 }
 
+body {
+    padding-left:  30px;
+    padding-right: 30px;
+}
+
 html,
-body,
-#content {
+body {
     min-height: 100%;
     height:     100%;
 }
@@ -78,7 +93,7 @@ body,
     margin-right: auto;
 
     margin-top:     20px;
-    margin-bottom:  20px;
+    /* margin-bottom:  20px;*/
     /* z-index: 1;*/
 
     /* margin-left: 10px;*/
@@ -88,8 +103,16 @@ body,
 }
 
 #content {
+    /* width: 644px;*/
+    margin-left:  auto;
+    margin-right: auto;
     padding: 10px;
     /* box-shadow: inset 1px 0px 0px rgba(0, 0, 0, 0.35);*/
+    /* box-shadow:*/
+    /*      0px 3px 0px rgba(0, 0, 0, 0.10),*/
+    /*      3px 0px 0px rgba(0, 0, 0, 0.10),*/
+    /*     -3px 0px 0px rgba(0, 0, 0, 0.10);*/
+    box-shadow: 0px 0px 0px 3px rgba(0, 0, 0, 0.10);
 }
 
 #timer {
@@ -133,13 +156,14 @@ body,
 
 .icon-button.large.lower {
     position: relative;
-    top: 40px;
-    left: -10px;
+    /* top: 40px;*/
+    /* left: -10px;*/
+    left: 5px;
 }
 
 .icon-button.large.higher {
-    position: relative;
-    top: 0px;
+    /* position: relative;*/
+    /* top: 0px;*/
 }
 
 .icon-button.large:hover {
@@ -180,11 +204,10 @@ body,
     padding: 4px;
     padding-right: 8px;
 
-    position: fixed;
-
     background-color: rgba(190, 200, 210, 0.50);
 
-    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.20);
+    /* box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.20);*/
+    box-shadow: inset 1px -1px 1px rgba(0, 0, 0, 0.05);
 
     border-bottom-left-radius: 8px;
 
@@ -211,8 +234,11 @@ body,
     display: inline-block;
 }
 
+.container {
+    position: absolute;
+}
+
 #controls {
-    position: fixed;
     padding: 8px;
     /* background: rgba(190, 200, 210, 0.50);*/
     top:  0px;

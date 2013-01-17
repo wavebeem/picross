@@ -48,6 +48,7 @@ _.extend(GameView.prototype, {
         this.canvas.height = CS;
         this.subsectionCount = SC;
         this.fontSize = Math.round(0.60 * TS);
+        $('#content').css('width', CS + 'px');
         if (this.ctx) {
             this.draw();
         }
