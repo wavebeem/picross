@@ -44,9 +44,13 @@ _.extend(GameView.prototype, {
         this.container = $('#game');
         this.makeLayers();
         this.setTileSize(this.tileSize);
-        this.model.events.register('draw', function() {
-            self.draw();
+        this.model.events.register('update', function(data) {
+            self.drawLayer(data.layer);
         });
+        _(layers).each(self.drawLayer, self);
+    },
+    drawLayer: function(layer) {
+        this['draw_' + layer]();
     },
     makeLayers: function() {
         var self = this;
@@ -101,21 +105,21 @@ _.extend(GameView.prototype, {
     draw: function() {
         var F = this.offset;
 
-        this.drawHintsBackground();
-        this.drawHints();
+        // this.drawHintsBackground();
+        // this.drawHints();
 
-        this.drawMinimap();
-        this.drawBackground();
-        this.drawSquares();
-        this.drawMajorLines();
-        this.drawCursor();
-        this.drawInsetBorder();
+        // this.drawMinimap();
+        // this.drawBackground();
+        // this.drawSquares();
+        // this.drawMajorLines();
+        // this.drawCursor();
+        // this.drawInsetBorder();
     },
     offsetContext: function(ctx, factor) {
         var F = factor * this.offset;
         ctx.translate(F, F);
     },
-    drawMinimap: function() {
+    draw_minimap: function() {
         var self = this;
         var N  = self.model.size;
         var S  = sizeMapping[N];
@@ -134,7 +138,7 @@ _.extend(GameView.prototype, {
         ctx.translate(CS, CS);
         this.offsetContext(ctx, -1);
     },
-    drawHints: function() {
+    draw_hintsText: function() {
         var self = this;
         var ctx  = self.getContextByName('hintsText');
 
@@ -188,7 +192,7 @@ _.extend(GameView.prototype, {
 
         ctx.fillText(text, x + s/2, y + s/2, s);
     },
-    drawHintsBackground: function() {
+    draw_hintsBG: function() {
         var N = this.model.size;
         var G = this.borderSize;
         var T = this.tileSize;
@@ -221,7 +225,7 @@ _.extend(GameView.prototype, {
         }
         ctx.translate(0, -F);
     },
-    drawBackground: function() {
+    draw_background: function() {
         var ctx = this.getContextByName('background');
         this.clearContext(ctx);
         this.offsetContext(ctx, +1);
@@ -240,7 +244,7 @@ _.extend(GameView.prototype, {
         ctx.fillRect(0, 0, Q - G, Q - G);
         this.offsetContext(ctx, -1);
     },
-    drawMajorLines: function() {
+    draw_grid: function() {
         var ctx = this.getContextByName('grid');
         this.clearContext(ctx);
         this.offsetContext(ctx, +1);
@@ -275,7 +279,7 @@ _.extend(GameView.prototype, {
         ctx.closePath();
         this.offsetContext(ctx, -1);
     },
-    drawSquares: function() {
+    draw_squares: function() {
         var self = this;
         var ctx = this.getContextByName('squares');
         this.clearContext(ctx);
@@ -364,7 +368,7 @@ _.extend(GameView.prototype, {
         });
         this.offsetContext(ctx, -1);
     },
-    drawCursor: function() {
+    draw_cursor: function() {
         var ctx = this.getContextByName('cursor');
         this.clearContext(ctx);
         this.offsetContext(ctx, +1);
@@ -391,7 +395,7 @@ _.extend(GameView.prototype, {
 
         this.offsetContext(ctx, -1);
     },
-    drawInsetBorder: function() {
+    draw_inset: function() {
         var ctx = this.getContextByName('inset');
         this.clearContext(ctx);
         this.offsetContext(ctx, +1);
