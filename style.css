@@ -32,6 +32,7 @@
 
 html {
     background-color: #ccc;
+    background-image: url(textures/grid.png);
     color: #333;
     font-family:
         'Lucida Grande',
@@ -42,6 +43,7 @@ html {
 
 #content {
     background-color: #f4f4f4;
+    background-image: url(textures/debut_light.png);
     /* background-color: #fff;*/
     color: #333;
     position: relative;
