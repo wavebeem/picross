@@ -80,13 +80,14 @@ _.extend(GameController.prototype, {
 
         self.keysHeld = {};
 
-        self.$canvas = $('#game');
+        var $canvas   = $('#game');
+        var $document = $(document);
 
         _([
             'mousemove',
             'mousedown',
         ]).each(function(name) {
-            bindHandler(self, self.$canvas, name);
+            bindHandler(self, $canvas, name);
         });
 
         _([
@@ -95,7 +96,7 @@ _.extend(GameController.prototype, {
             'keydown',
             'keyup',
         ]).each(function(name) {
-            bindHandler(self, $(document), name);
+            bindHandler(self, $document, name);
         });
     },
     isArrowKey: function(k) {

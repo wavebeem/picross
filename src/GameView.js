@@ -11,6 +11,24 @@ var sizeMapping = {
      5: 12,
 };
 
+var layers = [
+    'background',
+    'squares',
+    'grid',
+    'cursor',
+    'hintsBG',
+    'hintsText',
+    'minimap',
+    'inset',
+];
+
+var numLayers = layers.length;
+
+var nameToLayerNum = {};
+_(layers).each(function(name, i) {
+    nameToLayerNum[name] = i;
+});
+
 _.extend(GameView.prototype, {
     incrementSize: 5,
     tileSize: 25,
@@ -19,16 +37,33 @@ _.extend(GameView.prototype, {
     fontSize: 14,
     fontName: 'sans-serif',
     fontColor: '#666',
+    shouldShadeSubsections: true,
     init: function(opts) {
         var self = this;
         _.extend(this, opts);
-        this.$canvas = $('#game');
-        this.canvas = this.$canvas[0];
+        this.container = $('#game');
+        this.makeLayers();
         this.setTileSize(this.tileSize);
-        this.ctx = this.canvas.getContext('2d');
         this.model.events.register('draw', function() {
             self.draw();
         });
+    },
+    makeLayers: function() {
+        var self = this;
+        self.canvases = [];
+        self.contexts = [];
+        _(numLayers).times(function(i) {
+            var canvas = $('<canvas>')
+                .css('zIndex', 100 + i)
+                .addClass('layer-' + i);
+            self.canvases[i] = canvas;
+            self.contexts[i] = canvas[0].getContext('2d');
+            self.container.append(canvas);
+        });
+    },
+    getContextByName: function(name) {
+        var num = nameToLayerNum[name];
+        return this.contexts[num];
     },
     grow:   function() { this.setTileSize(this.tileSize + this.incrementSize) },
     shrink: function() { this.setTileSize(this.tileSize - this.incrementSize) },
@@ -43,39 +78,42 @@ _.extend(GameView.prototype, {
         var CS = (TS + BS) * (MS + HS);
         var offset = (TS + BS) * HS;
         this.offset = offset;
-        this.canvasSize    = CS;
-        this.canvas.width  = CS;
-        this.canvas.height = CS;
+        this.canvasSize = CS;
+        _(this.canvases).each(function(canvas) {
+            canvas.prop({
+                width:  CS,
+                height: CS,
+            });
+        });
+        this.container.css({
+            width:  CS + 'px',
+            height: CS + 'px',
+        });
         this.subsectionCount = SC;
         this.fontSize = Math.round(0.60 * TS);
         $('#content').css('width', CS + 'px');
-        if (this.ctx) {
-            this.draw();
-        }
+        this.draw();
+    },
+    clearContext: function(ctx) {
+        var CS = this.canvasSize;
+        ctx.clearRect(0, 0, CS, CS);
     },
     draw: function() {
-        var ctx = this.ctx;
-
-        var CS = this.canvasSize;
-
-        ctx.clearRect(0, 0, CS, CS);
-
         var F = this.offset;
 
         this.drawHintsBackground();
         this.drawHints();
 
-        ctx.translate(F, F);
-
         this.drawMinimap();
         this.drawBackground();
-        this.shouldShadeSubsections = true;
         this.drawSquares();
         this.drawMajorLines();
         this.drawCursor();
         this.drawInsetBorder();
-
-        ctx.translate(-F, -F);
+    },
+    offsetContext: function(ctx, factor) {
+        var F = factor * this.offset;
+        ctx.translate(F, F);
     },
     drawMinimap: function() {
         var self = this;
@@ -83,7 +121,9 @@ _.extend(GameView.prototype, {
         var S  = sizeMapping[N];
         var P  = 30;
         var CS = S * N + P;
-        var ctx = self.ctx;
+        var ctx = self.getContextByName('minimap');
+        this.clearContext(ctx);
+        this.offsetContext(ctx, +1);
         ctx.translate(-CS, -CS);
         ctx.fillStyle = 'black';
         self.model.eachCell(function(x, y, cell) {
@@ -92,10 +132,13 @@ _.extend(GameView.prototype, {
             }
         });
         ctx.translate(CS, CS);
+        this.offsetContext(ctx, -1);
     },
     drawHints: function() {
         var self = this;
-        var ctx  = this.ctx;
+        var ctx  = self.getContextByName('hintsText');
+
+        self.clearContext(ctx);
 
         var hx = self.model.hintsX;
         var hy = self.model.hintsY;
@@ -113,6 +156,7 @@ _.extend(GameView.prototype, {
             M = hx[i].length;
             for (j = 0; j < M; j++) {
                 self.drawTextInsideRect(
+                    ctx,
                     i * S,
                     (F - T - T) - j * T,
                     T,
@@ -126,6 +170,7 @@ _.extend(GameView.prototype, {
             M = hy[i].length;
             for (j = 0; j < M; j++) {
                 self.drawTextInsideRect(
+                    ctx,
                     (F - T - T) - j * T,
                     i * S - FS/2,
                     T,
@@ -135,8 +180,7 @@ _.extend(GameView.prototype, {
         }
         ctx.translate(0, -F);
     },
-    drawTextInsideRect: function(x, y, s, text) {
-        var ctx = this.ctx;
+    drawTextInsideRect: function(ctx, x, y, s, text) {
         ctx.font         = (this.fontBold ? 'bold ' : '') + this.fontSize + 'px ' + this.fontName;
         ctx.textAlign    = 'center';
         ctx.textBaseline = 'top';
@@ -152,7 +196,8 @@ _.extend(GameView.prototype, {
         var S = T + G;
         var i;
 
-        var ctx = this.ctx;
+        var ctx = this.getContextByName('hintsBG');
+        this.clearContext(ctx);
 
         var grad = ctx.createLinearGradient(0, 0, 0, 4*T);
         grad.addColorStop(0, colors.hintsFade);
@@ -177,7 +222,9 @@ _.extend(GameView.prototype, {
         ctx.translate(0, -F);
     },
     drawBackground: function() {
-        var ctx = this.ctx;
+        var ctx = this.getContextByName('background');
+        this.clearContext(ctx);
+        this.offsetContext(ctx, +1);
 
         var TS = this.tileSize;
         var BS = this.borderSize;
@@ -191,9 +238,12 @@ _.extend(GameView.prototype, {
 
         ctx.fillStyle = colors.minorLines;
         ctx.fillRect(0, 0, Q - G, Q - G);
+        this.offsetContext(ctx, -1);
     },
     drawMajorLines: function() {
-        var ctx = this.ctx;
+        var ctx = this.getContextByName('grid');
+        this.clearContext(ctx);
+        this.offsetContext(ctx, +1);
 
         var N = this.model.size;
         var G = this.borderSize;
@@ -223,10 +273,13 @@ _.extend(GameView.prototype, {
         }
         ctx.fill();
         ctx.closePath();
+        this.offsetContext(ctx, -1);
     },
     drawSquares: function() {
         var self = this;
-        var ctx = this.ctx;
+        var ctx = this.getContextByName('squares');
+        this.clearContext(ctx);
+        this.offsetContext(ctx, +1);
         var T = this.tileSize;
         var G = this.borderSize;
         var S = T + G;
@@ -309,9 +362,12 @@ _.extend(GameView.prototype, {
                 ctx.closePath();
             }
         });
+        this.offsetContext(ctx, -1);
     },
     drawCursor: function() {
-        var ctx = this.ctx;
+        var ctx = this.getContextByName('cursor');
+        this.clearContext(ctx);
+        this.offsetContext(ctx, +1);
 
         var cx = this.model.x;
         var cy = this.model.y;
@@ -333,9 +389,12 @@ _.extend(GameView.prototype, {
         ctx.fill();
         ctx.closePath();
 
+        this.offsetContext(ctx, -1);
     },
     drawInsetBorder: function() {
-        var ctx = this.ctx;
+        var ctx = this.getContextByName('inset');
+        this.clearContext(ctx);
+        this.offsetContext(ctx, +1);
 
         var TS = this.tileSize;
         var BS = this.borderSize;
@@ -356,6 +415,7 @@ _.extend(GameView.prototype, {
 
         ctx.fill();
         ctx.closePath();
+        this.offsetContext(ctx, -1);
     },
 });
 

@@ -50,6 +50,7 @@ html {
     border: 1px solid rgba(0, 0, 0, 0.35);
     border-top-width:    0px;
     /* border-bottom-width: 0px;*/
+    z-index: 1;
 }
 
 html,
@@ -100,8 +101,16 @@ body {
 
     /* margin-left: 10px;*/
 
-    display: table;
+    /* display: table;*/
     /* display: table-cell;*/
+
+    position: relative;
+}
+
+#game canvas {
+    position: absolute;
+    top:   0px;
+    right: 0px;
 }
 
 #content {
@@ -294,4 +303,44 @@ body {
 
 #toolbar .icon:hover {
     color: #000;
+}
+
+#footer {
+    position: fixed;
+    bottom: 0px;
+    left:   0px;
+    right:  0px;
+
+    z-index: -1;
+
+    /* margin-left:  -30px;*/
+    /* margin-right: -30px;*/
+
+    padding-left:   30px;
+    padding-right:  30px;
+    padding-bottom: 10px;
+    padding-top:    10px;
+
+    /* background-image: url(textures/dirty_old_shirt.png);*/
+    /* background-image: url(textures/stressed_linen.png);*/
+    /* background-image: url(textures/debut_dark.png);*/
+    background-image: url(textures/wild_oliva.png);
+
+    text-align: center;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.50);
+
+    /* box-shadow: inset 0px 3px 3px 0px rgba(0, 0, 0, 0.25);*/
+    /* box-shadow: inset 0px 3px 3px -3px black;*/
+    box-shadow: inset 0px 3px 0px  0px rgba(0, 0, 0, 0.25);
+}
+
+#footer,
+#footer #copyright {
+    color: #aaa;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+
+    z-index: 0;
 }
