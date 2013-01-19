@@ -31,7 +31,7 @@ _(layers).each(function(name, i) {
 
 _.extend(GameView.prototype, {
     incrementSize: 5,
-    tileSize: 25,
+    defaultTileSize: 25,
     borderSize: 3,
     fontBold: true,
     fontSize: 14,
@@ -43,7 +43,7 @@ _.extend(GameView.prototype, {
         _.extend(this, opts);
         this.container = $('#game');
         this.makeLayers();
-        this.setTileSize(this.tileSize);
+        this.setTileSize(this.defaultTileSize);
         this.model.events.register('update', function(data) {
             self.drawLayer(data.layer);
         });
@@ -69,9 +69,10 @@ _.extend(GameView.prototype, {
         var num = nameToLayerNum[name];
         return this.contexts[num];
     },
-    grow:   function() { this.setTileSize(this.tileSize + this.incrementSize) },
-    shrink: function() { this.setTileSize(this.tileSize - this.incrementSize) },
-    resetTileSize: function() { this.setTileSize(25) },
+    grow:   function() { this.growBy(+1) },
+    shrink: function() { this.growBy(-1) },
+    growBy: function(k) { this.setTileSize(this.tileSize + k*this.incrementSize) },
+    resetTileSize: function() { this.setTileSize(this.defaultTileSize) },
     setTileSize: function(x) {
         this.tileSize = util.clamp(x, 15, 60);
         var TS = this.tileSize;
