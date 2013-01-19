@@ -90,7 +90,7 @@ body {
     margin-left:  auto;
     margin-right: auto;
 
-    margin-top:     20px;
+    /* margin-top:     20px;*/
     /* margin-bottom:  20px;*/
     /* z-index: 1;*/
 
@@ -142,43 +142,57 @@ body {
 
 .icon-button.large {
     font-size:   28px;
-    width:       56px;
+    width:       66px;
     height:      56px;
     line-height: 58px;
     padding: 0px;
     margin: 0px;
     vertical-align: center;
     text-align: center;
-    display: inline-block;
-    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.25);
+    /* display: inline-block;*/
+    display: block;
+    /* box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.25);*/
+    box-shadow: inset -1px -1px 1px rgba(0, 0, 0, 0.25);
     background-color: rgba(190, 200, 210, 0.50);
     /* display: block;*/
     /* background-color: rgba(160, 170, 180, 0.50);*/
     /* background-color: rgba(190, 200, 210, 0.50);*/
     /* box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.30);*/
-    border-radius: 100%;
+    border-radius:  20%;
     cursor: pointer;
 }
 
-.icon-button.large.lower {
+.icon-button.large.right {
     position: relative;
-    /* top: 40px;*/
+    /* top : 40px;*/
     /* left: -10px;*/
-    left: 5px;
+    /* left: -1px;*/
+
+    /* border-radius: 100%;*/
+    border-top-right-radius:   0px;
+    border-top-left-radius:    0px;
+    border-bottom-left-radius: 0px;
+
+    /* border-left: 1px solid transparent;*/
 }
 
-.icon-button.large.higher {
+.icon-button.large.left {
     /* position: relative;*/
-    /* top: 0px;*/
+    top: 0px;
+    /* border-radius: 0%;*/
+    border-top-left-radius:     0px;
+    border-bottom-left-radius:  0px;
+    border-bottom-right-radius: 0px;
+    box-shadow: inset -1px -1px 1px rgba(0, 0, 0, 0.25);
 }
 
 .icon-button.large:hover {
-    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.75);
+    /* box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.75);*/
     background-color: rgba(170, 180, 190, 0.50);
 }
 
 .icon-button.large.selected {
-    box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.75);
+    /* box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.75);*/
     background-color: rgba(130, 140, 150, 0.75);
 }
 
@@ -205,7 +219,7 @@ body {
 
 #toolbar {
     top:   0px;
-    right: 0px;
+    left : 0px;
 
     padding: 4px;
     padding-right: 8px;
@@ -213,9 +227,13 @@ body {
     background-color: rgba(190, 200, 210, 0.50);
 
     /* box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.20);*/
-    box-shadow: inset 1px -1px 1px rgba(0, 0, 0, 0.05);
+    /* box-shadow: inset 1px -1px 1px rgba(0, 0, 0, 0.05);*/
+    /* border-bottom-left-radius: 8px;*/
 
-    border-bottom-left-radius: 8px;
+    box-shadow: inset -1px -1px 1px rgba(0, 0, 0, 0.05);
+    border-bottom-right-radius: 8px;
+
+    /* height: 24px;*/
 
     /* padding-right: 20px;*/
     /* padding-top: 12px;*/
@@ -245,9 +263,9 @@ body {
 }
 
 #controls {
-    padding: 8px;
+    padding: 0px;
     /* background: rgba(190, 200, 210, 0.50);*/
-    top:  0px;
+    top:  70px;
     left: 0px;
     /* left: 100px;*/
     /* border-bottom-right-radius: 8px;*/

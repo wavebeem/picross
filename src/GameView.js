@@ -125,10 +125,14 @@ _.extend(GameView.prototype, {
         var S  = sizeMapping[N];
         var P  = 30;
         var CS = S * N + P;
+        var O  = 20 + 3;
         var ctx = self.getContextByName('minimap');
         this.clearContext(ctx);
         this.offsetContext(ctx, +1);
+        ctx.translate(-O, -O);
         ctx.translate(-CS, -CS);
+        ctx.fillStyle = colors.shadeCell;
+        ctx.fillRect(0, 0, CS, CS);
         ctx.fillStyle = 'black';
         self.model.eachCell(function(x, y, cell) {
             if (cell.state === 'filled') {
@@ -136,6 +140,7 @@ _.extend(GameView.prototype, {
             }
         });
         ctx.translate(CS, CS);
+        ctx.translate(O, O);
         this.offsetContext(ctx, -1);
     },
     draw_hintsText: function() {
@@ -385,13 +390,21 @@ _.extend(GameView.prototype, {
         var t = T - G;
 
         ctx.fillStyle = colors.highlight;
-        ctx.beginPath();
-        ctx.rect(X + 0, Y + 0, T, G);
-        ctx.rect(X + 0, Y + 0, G, T);
-        ctx.rect(X + t, Y + 0, G, T);
-        ctx.rect(X + 0, Y + t, T, G);
-        ctx.fill();
-        ctx.closePath();
+
+        util.drawBorderOutsideRect(
+            ctx,
+            X, Y,
+            S, S,
+            3
+        );
+
+        // ctx.beginPath();
+        // ctx.rect(X + 0, Y + 0, T, G);
+        // ctx.rect(X + 0, Y + 0, G, T);
+        // ctx.rect(X + t, Y + 0, G, T);
+        // ctx.rect(X + 0, Y + t, T, G);
+        // ctx.fill();
+        // ctx.closePath();
 
         this.offsetContext(ctx, -1);
     },

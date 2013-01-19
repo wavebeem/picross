@@ -31,6 +31,17 @@ return {
     zeroPad: function(n) {
         return (n < 10 ? '0' : '') + n;
     },
+    drawBorderOutsideRect: function(ctx, x, y, w, h, s) {
+        var X = x - s;
+        var Y = y - s;
+        ctx.beginPath();
+        ctx.rect(X + 0, Y + 0, w + s, 0 + s);
+        ctx.rect(X + 0, Y + 0, 0 + s, h + s);
+        ctx.rect(X + w, Y + 0, 0 + s, h + s);
+        ctx.rect(X + 0, Y + h, w + s, 0 + s);
+        ctx.fill();
+        ctx.closePath();
+    },
     odd:  function(x) { return x % 2 === 1 },
     even: function(x) { return x % 2 === 0 },
     sum: function(x) {
