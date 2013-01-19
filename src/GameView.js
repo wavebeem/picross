@@ -115,23 +115,27 @@ _.extend(GameView.prototype, {
         var N  = self.model.size;
         var S  = sizeMapping[N];
         var P  = 30;
-        var CS = S * N + P;
-        var O  = 20 + 3;
+        var CS = S * N;
+        var CSP = CS + P;
         var ctx = self.getContextByName('minimap');
         this.clearContext(ctx);
         this.offsetContext(ctx, +1);
-        ctx.translate(-O, -O);
-        ctx.translate(-CS, -CS);
+        ctx.translate(-CSP, -CSP);
+
         ctx.fillStyle = colors.shadeCell;
         ctx.fillRect(0, 0, CS, CS);
+
+        ctx.fillStyle = colors.insetShadow;
+        util.drawBorderOutsideRect(ctx, 0, 0, CS, CS, 3);
+        util.drawBorderInsideRect (ctx, 0, 0, CS, CS, 3);
+
         ctx.fillStyle = 'black';
         self.model.eachCell(function(x, y, cell) {
             if (cell.state === 'filled') {
                 ctx.fillRect(S * x, S * y, S, S);
             }
         });
-        ctx.translate(CS, CS);
-        ctx.translate(O, O);
+        ctx.translate(CSP, CSP);
         this.offsetContext(ctx, -1);
     },
     draw_hintsText: function() {
