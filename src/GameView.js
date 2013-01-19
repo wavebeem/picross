@@ -103,17 +103,7 @@ _.extend(GameView.prototype, {
         ctx.clearRect(0, 0, CS, CS);
     },
     draw: function() {
-        var F = this.offset;
-
-        // this.drawHintsBackground();
-        // this.drawHints();
-
-        // this.drawMinimap();
-        // this.drawBackground();
-        // this.drawSquares();
-        // this.drawMajorLines();
-        // this.drawCursor();
-        // this.drawInsetBorder();
+        _(layers).each(this.drawLayer, this);
     },
     offsetContext: function(ctx, factor) {
         var F = factor * this.offset;
