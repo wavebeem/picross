@@ -43,7 +43,8 @@ html {
 
 #content {
     background-color: #f4f4f4;
-    background-image: url(textures/debut_light.png);
+    /* background-image: url(textures/debut_light.png);*/
+    background-color: hsl(40, 90%, 97%);
     /* background-color: #fff;*/
     color: #333;
     position: relative;
@@ -219,18 +220,18 @@ body {
 
 #toolbar {
     top:   0px;
-    left : 0px;
+    left:  0px;
 
     padding: 4px;
     padding-right: 8px;
 
-    background-color: rgba(190, 200, 210, 0.50);
+    /* background-color: rgba(190, 200, 210, 0.50);*/
 
     /* box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.20);*/
     /* box-shadow: inset 1px -1px 1px rgba(0, 0, 0, 0.05);*/
     /* border-bottom-left-radius: 8px;*/
 
-    box-shadow: inset -1px -1px 1px rgba(0, 0, 0, 0.05);
+    /* box-shadow: inset -1px -1px 1px rgba(0, 0, 0, 0.05);*/
     border-bottom-right-radius: 8px;
 
     /* height: 24px;*/

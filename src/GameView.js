@@ -12,14 +12,14 @@ var sizeMapping = {
 };
 
 var layers = [
+    'hintsBG',
+    'hintsText',
     'background',
     'squares',
     'grid',
-    'cursor',
-    'hintsBG',
-    'hintsText',
     'minimap',
     'inset',
+    'cursor',
 ];
 
 var numLayers = layers.length;
@@ -36,8 +36,8 @@ _.extend(GameView.prototype, {
     fontBold: true,
     fontSize: 14,
     fontName: 'sans-serif',
-    fontColor: '#666',
-    shouldShadeSubsections: true,
+    shouldShadeSubsections: false,
+    shouldShadeX: false,
     init: function(opts) {
         var self = this;
         _.extend(this, opts);
@@ -184,7 +184,7 @@ _.extend(GameView.prototype, {
         ctx.font         = (this.fontBold ? 'bold ' : '') + this.fontSize + 'px ' + this.fontName;
         ctx.textAlign    = 'center';
         ctx.textBaseline = 'top';
-        ctx.fillStyle    = this.fontColor;
+        ctx.fillStyle    = colors.fontNormal;
 
         ctx.fillText(text, x + s/2, y + s/2, s);
     },
@@ -233,7 +233,7 @@ _.extend(GameView.prototype, {
         var Q = (TS + BS) * MS;
         var G = this.borderSize;
 
-        ctx.fillStyle = colors.majorLines;
+        ctx.fillStyle = colors.outsideBorder;
         ctx.fillRect(-G, -G, Q + G, Q + G);
 
         ctx.fillStyle = colors.minorLines;
@@ -241,6 +241,7 @@ _.extend(GameView.prototype, {
         this.offsetContext(ctx, -1);
     },
     draw_grid: function() {
+        // return;
         var ctx = this.getContextByName('grid');
         this.clearContext(ctx);
         this.offsetContext(ctx, +1);
@@ -257,19 +258,21 @@ _.extend(GameView.prototype, {
         var x, y, w, h;
 
         ctx.beginPath();
-        ctx.fillStyle = colors.shadeLine;
+        ctx.fillStyle = colors.majorLines;
         for (p = 5; p < N; p += 5) {
             x = (p - 1) * S + T;
             y = 0;
             w = G;
             h = Q - G;
-            ctx.rect(x - 1, y, G + 2, h);
+            // ctx.rect(x - 1, y, G + 2, h);
+            ctx.rect(x, y, G, h);
 
             x = 0;
             y = (p - 1) * S + T;
             w = Q - G;
             h = G;
-            ctx.rect(x, y - 1, w, G + 2);
+            // ctx.rect(x, y - 1, w, G + 2);
+            ctx.rect(x, y, w, G);
         }
         ctx.fill();
         ctx.closePath();
@@ -314,23 +317,29 @@ _.extend(GameView.prototype, {
                 }
             }
 
-            ctx.beginPath();
-            ctx.fillStyle = colors.shadeCell;
+            if (state === 'filled') {
+                ctx.beginPath();
+                ctx.fillStyle = colors.shadeCell;
+                ctx.rect(X, Y, T, 1);
+                ctx.rect(X, Y, 1, T);
+                ctx.fill();
+                ctx.closePath();
 
-            ctx.rect(X, Y, T, 1);
-            ctx.rect(X, Y, 1, T);
+                // ctx.beginPath();
+                // ctx.fillStyle = colors.shadeCell;
+                // ctx.rect(X + 1, Y + 1, T - 2, 1);
+                // ctx.rect(X + 1, Y + 1, 1, T - 2);
+                // ctx.fill();
+                // ctx.closePath();
 
-            ctx.fill();
-            ctx.closePath();
-
-            ctx.beginPath();
-            ctx.fillStyle = colors.shadeLess;
-
-            ctx.rect(A, Y, 1, T);
-            ctx.rect(X, B, T, 1);
-
-            ctx.fill();
-            ctx.closePath();
+                ctx.beginPath();
+                ctx.fillStyle = colors.shadeLess;
+                // ctx.fillStyle = colors.light;
+                ctx.rect(A, Y, 1, T);
+                ctx.rect(X, B, T, 1);
+                ctx.fill();
+                ctx.closePath();
+            }
 
             // Draw an X to indicate the square is marked
             if (cell.state === 'marked') {
@@ -343,14 +352,16 @@ _.extend(GameView.prototype, {
                 ctx.lineJoin  = 'round';
 
 
-                ctx.beginPath();
-                ctx.strokeStyle = colors.shadowX;
-                ctx.moveTo(X + 0 + O, Y + 0 + O + o);
-                ctx.lineTo(X + T - O, Y + T - O + o);
-                ctx.moveTo(X + T - O, Y + 0 + O + o);
-                ctx.lineTo(X + 0 + O, Y + T - O + o);
-                ctx.stroke();
-                ctx.closePath();
+                if (self.shouldShadeX) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = colors.shadowX;
+                    ctx.moveTo(X + 0 + O, Y + 0 + O + o);
+                    ctx.lineTo(X + T - O, Y + T - O + o);
+                    ctx.moveTo(X + T - O, Y + 0 + O + o);
+                    ctx.lineTo(X + 0 + O, Y + T - O + o);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
 
                 ctx.beginPath();
                 ctx.strokeStyle = colors.marked;
@@ -381,21 +392,10 @@ _.extend(GameView.prototype, {
         var t = T - G;
 
         ctx.fillStyle = colors.highlight;
+        util.drawBorderOutsideRect(ctx, X, Y, S, S, 3);
 
-        util.drawBorderOutsideRect(
-            ctx,
-            X, Y,
-            S, S,
-            3
-        );
-
-        // ctx.beginPath();
-        // ctx.rect(X + 0, Y + 0, T, G);
-        // ctx.rect(X + 0, Y + 0, G, T);
-        // ctx.rect(X + t, Y + 0, G, T);
-        // ctx.rect(X + 0, Y + t, T, G);
-        // ctx.fill();
-        // ctx.closePath();
+        ctx.fillStyle = colors.cursorShadow;
+        util.drawBorderInsideRect(ctx, X, Y, S, S, 3);
 
         this.offsetContext(ctx, -1);
     },
@@ -407,22 +407,11 @@ _.extend(GameView.prototype, {
         var TS = this.tileSize;
         var BS = this.borderSize;
         var MS = this.model.size;
-        var HS = this.model.hintsSize;
-        var G  = this.borderSize;
-        var F  = this.offset;
-        var Q  = (TS + BS) * MS - G;
-        var q  = Q - 1;
+        var Q  = (TS + BS) * MS;
 
-        ctx.beginPath();
-        ctx.fillStyle = colors.shadow;
+        ctx.fillStyle = colors.insetShadow;
+        util.drawBorderInsideRect(ctx, 0, 0, Q, Q, 3);
 
-        ctx.rect(0, 0, Q, 1);
-        ctx.rect(q, 0, 1, Q);
-        ctx.rect(0, q, Q, 1);
-        ctx.rect(0, 0, 1, Q);
-
-        ctx.fill();
-        ctx.closePath();
         this.offsetContext(ctx, -1);
     },
 });

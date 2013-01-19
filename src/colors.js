@@ -4,32 +4,35 @@ var rgb       = util.rgb;
 var rgba      = util.rgba;
 var gray      = util.gray;
 var alphaGray = util.alphaGray;
+var hsl       = util.hsl;
+var hsla      = util.hsla;
 
-var blue     = '#729fcf';
-var darkBlue = '#3465a4';
+var yellow =  40;
+var cyan   = 180;
+var green  = 90;
 
 return {
-    highlight:  rgb(130, 140, 150),
-    shadeCell:  alphaGray(0, 0.10),
-    shadeLess:  alphaGray(0, 0.05),
-    // shadeLine:  alphaGray(0, 0.25),
-    // shadeLine:  alphaGray(0, 0.10),
-    shadeLine:  alphaGray(0, 0.10),
-    // shadeLine:  alphaGray(255, 0.99),
-    // shadeLine:  'red',
-    background: gray(250),
-    // filled:     gray(187),
-    filled:     rgb(190, 200, 210),
-    marked:     gray(175),
-    // minorLines: gray(240),
-    minorLines: rgb(235, 235, 245),
-    majorLines: gray(210),
-    // majorLines: gray(240),
-    hintsBG:    alphaGray(200, 0.25),
-    hintsFade:  alphaGray(200, 0.00),
-    shadow:     alphaGray(0,   0.25),
-    shadowX:    alphaGray(0,   0.50),
-    // cellShade:  alphaGray(0,   0.05),
-    cellShade:  rgba(0, 110, 220, 0.05),
+    highlight:      hsla(cyan, 0.3, 0.50, 0.75),
+    cursorShadow:   hsla(cyan, 0.4, 0.40, 0.50),
+    // cursorShadow:   alphaGray(0, 0.20),
+    shadeCell:      alphaGray(0, 0.10),
+    shadeLess:      alphaGray(0, 0.05),
+    shadeLine:      alphaGray(0, 0.20),
+    background:     hsl(yellow, 0.9, 0.93),
+    // filled:         rgb(140, 190, 100),
+    filled:         hsl(green, 0.4, 0.6),
+    marked:         hsl(yellow, 0.6, 0.60),
+    minorLines:     hsl(yellow, 0.8, 0.85),
+    majorLines:     hsl(yellow, 0.7, 0.70),
+    outsideBorder:  hsl(yellow, 0.4, 0.60),
+    insetShadow:    alphaGray(0, 0.05),
+    hintsBG:        hsla(yellow, 0.6, 0.8, 0.35),
+    hintsFade:      hsla(yellow, 0.6, 0.8, 0.00),
+    shadow:         alphaGray(0,   0.25),
+    light:          alphaGray(255, 0.75),
+    shadowX:        alphaGray(0,   0.00),
+    cellShade:      rgba(100, 110, 120, 0.05),
+    // fontNormal:     alphaGray(0, 0.50),
+    fontNormal:     hsl(yellow, 0.3, 0.5),
 };
 })();
