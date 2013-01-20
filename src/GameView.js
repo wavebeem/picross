@@ -399,7 +399,7 @@ _.extend(GameView.prototype, {
         util.drawBorderOutsideRect(ctx, X, Y, T, T, 3);
 
         ctx.fillStyle = colors.cursorShadow;
-        util.drawBorderInsideRect(ctx, X, Y, T, T, 3);
+        util.drawBorderInsideRect(ctx, X, Y, T, T, 1);
 
         this.offsetContext(ctx, -1);
     },
