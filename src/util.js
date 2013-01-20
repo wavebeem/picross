@@ -15,12 +15,8 @@ var percent = function(x) {
 };
 
 return {
-    now: (function() {
-        var p = window.performance || {};
-        return typeof p.now === 'function'
-            ? function() { return p.now() }
-            : function() { return +(new Date()) };
-    })(),
+    now: function() { return window.performance.now() },
+
     clamp: function(x, a, b) {
         return min(max(x, a), b);
     },
@@ -43,23 +39,28 @@ return {
     drawBorderOutsideRect: function(ctx, x, y, w, h, s) {
         var X = x - s;
         var Y = y - s;
+        ctx.translate(X, Y);
         ctx.beginPath();
-        ctx.rect(X + 0, Y + 0, w + s, 0 + s); // top
-        ctx.rect(X + 0, Y + 0, 0 + s, h + s); // left
-        ctx.rect(X + w, Y + 0, 0 + s, h + s); // right
-        ctx.rect(X + 0, Y + h, w + s, 0 + s); // bottom
+        var S = 2 * s;
+        ctx.rect(0,     0,     w + S, 0 + s); // top
+        ctx.rect(0,     0,     0 + s, h + S); // left
+        ctx.rect(w + s, 0,     0 + s, h + S); // right
+        ctx.rect(0,     h + s, w + S, 0 + s); // bottom
         ctx.fill();
         ctx.closePath();
+        ctx.translate(-X, -Y);
     },
     drawBorderInsideRect: function(ctx, x, y, w, h, s) {
+        ctx.translate(x, y);
         ctx.beginPath();
-        var S = 2*s;
-        ctx.rect(x + 0 - 0, y + 0 - 0, w - s, 0 + s); // top
-        ctx.rect(x + 0 - 0, y + 0 - 0, 0 + s, h - s); // left
-        ctx.rect(x + w - S, y + 0 - 0, 0 + s, h - s); // right
-        ctx.rect(x + 0 - 0, y + h - S, w - s, 0 + s); // bottom
+        var S = 2 * s;
+        ctx.rect(0 - 0, 0 - 0, w, s); // top
+        ctx.rect(0 - 0, 0 - 0, s, h); // left
+        ctx.rect(w - s, 0 - 0, s, h); // right
+        ctx.rect(0 - 0, h - s, w, s); // bottom
         ctx.fill();
         ctx.closePath();
+        ctx.translate(-x, -y);
     },
     odd:  function(x) { return x % 2 === 1 },
     even: function(x) { return x % 2 === 0 },

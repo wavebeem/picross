@@ -127,7 +127,7 @@ _.extend(GameView.prototype, {
 
         ctx.fillStyle = colors.insetShadow;
         util.drawBorderOutsideRect(ctx, 0, 0, CS, CS, 3);
-        util.drawBorderInsideRect (ctx, 0, 0, CS, CS, 3);
+        util.drawBorderInsideRect (ctx, 0, 0, CS, CS, 1);
 
         ctx.fillStyle = 'black';
         self.model.eachCell(function(x, y, cell) {
@@ -396,10 +396,10 @@ _.extend(GameView.prototype, {
         var t = T - G;
 
         ctx.fillStyle = colors.highlight;
-        util.drawBorderOutsideRect(ctx, X, Y, S, S, 3);
+        util.drawBorderOutsideRect(ctx, X, Y, T, T, 3);
 
         ctx.fillStyle = colors.cursorShadow;
-        util.drawBorderInsideRect(ctx, X, Y, S, S, 3);
+        util.drawBorderInsideRect(ctx, X, Y, T, T, 3);
 
         this.offsetContext(ctx, -1);
     },
@@ -412,9 +412,10 @@ _.extend(GameView.prototype, {
         var BS = this.borderSize;
         var MS = this.model.size;
         var Q  = (TS + BS) * MS;
+        var G = this.borderSize;
 
         ctx.fillStyle = colors.insetShadow;
-        util.drawBorderInsideRect(ctx, 0, 0, Q, Q, 3);
+        util.drawBorderInsideRect(ctx, 0, 0, Q - G, Q - G, 1);
 
         this.offsetContext(ctx, -1);
     },

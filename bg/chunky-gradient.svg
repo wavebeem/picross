@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="64"
+   height="480"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="chunky-gradient.svg"
+   inkscape:export-filename="U:\picross\bg\chunky-gradient.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 128 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="64 : 128 : 1"
+       inkscape:persp3d-origin="32 : 85.333333 : 1"
+       id="perspective11011" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#3465a4"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4287109"
+     inkscape:cx="-84.031164"
+     inkscape:cy="172.77687"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1058"
+     inkscape:window-x="1674"
+     inkscape:window-y="-6"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="false"
+     borderlayer="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid10929"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-572.3622)">
+    <rect
+       style="color:#000000;fill:#b2dede;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect10997"
+       width="65"
+       height="480.35709"
+       x="0"
+       y="572.36218"
+       ry="0"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       id="g10927"
+       style="fill:#dbf1f1;fill-opacity:1">
+      <rect
+         transform="scale(1,-1)"
+         style="opacity:0.50000000000000000;color:#000000;fill:#dbf1f1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect10966"
+         width="65"
+         height="35"
+         x="0"
+         y="-982.36224"
+         ry="0" />
+      <rect
+         transform="scale(1,-1)"
+         ry="0"
+         y="-1017.3622"
+         x="0"
+         height="35"
+         width="65"
+         id="rect10968"
+         style="opacity:0.75000000000000000;color:#000000;fill:#dbf1f1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <rect
+         transform="scale(1,-1)"
+         style="color:#000000;fill:#dbf1f1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect10970"
+         width="65"
+         height="35"
+         x="0"
+         y="-1052.3622"
+         ry="0" />
+      <rect
+         transform="scale(1,-1)"
+         style="opacity:0.25000000000000000;color:#000000;fill:#dbf1f1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect10978"
+         width="65"
+         height="35"
+         x="0"
+         y="-947.36224"
+         ry="0" />
+      <rect
+         ry="0"
+         y="-912.36218"
+         x="0"
+         height="35"
+         width="65"
+         id="rect10925"
+         style="opacity:0.12000002000000000;color:#000000;fill:#dbf1f1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.50000000000000000;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         transform="scale(1,-1)" />
+    </g>
+  </g>
+</svg>
