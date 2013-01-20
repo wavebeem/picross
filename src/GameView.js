@@ -19,8 +19,16 @@ var layers = [
     'grid',
     'minimap',
     'inset',
+    'crosshair',
     'cursor',
 ];
+
+var groups = {
+    hints:  ['hintsBG', 'hintsText'],
+    data:   ['squares', 'minimap'  ],
+    // cursor: ['cursor',  'crosshair'],
+    cursor: ['cursor',  'crosshair', 'hintsText', 'hintsBG'],
+};
 
 var numLayers = layers.length;
 
@@ -34,8 +42,7 @@ _.extend(GameView.prototype, {
     defaultTileSize: 25,
     borderSize: 3,
     fontBold: true,
-    fontSize: 14,
-    fontName: 'sans-serif',
+    fontName: 'Lucida Grande, Segoe UI, Verdana, sans-serif',
     shouldShadeSubsections: false,
     shouldShadeX: false,
     init: function(opts) {
@@ -45,12 +52,20 @@ _.extend(GameView.prototype, {
         this.makeLayers();
         this.setTileSize(this.defaultTileSize);
         this.model.events.register('update', function(data) {
-            self.drawLayer(data.layer);
+            if (data.group) {
+                self.drawGroup(data.group);
+            }
+            else if (data.layer) {
+                self.drawLayer(data.layer);
+            }
         });
         _(layers).each(self.drawLayer, self);
     },
     drawLayer: function(layer) {
         this['draw_' + layer]();
+    },
+    drawGroup: function(group) {
+        _(groups[group]).each(this.drawLayer, this);
     },
     makeLayers: function() {
         var self = this;
@@ -95,7 +110,7 @@ _.extend(GameView.prototype, {
             height: CS + 'px',
         });
         this.subsectionCount = SC;
-        this.fontSize = Math.round(0.60 * TS);
+        this.fontSize = Math.round(0.55 * TS);
         $('#content').css('width', CS + 'px');
         this.draw();
     },
@@ -156,16 +171,30 @@ _.extend(GameView.prototype, {
         var S = T + G;
         var i, j;
 
+        var cx = self.model.x;
+        var cy = self.model.y;
+
+        var sel;
+        var textColors = [
+            colors.fontNormal,
+            colors.fontSelected,
+        ];
+
+        ctx.strokeStyle = colors.fontStroke;
+
         ctx.translate(F, 0);
         for (i = 0; i < N; i++) {
             M = hx[i].length;
             for (j = 0; j < M; j++) {
+                sel = ~~(cx === i);
+                ctx.fillStyle = textColors[sel];
                 self.drawTextInsideRect(
                     ctx,
                     i * S,
                     (F - T - T) - j * T,
                     T,
-                    '' + hx[i][j]
+                    '' + hx[i][j],
+                    sel
                 );
             }
         }
@@ -174,24 +203,29 @@ _.extend(GameView.prototype, {
         for (i = 0; i < N; i++) {
             M = hy[i].length;
             for (j = 0; j < M; j++) {
+                sel = ~~(cy === i);
+                ctx.fillStyle = textColors[sel];
                 self.drawTextInsideRect(
                     ctx,
                     (F - T - T) - j * T,
                     i * S - FS/2,
                     T,
-                    '' + hy[i][j]
+                    '' + hy[i][j],
+                    sel
                 );
             }
         }
         ctx.translate(0, -F);
     },
-    drawTextInsideRect: function(ctx, x, y, s, text) {
+    drawTextInsideRect: function(ctx, x, y, s, text, stroke) {
         ctx.font         = (this.fontBold ? 'bold ' : '') + this.fontSize + 'px ' + this.fontName;
         ctx.textAlign    = 'center';
         ctx.textBaseline = 'top';
-        ctx.fillStyle    = colors.fontNormal;
 
-        ctx.fillText(text, x + s/2, y + s/2, s);
+        var X = x + s/2;
+        var Y = y + s/2;
+
+        ctx.fillText(text, X, Y, s);
     },
     draw_hintsBG: function() {
         var N = this.model.size;
@@ -204,25 +238,40 @@ _.extend(GameView.prototype, {
         var ctx = this.getContextByName('hintsBG');
         this.clearContext(ctx);
 
-        var grad = ctx.createLinearGradient(0, 0, 0, 4*T);
-        grad.addColorStop(0, colors.hintsFade);
-        grad.addColorStop(1, colors.hintsBG);
-        ctx.fillStyle = grad;
+        var cx = this.model.x;
+        var cy = this.model.y;
+
+        var grad;
+        var sel;
+
 
         ctx.translate(F, 0);
-        for (i = 1; i < N; i += 2) {
+        for (i = 0; i < N; i++) {
+            sel = (cx === i);
+            if (!(util.odd(i) || sel)) {
+                continue;
+            }
+            grad = ctx.createLinearGradient(0, 0, 0, 4*T);
+            grad.addColorStop(0, colors['hints' + (sel ? 'Sel' : '') + 'Fade']);
+            grad.addColorStop(1, colors['hints' + (sel ? 'Sel' : '') + 'BG']);
+            ctx.fillStyle = grad;
             ctx.fillRect(i * S, 0, T, F);
+            util.drawBorderInsideRect(ctx, i * S, 0, T, F, 1);
         }
         ctx.translate(-F, 0);
 
-        var grad = ctx.createLinearGradient(0, 0, 4*T, 0);
-        grad.addColorStop(0, colors.hintsFade);
-        grad.addColorStop(1, colors.hintsBG);
-        ctx.fillStyle = grad;
-
         ctx.translate(0, F);
-        for (i = 1; i < N; i += 2) {
+        for (i = 0; i < N; i++) {
+            sel = (cy === i);
+            if (!(util.odd(i) || sel)) {
+                continue;
+            }
+            grad = ctx.createLinearGradient(0, 0, 4*T, 0);
+            grad.addColorStop(0, colors['hints' + (sel ? 'Sel' : '') + 'Fade']);
+            grad.addColorStop(1, colors['hints' + (sel ? 'Sel' : '') + 'BG']);
+            ctx.fillStyle = grad;
             ctx.fillRect(0, i * S, F, T);
+            util.drawBorderInsideRect(ctx, 0, i * S, F, T, 1);
         }
         ctx.translate(0, -F);
     },
@@ -378,6 +427,43 @@ _.extend(GameView.prototype, {
                 ctx.closePath();
             }
         });
+        this.offsetContext(ctx, -1);
+    },
+    draw_crosshair: function() {
+        var ctx = this.getContextByName('crosshair');
+        this.clearContext(ctx);
+        this.offsetContext(ctx, +1);
+
+        var cx = this.model.x;
+        var cy = this.model.y;
+
+        var TS = this.tileSize;
+        var BS = this.borderSize;
+        var MS = this.model.size;
+        var CS = (TS + BS) * MS - BS;
+
+        var G = this.borderSize;
+        var T = this.tileSize;
+        var S = T + G;
+
+        var X = cx * S;
+        var Y = cy * S;
+        var t = T - G;
+
+        // ctx.fillStyle = colors.highlight;
+        // util.drawBorderOutsideRect(ctx, X, Y, T, T, 3);
+
+        // ctx.fillStyle = colors.cursorShadow;
+        // util.drawBorderInsideRect(ctx, X, Y, T, T, 1);
+
+        ctx.fillStyle = colors.crosshair;
+        ctx.fillRect(X, 0, T,  CS);
+        ctx.fillRect(0, Y, CS, T );
+
+        ctx.fillStyle = colors.crosshair;
+        util.drawBorderInsideRect(ctx, X, 0, T,  CS, 1);
+        util.drawBorderInsideRect(ctx, 0, Y, CS, T , 1);
+
         this.offsetContext(ctx, -1);
     },
     draw_cursor: function() {

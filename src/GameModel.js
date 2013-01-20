@@ -86,8 +86,7 @@ _.extend(GameModel.prototype, {
 
         if (result !== state) {
             cell.state  = result;
-            this.events.fire('update', { layer: 'squares' });
-            this.events.fire('update', { layer: 'minimap' });
+            this.events.fire('update', { group: 'data' });
         }
     },
     moveTo: function(x, y) {
@@ -112,7 +111,7 @@ _.extend(GameModel.prototype, {
 
         this.x = x;
         this.y = y;
-        this.events.fire('update', { layer: 'cursor' });
+        this.events.fire('update', { group: 'cursor' });
         this.startMode(this.mode);
     },
     cellStateAt: function(x, y) {
