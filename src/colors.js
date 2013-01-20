@@ -7,9 +7,12 @@ var alphaGray = util.alphaGray;
 var hsl       = util.hsl;
 var hsla      = util.hsla;
 
-var yellow =  40;
-var cyan   = 180;
-var green  =  90;
+var yellow  =  40;
+var cyan    = 180;
+var blue    = 200;
+var purple  = 300;
+var green   =  80;
+var aqua    = 100;
 
 return {
     highlight:      hsla(cyan, 0.3, 0.50, 1.00),
@@ -18,21 +21,25 @@ return {
     shadeCell:      alphaGray(0, 0.10),
     shadeLess:      alphaGray(0, 0.05),
     shadeLine:      alphaGray(0, 0.20),
-    background:     hsl(yellow, 0.9, 0.93),
-    // filled:         rgb(140, 190, 100),
     filled:         hsl(green, 0.4, 0.6),
+    background:     hsl(yellow, 0.9, 0.97),
     marked:         hsl(yellow, 0.6, 0.60),
-    minorLines:     hsl(yellow, 0.8, 0.85),
+    minorLines:     hsl(yellow, 0.8, 0.90),
     majorLines:     hsl(yellow, 0.7, 0.70),
     outsideBorder:  hsl(yellow, 0.5, 0.65),
     // insetShadow:    alphaGray(0, 0.05),
     insetShadow:    alphaGray(0, 0.40),
-    hintsBG:        hsla(yellow, 0.6, 0.8, 0.55),
-    hintsFade:      hsla(yellow, 0.6, 0.8, 0.00),
+    outerShadow:    hsla(aqua, 0.6, 0.3, 0.20),
+    minimapBG:      hsl (aqua, 0.6, 0.9),
+    innerShadow:    alphaGray(0, 0.20),
+    hintsBG:        hsla(blue, 0.3, 0.7, 0.25),
+    hintsFade:      hsla(blue, 0.3, 0.7, 0.00),
     shadow:         alphaGray(0,   0.25),
     light:          alphaGray(255, 0.75),
     shadowX:        alphaGray(0,   0.00),
     cellShade:      rgba(100, 110, 120, 0.05),
-    fontNormal:     hsl(yellow, 0.3, 0.5),
+    fontNormal:     hsl(blue, 0.1, 0.4),
+    // fontNormal:     hsl(yellow, 0.5, 0.4),
+    // fontNormal:     alphaGray(0, 0.7),
 };
 })();

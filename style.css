@@ -48,7 +48,7 @@ html {
 #content {
     background-color: #f4f4f4;
     /* background-image: url(textures/debut_light.png);*/
-    background-color: hsl(40, 90%, 97%);
+    background-color: hsl(200, 90%, 99%);
     /* background-color: #fff;*/
     color: #333;
     position: relative;
@@ -153,24 +153,33 @@ body {
 
 .icon-button.large {
     font-size:   28px;
-    width:       66px;
+    width:       56px;
     height:      56px;
     line-height: 58px;
     padding: 0px;
     margin: 0px;
+    margin-bottom: 15px;
     vertical-align: center;
     text-align: center;
     /* display: inline-block;*/
     display: block;
     /* box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.25);*/
-    box-shadow: inset -1px -1px 1px rgba(0, 0, 0, 0.25);
-    background-color: rgba(190, 200, 210, 0.50);
+    box-shadow: 0px 0px 0px 3px rgba(0, 0, 0, 0.10);
+    /* background-color: rgba(190, 200, 210, 0.50);*/
+    background-color: hsl(300, 30%, 80%);
+    border: 1px solid rgba(0, 0, 0, 0.15);
     /* display: block;*/
     /* background-color: rgba(160, 170, 180, 0.50);*/
     /* background-color: rgba(190, 200, 210, 0.50);*/
     /* box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.30);*/
-    border-radius:  20%;
+    /* border-radius:  20%;*/
     cursor: pointer;
+}
+
+.icon-button.large:hover {
+    /* box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.75);*/
+    /* background-color: rgba(170, 180, 190, 0.50);*/
+    background-color: hsl(300, 40%, 75%);
 }
 
 .icon-button.large.right {
@@ -180,9 +189,9 @@ body {
     /* left: -1px;*/
 
     /* border-radius: 100%;*/
-    border-top-right-radius:   0px;
-    border-top-left-radius:    0px;
-    border-bottom-left-radius: 0px;
+    /* border-top-right-radius:   0px;*/
+    /* border-top-left-radius:    0px;*/
+    /* border-bottom-left-radius: 0px;*/
 
     /* border-left: 1px solid transparent;*/
 }
@@ -194,17 +203,16 @@ body {
     border-top-left-radius:     0px;
     border-bottom-left-radius:  0px;
     border-bottom-right-radius: 0px;
-    box-shadow: inset -1px -1px 1px rgba(0, 0, 0, 0.25);
-}
-
-.icon-button.large:hover {
-    /* box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.75);*/
-    background-color: rgba(170, 180, 190, 0.50);
 }
 
 .icon-button.large.selected {
     /* box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.75);*/
-    background-color: rgba(130, 140, 150, 0.75);
+    /* background-color: rgba(130, 140, 150, 0.75);*/
+    background-color: hsl(80, 50%, 50%);
+}
+
+.icon-button.large.selected:hover {
+    background-color: hsl(80, 50%, 60%);
 }
 
 .icon-button.large.selected .icon {
@@ -238,12 +246,16 @@ body {
 
     /* background-color: rgba(190, 200, 210, 0.50);*/
 
+    /* box-shadow:*/
+    /*     6px 0px 0px -3px rgba(0, 0, 0, 0.20),*/
+    /*     0px 6px 0px -3px rgba(0, 0, 0, 0.20);*/
+
     /* box-shadow: inset 0px 0px 3px rgba(0, 0, 0, 0.20);*/
     /* box-shadow: inset 1px -1px 1px rgba(0, 0, 0, 0.05);*/
     /* border-bottom-left-radius: 8px;*/
 
     /* box-shadow: inset -1px -1px 1px rgba(0, 0, 0, 0.05);*/
-    border-bottom-right-radius: 8px;
+    /* border-bottom-right-radius: 8px;*/
 
     /* height: 24px;*/
 
@@ -277,8 +289,8 @@ body {
 #controls {
     padding: 0px;
     /* background: rgba(190, 200, 210, 0.50);*/
-    top:  70px;
-    left: 0px;
+    top:  50px;
+    left: 12px;
     /* left: 100px;*/
     /* border-bottom-right-radius: 8px;*/
     /* border-bottom-left-radius:  8px;*/
@@ -320,10 +332,15 @@ body {
     font-size:   16px;
     line-height: 20px;
     text-decoration: none;
-    color: rgba(0, 0, 0, 0.50);
+    /* color: rgba(0, 0, 0, 0.50);*/
 
     padding-left:  4px;
     padding-right: 4px;
+}
+
+#toolbar .icon,
+#toolbar #timer {
+    color: hsla(200, 40%, 20%, 0.50);
 }
 
 #toolbar .icon:hover {

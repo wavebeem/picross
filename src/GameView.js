@@ -122,11 +122,12 @@ _.extend(GameView.prototype, {
         this.offsetContext(ctx, +1);
         ctx.translate(-CSP, -CSP);
 
-        ctx.fillStyle = colors.shadeCell;
+        ctx.fillStyle = colors.minimapBG;
         ctx.fillRect(0, 0, CS, CS);
 
-        ctx.fillStyle = colors.insetShadow;
+        ctx.fillStyle = colors.outerShadow;
         util.drawBorderOutsideRect(ctx, 0, 0, CS, CS, 3);
+        ctx.fillStyle = colors.innerShadow;
         util.drawBorderInsideRect (ctx, 0, 0, CS, CS, 1);
 
         ctx.fillStyle = 'black';
