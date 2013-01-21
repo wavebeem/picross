@@ -118,7 +118,26 @@ _.extend(GameController.prototype, {
         var cy = (y/G) | 0;
         cx = Math.min(cx, this.model.size - 1);
         cy = Math.min(cy, this.model.size - 1);
-        return {x: cx, y: cy};
+        var p = {x: cx, y: cy};
+        var p1 = this.p1;
+        var p2 = this.p2;
+        if (this.mouseDown) {
+            if (! p1) {
+                this.p1 = p;
+            }
+            else if (! p2 && (p.x !== p1.x || p.y !== p1.y)) {
+                this.p2 = p;
+            }
+            else if (p1 && p2) {
+                if (p1.x !== p2.x) {
+                    return {x: cx, y: p1.y}
+                }
+                else {
+                    return {x: p1.x, y: cy}
+                }
+            }
+        }
+        return p;
     },
     keydown: function(event) {
         var k = event.which;
@@ -160,6 +179,7 @@ _.extend(GameController.prototype, {
     },
     mousedown: function(event) {
         console.log('MOUSEDOWN');
+        this.mouseDown = true;
         var off = $(event.target).offset();
         var x = event.pageX - off.left;
         var y = event.pageY - off.top;
@@ -186,6 +206,9 @@ _.extend(GameController.prototype, {
     },
     mouseup: function(event) {
         console.log('MOUSEUP');
+        this.mouseDown = false;
+        this.p1 = undefined;
+        this.p2 = undefined;
         var button = event.which;
         var fun = this.buttonUpMap[button];
         if (fun) {
