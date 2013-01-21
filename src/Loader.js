@@ -10,17 +10,27 @@ _.extend(Loader.prototype, {
         this.load();
     },
     load: function() {
-        var save = this.get('puzzle_state');
-        if (save) {
+        var size = this.get('puzzle_size') | 0;
+        var save = this.get('puzzle_save');
+        var goal = this.get('puzzle_goal');
+        if (save && goal) {
+            this.model.size = size;
+            this.model.goal = goal;
             this.model.restoreFromSerializedPuzzleState(save);
         }
     },
     save: function() {
+        var size = this.model.size;
         var save = this.model.serializedPuzzleState();
-        this.set('puzzle_state', save);
+        var goal = this.model.goal;
+        this.set('puzzle_size', size);
+        this.set('puzzle_save', save);
+        this.set('puzzle_goal', goal);
     },
     erase: function() {
-        delete this.storage['puzzle_state'];
+        delete this.storage['puzzle_size'];
+        delete this.storage['puzzle_save'];
+        delete this.storage['puzzle_goal'];
     },
     get: function(key) {
         return this.storage[key];

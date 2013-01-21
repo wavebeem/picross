@@ -37,6 +37,9 @@ _.extend(GameModel.prototype, {
         this.hintsY = [];
         this.events = new Events();
 
+        this.goal = (new Array(S*S + 1)).join('.');
+        console.log(this.goal);
+
         _(S).times(function() {
             var row = [];
             _(S).times(function() {
@@ -88,6 +91,9 @@ _.extend(GameModel.prototype, {
         if (result !== state) {
             cell.state  = result;
             this.events.fire('update', { group: 'data' });
+            if (this.serializedPuzzleState() === this.goal) {
+                $('#copyright').text('You win!');
+            }
         }
     },
     moveTo: function(x, y) {

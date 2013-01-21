@@ -5,6 +5,28 @@ $(document).ready(function() {
     var timer      = new Timer();
     var loader     = new Loader({ model: model });
 
+    window.console =
+    window.console || { log: function(){} };
+
+    // window.localStorage.puzzle_goal = (''
+    model.goal = (''
+        + '...............\n'
+        + '...............\n'
+        + '...............\n'
+        + '...............\n'
+        + '...............\n'
+        + '...............\n'
+        + '...............\n'
+        + '...............\n'
+        + '...............\n'
+        + '...............\n'
+        + '...............\n'
+        + '...............\n'
+        + '...............\n'
+        + '#..............\n'
+        + '##.............\n'
+    );
+
     var useLoader = false;
     loader.load();
     $(window).unload(function() {
@@ -16,4 +38,6 @@ $(document).ready(function() {
 
     view.draw();
     timer.start();
+
+    window.$M = model;
 });
