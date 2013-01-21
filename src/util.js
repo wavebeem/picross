@@ -15,7 +15,13 @@ var percent = function(x) {
 };
 
 return {
-    now: function() { return window.performance.now() },
+    now: (function() {
+        if (typeof window.performance     === 'object'
+        &&  typeof window.performance.now === 'function') {
+            return function() { return performance.now() };
+        }
+        return function() { return +(new Date()) };
+    })(),
 
     clamp: function(x, a, b) {
         return min(max(x, a), b);
