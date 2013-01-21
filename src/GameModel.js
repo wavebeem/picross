@@ -171,7 +171,7 @@ _.extend(GameModel.prototype, {
                 };
             });
         });
-        this.events.fire('draw');
+        this.events.fire('update', { group: 'data' });
     },
     eachCell: function(fun, context) {
         if (! fun)
