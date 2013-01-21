@@ -248,7 +248,7 @@ _.extend(GameView.prototype, {
         ctx.translate(F, 0);
         for (i = 0; i < N; i++) {
             sel = (cx === i);
-            if (!(util.odd(i) || sel)) {
+            if (!sel) {
                 continue;
             }
             grad = ctx.createLinearGradient(0, 0, 0, 4*T);
@@ -263,7 +263,7 @@ _.extend(GameView.prototype, {
         ctx.translate(0, F);
         for (i = 0; i < N; i++) {
             sel = (cy === i);
-            if (!(util.odd(i) || sel)) {
+            if (!sel) {
                 continue;
             }
             grad = ctx.createLinearGradient(0, 0, 4*T, 0);
@@ -460,7 +460,7 @@ _.extend(GameView.prototype, {
         ctx.fillRect(X, 0, T,  CS);
         ctx.fillRect(0, Y, CS, T );
 
-        ctx.fillStyle = colors.crosshair;
+        ctx.fillStyle = colors.crosshairShadow;
         util.drawBorderInsideRect(ctx, X, 0, T,  CS, 1);
         util.drawBorderInsideRect(ctx, 0, Y, CS, T , 1);
 
