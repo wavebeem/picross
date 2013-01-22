@@ -4,6 +4,7 @@ $(document).ready(function() {
     var controller = new GameController({model: model, view: view});
     var timer      = new Timer();
     var loader     = new Loader({ model: model });
+    var toolbar    = new Toolbar({ model: model });
 
     window.console =
     window.console || { log: function(){} };

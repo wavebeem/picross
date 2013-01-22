@@ -15,30 +15,19 @@
     <script type='text/javascript' src='src/GameView.js'></script>
     <script type='text/javascript' src='src/GameController.js'></script>
     <script type='text/javascript' src='src/Timer.js'></script>
+    <script type='text/javascript' src='src/Toolbar.js'></script>
     <script type='text/javascript' src='src/Loader.js'></script>
     <script type='text/javascript' src='src/MinimapView.js'></script>
     <script type='text/javascript' src='src/main.js'></script>
 </head>
 <body>
 <div id='content'>
-    <div id='controls' class='container'><!--
-         --><div class='icon-button large selected left'><a href='#' class='icon icon-pencil'></a></div><!--
-         --><div class='icon-button large right'><a href='#' class='icon icon-close'></a></div><!--
- --></div>
     <div id='toolbar' class='container'><!--
      --><div id='timer'>0:00</div><!--
 
-     --><div class='separator'></div><!--
-
-     --><div class='icon-button small'><a href='#' class='icon icon-pause'></a></div><!--
-     --><div class='icon-button small'><a href='#' class='icon icon-undo-2'></a></div><!--
-     --><div class='icon-button small'><a href='#' class='icon icon-question'></a></div><!--
-
-     --><div class='separator'></div><!--
-
-     --><div class='icon-button small'><a href='#' class='icon icon-search'></a></div><!--
-     --><div class='icon-button small'><a href='#' class='icon icon-zoom-in'></a></div><!--
-     --><div class='icon-button small'><a href='#' class='icon icon-zoom-out'></a></div><!--
+     --><a href='#' id='pause-button' class='icon icon-pause'></a><!--
+     --><a href='#' id='undo-button'  class='icon icon-undo-2'></a><!--
+     --><a href='#' id='help-button'  class='icon icon-question'></a><!--
  --></div>
     <div id='game'></div>
 </div>
