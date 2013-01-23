@@ -230,7 +230,7 @@ _.extend(GameController.prototype, {
     },
     stopRepeating: function(k) {
         var T = this.timeouts;
-        var I = this.intervals
+        var I = this.intervals;
         var t = T[k];
         var i = I[k];
         if (t) clearTimeout(t);

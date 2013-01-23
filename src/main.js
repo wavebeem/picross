@@ -41,4 +41,5 @@ $(document).ready(function() {
     timer.start();
 
     window.$M = model;
+    window.$V = view;
 });
