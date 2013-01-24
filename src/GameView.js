@@ -244,7 +244,6 @@ _.extend(GameView.prototype, {
         var grad;
         var sel;
 
-
         ctx.translate(F, 0);
         for (i = 0; i < N; i++) {
             sel = (cx === i);
