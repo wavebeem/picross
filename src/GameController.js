@@ -39,31 +39,31 @@ var mungeKeymap = function(keymapName) {
 
 _.extend(GameController.prototype, {
     buttonDownMap: {
-        1: function() { this.model.pushUndoHistory(); this.model.startMode('fill') },
-        3: function() { this.model.pushUndoHistory(); this.model.startMode('mark') },
+        1: function() { this.startMode('fill') },
+        3: function() { this.startMode('mark') },
     },
     buttonUpMap: {
-        1: function() { this.model.startMode('none') },
-        3: function() { this.model.startMode('none') },
+        1: function() { this.startMode('none') },
+        3: function() { this.startMode('none') },
     },
     keyDownMap: {
         I: function() { this.view.resetTileSize() },
         O: function() { this.view.shrink() },
         P: function() { this.view.grow() },
 
-        UP:    function() { this.model.moveDirection('up') },
-        DOWN:  function() { this.model.moveDirection('down') },
-        LEFT:  function() { this.model.moveDirection('left') },
-        RIGHT: function() { this.model.moveDirection('right') },
+        UP:    function() { this.walkDirection('up') },
+        DOWN:  function() { this.walkDirection('down') },
+        LEFT:  function() { this.walkDirection('left') },
+        RIGHT: function() { this.walkDirection('right') },
 
-        Z:     function() { this.model.pushUndoHistory(); this.model.startMode('mark') },
-        SPACE: function() { this.model.pushUndoHistory(); this.model.startMode('fill') },
+        Z:     function() { this.startMode('mark') },
+        SPACE: function() { this.startMode('fill') },
 
         U:     function() { this.model.undo() },
     },
     keyUpMap: {
-        Z:     function() { this.model.startMode('none') },
-        SPACE: function() { this.model.startMode('none') },
+        Z:     function() { this.startMode('none') },
+        SPACE: function() { this.startMode('none') },
     },
     repeatInterval: 100,
     repeatDelay: 300,
@@ -99,12 +99,77 @@ _.extend(GameController.prototype, {
             bindHandler(self, $document, name);
         });
     },
+    startMode: function(mode) {
+        if (mode !== 'none') {
+            this.model.pushUndoHistory();
+            this.drawingLine = true;
+        }
+        else {
+            this.drawingLine = false;
+            this.lineOrientation = undefined;
+        }
+
+        this.model.startMode(mode);
+    },
+    walkTo: function(x, y) {
+        var self = this;
+        var mx = self.model.x;
+        var my = self.model.y;
+        var dx = x - mx;
+        var dy = y - my;
+        var nx = Math.abs(dx);
+        var ny = Math.abs(dy);
+        var sx = dx < 0 ? 'left' : 'right';
+        var sy = dy < 0 ? 'up'   : 'down';
+
+        _(nx).times(function() { self.model.moveDirection(sx); });
+        _(ny).times(function() { self.model.moveDirection(sy); });
+    },
+    walkDirection: function(dir) {
+        var x = this.model.x;
+        var y = this.model.y;
+
+        var offsets = {
+            'up':    [x + 0, y - 1],
+            'down':  [x + 0, y + 1],
+            'left':  [x - 1, y + 0],
+            'right': [x + 1, y + 0],
+        };
+
+        this.walkTo.apply(this, offsets[dir]);
+    },
     isArrowKey: function(k) {
         return (
                k === K.UP
             || k === K.DOWN
             || k === K.LEFT
             || k === K.RIGHT);
+    },
+    fitPointToCurrentLine: function(p) {
+        var p1 = this.p1;
+        var p2 = this.p2;
+        if (this.drawingLine) {
+            if (! p1) {
+                this.p1 = p;
+            }
+            else if (! p2 && (p.x !== p1.x || p.y !== p1.y)) {
+                if (p.x !== p1.x && p.y !== p1.y) {
+                    return undefined;
+                }
+
+                this.p2 = p;
+            }
+            else if (p1 && p2) {
+                if (p1.x !== p2.x) {
+                    return {x: p.x, y: p1.y}
+                }
+                else {
+                    return {x: p1.x, y: p.y}
+                }
+            }
+        }
+
+        return p;
     },
     positionForXY: function(x, y) {
         x -= this.view.offset;
@@ -121,22 +186,6 @@ _.extend(GameController.prototype, {
         var p = {x: cx, y: cy};
         var p1 = this.p1;
         var p2 = this.p2;
-        if (this.mouseDown) {
-            if (! p1) {
-                this.p1 = p;
-            }
-            else if (! p2 && (p.x !== p1.x || p.y !== p1.y)) {
-                this.p2 = p;
-            }
-            else if (p1 && p2) {
-                if (p1.x !== p2.x) {
-                    return {x: cx, y: p1.y}
-                }
-                else {
-                    return {x: p1.x, y: cy}
-                }
-            }
-        }
         return p;
     },
     keydown: function(event) {
@@ -175,7 +224,11 @@ _.extend(GameController.prototype, {
         var x = event.pageX - off.left;
         var y = event.pageY - off.top;
         var p = this.positionForXY(x, y);
-        this.model.moveTo(p.x, p.y);
+        // this.model.moveTo(p.x, p.y);
+        p = this.fitPointToCurrentLine(p);
+        if (p) {
+            this.walkTo(p.x, p.y);
+        }
     },
     mousedown: function(event) {
         console.log('MOUSEDOWN');
@@ -189,7 +242,11 @@ _.extend(GameController.prototype, {
         }
         // console.log('pressed button', button);
         var p = this.positionForXY(x, y);
-        this.model.moveTo(p.x, p.y);
+        // this.model.moveTo(p.x, p.y);
+        p = this.fitPointToCurrentLine(p);
+        if (p) {
+            this.walkTo(p.x, p.y);
+        }
         var fun = this.buttonDownMap[button];
         if (fun) {
             fun.call(this);
