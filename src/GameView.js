@@ -49,6 +49,11 @@ _.extend(GameView.prototype, {
         var self = this;
         _.extend(this, opts);
         this.container = $('#game');
+        this.gradients = {
+            light: {},
+            shade: {},
+            bg: {},
+        };
         this.makeLayers();
         this.setTileSize(this.defaultTileSize);
         this.model.events.register('update', function(data) {
@@ -112,7 +117,39 @@ _.extend(GameView.prototype, {
         this.subsectionCount = SC;
         this.fontSize = Math.round(0.55 * TS);
         $('#content').css('width', CS + 'px');
+        this.constructGradients();
         this.draw();
+    },
+    constructGradients: function() {
+        var F = this.offset;
+        var ctx = this.getContextByName('hintsBG');
+        var grad;
+
+        var bgGrad = [
+            [0.00, colors.hintsFade],
+            [0.50, colors.hintsBG  ],
+        ];
+
+        var lightGrad = [
+            [0.00, colors.lightFade],
+            [0.50, colors.lightBG  ],
+            [1.00, colors.lightFade],
+        ];
+
+        var shadeGrad = [
+            [0.00, colors.shadeFade],
+            [0.50, colors.shadeBG  ],
+            [1.00, colors.shadeFade],
+        ];
+
+        this.gradients.bg.vertical   = util.vertGradient (ctx, F, bgGrad);
+        this.gradients.bg.horizontal = util.horizGradient(ctx, F, bgGrad);
+
+        this.gradients.light.vertical   = util.vertGradient (ctx, F, lightGrad);
+        this.gradients.light.horizontal = util.horizGradient(ctx, F, lightGrad);
+
+        this.gradients.shade.vertical   = util.vertGradient (ctx, F, shadeGrad);
+        this.gradients.shade.horizontal = util.horizGradient(ctx, F, shadeGrad);
     },
     clearContext: function(ctx) {
         var CS = this.canvasSize;
@@ -247,30 +284,36 @@ _.extend(GameView.prototype, {
         ctx.translate(F, 0);
         for (i = 0; i < N; i++) {
             sel = (cx === i);
-            if (!sel) {
-                continue;
+            if (! sel) {
+                ctx.fillStyle = this.gradients.light.vertical;
+                ctx.fillRect(i * S, 0, 1, F);
+
+                ctx.fillStyle = this.gradients.shade.vertical;
+                ctx.fillRect(i * S + 1, 0, 1, F);
             }
-            grad = ctx.createLinearGradient(0, 0, 0, 4*T);
-            grad.addColorStop(0, colors['hints' + (sel ? 'Sel' : '') + 'Fade']);
-            grad.addColorStop(1, colors['hints' + (sel ? 'Sel' : '') + 'BG']);
-            ctx.fillStyle = grad;
-            ctx.fillRect(i * S, 0, T, F);
-            util.drawBorderInsideRect(ctx, i * S, 0, T, F, 1);
+            else {
+                ctx.fillStyle = this.gradients.bg.vertical;
+                ctx.fillRect(i * S, 0, T, F);
+                util.drawBorderInsideRect(ctx, i * S, 0, T, F, 1);
+            }
         }
         ctx.translate(-F, 0);
 
         ctx.translate(0, F);
         for (i = 0; i < N; i++) {
             sel = (cy === i);
-            if (!sel) {
-                continue;
+            if (! sel) {
+                ctx.fillStyle = this.gradients.light.horizontal;
+                ctx.fillRect(0, i * S, F, 1);
+
+                ctx.fillStyle = this.gradients.shade.horizontal;
+                ctx.fillRect(0, i * S + 1, F, 1);
             }
-            grad = ctx.createLinearGradient(0, 0, 4*T, 0);
-            grad.addColorStop(0, colors['hints' + (sel ? 'Sel' : '') + 'Fade']);
-            grad.addColorStop(1, colors['hints' + (sel ? 'Sel' : '') + 'BG']);
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, i * S, F, T);
-            util.drawBorderInsideRect(ctx, 0, i * S, F, T, 1);
+            else {
+                ctx.fillStyle = this.gradients.bg.horizontal;
+                ctx.fillRect(0, i * S, F, T);
+                util.drawBorderInsideRect(ctx, 0, i * S, F, T, 1);
+            }
         }
         ctx.translate(0, -F);
     },

@@ -14,6 +14,16 @@ var percent = function(x) {
     return (x * 100) + '%';
 };
 
+var gradientHelper = function(ctx, w, h, colorStops) {
+    var grad = ctx.createLinearGradient(0, 0, w, h);
+    _(colorStops).each(function(pair) {
+        var distance = pair[0];
+        var color    = pair[1];
+        grad.addColorStop(distance, color);
+    });
+    return grad;
+};
+
 return {
     now: (function() {
         if (typeof window.performance     === 'object'
@@ -22,6 +32,14 @@ return {
         }
         return function() { return +(new Date()) };
     })(),
+
+    horizGradient: function(ctx, size, colorStops) {
+        return gradientHelper(ctx, size, 0, colorStops);
+    },
+
+    vertGradient: function(ctx, size, colorStops) {
+        return gradientHelper(ctx, 0, size, colorStops);
+    },
 
     clamp: function(x, a, b) {
         return min(max(x, a), b);
