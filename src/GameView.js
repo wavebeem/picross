@@ -44,6 +44,8 @@ _.extend(GameView.prototype, {
     fontBold: true,
     fontName: 'Lucida Grande, Segoe UI, Verdana, sans-serif',
     shouldShadeSubsections: false,
+    shouldShadeAllCells: false,
+    shouldDrawCrosshair: false,
     shouldShadeX: false,
     init: function(opts) {
         var self = this;
@@ -245,7 +247,7 @@ _.extend(GameView.prototype, {
                 self.drawTextInsideRect(
                     ctx,
                     (F - T - T) - j * T,
-                    i * S - FS/2,
+                    i * S,
                     T,
                     '' + hy[i][j],
                     sel
@@ -257,8 +259,11 @@ _.extend(GameView.prototype, {
     drawTextInsideRect: function(ctx, x, y, s, text, stroke) {
         ctx.font         = (this.fontBold ? 'bold ' : '') + this.fontSize + 'px ' + this.fontName;
         ctx.textAlign    = 'center';
-        ctx.textBaseline = 'top';
+        ctx.textBaseline = 'middle';
 
+        var w= ctx.measureText(text).width;
+
+        // var X = x + s/2;
         var X = x + s/2;
         var Y = y + s/2;
 
@@ -281,17 +286,18 @@ _.extend(GameView.prototype, {
         var grad;
         var sel;
 
+        var o = 3;
         ctx.translate(F, 0);
         for (i = 0; i < N; i++) {
             sel = (cx === i);
-            if (! sel) {
+            if (! sel && i !== 0 && (i - 1) !== cx) {
                 ctx.fillStyle = this.gradients.light.vertical;
-                ctx.fillRect(i * S, 0, 1, F);
+                ctx.fillRect(i * S - o, 0, 1, F);
 
                 ctx.fillStyle = this.gradients.shade.vertical;
-                ctx.fillRect(i * S + 1, 0, 1, F);
+                ctx.fillRect(i * S - o + 1, 0, 1, F);
             }
-            else {
+            else if (sel) {
                 ctx.fillStyle = this.gradients.bg.vertical;
                 ctx.fillRect(i * S, 0, T, F);
                 util.drawBorderInsideRect(ctx, i * S, 0, T, F, 1);
@@ -302,14 +308,14 @@ _.extend(GameView.prototype, {
         ctx.translate(0, F);
         for (i = 0; i < N; i++) {
             sel = (cy === i);
-            if (! sel) {
+            if (! sel && i !== 0 && (i - 1) !== cy) {
                 ctx.fillStyle = this.gradients.light.horizontal;
-                ctx.fillRect(0, i * S, F, 1);
+                ctx.fillRect(0, i * S - o, F, 1);
 
                 ctx.fillStyle = this.gradients.shade.horizontal;
-                ctx.fillRect(0, i * S + 1, F, 1);
+                ctx.fillRect(0, i * S - o + 1, F, 1);
             }
-            else {
+            else if (sel) {
                 ctx.fillStyle = this.gradients.bg.horizontal;
                 ctx.fillRect(0, i * S, F, T);
                 util.drawBorderInsideRect(ctx, 0, i * S, F, T, 1);
@@ -413,7 +419,7 @@ _.extend(GameView.prototype, {
                 }
             }
 
-            if (state === 'filled') {
+            if (self.shouldShadeAllCells || state === 'filled') {
                 ctx.beginPath();
                 ctx.fillStyle = colors.shadeCell;
                 ctx.rect(X, Y, T, 1);
@@ -472,6 +478,8 @@ _.extend(GameView.prototype, {
         this.offsetContext(ctx, -1);
     },
     draw_crosshair: function() {
+        if (! this.shouldDrawCrosshair) return;
+
         var ctx = this.getContextByName('crosshair');
         this.clearContext(ctx);
         this.offsetContext(ctx, +1);

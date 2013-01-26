@@ -22,7 +22,8 @@
 
 html {
     background-image: url(bg/checks.png);
-    background-color: hsl(200, 20%, 80%);
+    background-image: url(bg/paper.png);
+    background-color: hsl(40, 30%, 60%);
     color: #333;
     font-family:
         'Lucida Grande',
