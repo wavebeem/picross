@@ -27,7 +27,8 @@ var groups = {
     hints:  ['hintsBG', 'hintsText'],
     data:   ['squares', 'minimap'  ],
     // cursor: ['cursor',  'crosshair'],
-    cursor: ['cursor',  'crosshair', 'hintsText', 'hintsBG'],
+    // cursor: ['cursor',  'crosshair', 'hintsText', 'hintsBG'],
+    cursor: ['cursor',  'crosshair', 'hintsBG'],
 };
 
 var numLayers = layers.length;
@@ -44,9 +45,10 @@ _.extend(GameView.prototype, {
     fontBold: true,
     fontName: 'Lucida Grande, Segoe UI, Verdana, sans-serif',
     shouldShadeSubsections: false,
+    shouldDrawCheckerboard: true,
     shouldShadeAllCells: false,
     shouldDrawCrosshair: false,
-    shouldShadeX: false,
+    shouldShadeX: true,
     init: function(opts) {
         var self = this;
         _.extend(this, opts);
@@ -54,7 +56,8 @@ _.extend(GameView.prototype, {
         this.gradients = {
             light: {},
             shade: {},
-            bg: {},
+            alt:   {},
+            bg:    {},
         };
         this.makeLayers();
         this.setTileSize(this.defaultTileSize);
@@ -129,8 +132,17 @@ _.extend(GameView.prototype, {
 
         var bgGrad = [
             [0.00, colors.hintsFade],
-            [0.50, colors.hintsBG  ],
+            [0.90, colors.hintsBG  ],
         ];
+
+        var altGrad = [
+            [0.00, colors.hintsAltFade],
+            [0.90, colors.hintsAltBG  ],
+
+            // [0.00, colors.hintsFade],
+            // [0.50, colors.hintsBG  ],
+        ];
+        window.AG=altGrad;
 
         var lightGrad = [
             [0.00, colors.lightFade],
@@ -146,6 +158,9 @@ _.extend(GameView.prototype, {
 
         this.gradients.bg.vertical   = util.vertGradient (ctx, F, bgGrad);
         this.gradients.bg.horizontal = util.horizGradient(ctx, F, bgGrad);
+
+        this.gradients.alt.vertical   = util.vertGradient (ctx, F, altGrad);
+        this.gradients.alt.horizontal = util.horizGradient(ctx, F, altGrad);
 
         this.gradients.light.vertical   = util.vertGradient (ctx, F, lightGrad);
         this.gradients.light.horizontal = util.horizGradient(ctx, F, lightGrad);
@@ -288,19 +303,18 @@ _.extend(GameView.prototype, {
 
         var o = 3;
         ctx.translate(F, 0);
+        var odd = util.odd;
         for (i = 0; i < N; i++) {
             sel = (cx === i);
-            if (! sel && i !== 0 && (i - 1) !== cx) {
-                ctx.fillStyle = this.gradients.light.vertical;
-                ctx.fillRect(i * S - o, 0, 1, F);
-
-                ctx.fillStyle = this.gradients.shade.vertical;
-                ctx.fillRect(i * S - o + 1, 0, 1, F);
+            if (! sel && odd(i)) {
+                ctx.fillStyle = this.gradients.alt.vertical;
+                ctx.fillRect(i * S, 0, T, F);
+                util.drawBorderInsideRect (ctx, i * S, 0, T, F, 1);
             }
             else if (sel) {
                 ctx.fillStyle = this.gradients.bg.vertical;
                 ctx.fillRect(i * S, 0, T, F);
-                util.drawBorderInsideRect(ctx, i * S, 0, T, F, 1);
+                util.drawBorderInsideRect (ctx, i * S, 0, T, F, 1);
             }
         }
         ctx.translate(-F, 0);
@@ -308,12 +322,10 @@ _.extend(GameView.prototype, {
         ctx.translate(0, F);
         for (i = 0; i < N; i++) {
             sel = (cy === i);
-            if (! sel && i !== 0 && (i - 1) !== cy) {
-                ctx.fillStyle = this.gradients.light.horizontal;
-                ctx.fillRect(0, i * S - o, F, 1);
-
-                ctx.fillStyle = this.gradients.shade.horizontal;
-                ctx.fillRect(0, i * S - o + 1, F, 1);
+            if (! sel && odd(i)) {
+                ctx.fillStyle = this.gradients.alt.horizontal;
+                ctx.fillRect(0, i * S, F, T);
+                util.drawBorderInsideRect(ctx, 0, i * S, F, T, 1);
             }
             else if (sel) {
                 ctx.fillStyle = this.gradients.bg.horizontal;
@@ -390,6 +402,9 @@ _.extend(GameView.prototype, {
         var S = T + G;
         var N = this.model.size;
 
+        var odd   = util.odd;
+        var floor = Math.floor;
+
         this.model.eachCell(function(x, y, cell) {
             var O;
 
@@ -398,16 +413,17 @@ _.extend(GameView.prototype, {
             var A = X + T - 1;
             var B = Y + T - 1;
 
-            var state = cell.state;
-
-            ctx.fillStyle = colors[state === 'filled'
+            var state = cell.state === 'filled'
                 ? 'filled'
-                : 'background'
-            ];
-            ctx.fillRect(X, Y, T, T);
+                : 'background';
 
-            var odd   = util.odd;
-            var floor = Math.floor;
+            ctx.fillStyle = colors[state];
+            if (self.shouldDrawCheckerboard) {
+                if (state === 'background' && odd(x + y)) {
+                    ctx.fillStyle = colors.checkerBG;
+                }
+            }
+            ctx.fillRect(X, Y, T, T);
 
             if (self.shouldShadeSubsections && state !== 'filled') {
                 var sx = floor(x/5);

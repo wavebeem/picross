@@ -21,9 +21,9 @@
 }
 
 html {
-    background-image: url(bg/checks.png);
-    background-image: url(bg/paper.png);
-    background-color: hsl(40, 30%, 60%);
+    background-color: hsl(40, 30%, 95%);
+    /* background-image: url(bg/checks.png);*/
+    background-image: url(textures/grid.png);
     color: #333;
     font-family:
         'Lucida Grande',
@@ -35,6 +35,7 @@ html {
 #content {
     background-color: #f4f4f4;
     background-color: hsl(200, 90%, 99%);
+    background-image: url(textures/debut_light.png);
     color: #333;
     position: relative;
     border-top-width:    0px;
@@ -103,6 +104,11 @@ body {
 
     padding-left:  10px;
     padding-right: 10px;
+}
+
+.wf-active #timer {
+    font-weight: normal;
+    font-family: 'Archivo Black', sans-serif;
 }
 
 #toolbar {

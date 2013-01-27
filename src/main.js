@@ -28,7 +28,7 @@ $(document).ready(function() {
         + '##.............\n'
     );
 
-    var useLoader = false;
+    var useLoader = true;
     loader.load();
     $(window).unload(function() {
         loader[useLoader
