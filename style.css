@@ -38,7 +38,7 @@ html {
     background-image: url(textures/debut_light.png);
     color: #333;
     position: relative;
-    border-top-width:    0px;
+    border-top-width: 0px;
     z-index: 1;
 }
 
@@ -81,7 +81,10 @@ body {
 #content {
     margin-left:  auto;
     margin-right: auto;
-    padding: 10px;
+    /* padding: 10px;*/
+    padding: 0px;
+    padding-bottom: 10px;
+    padding-right:  10px;
 
     border: 1px solid rgba(0, 0, 0, 0.35);
     border-top-width: 0px;
@@ -151,7 +154,7 @@ body {
 
 #toolbar .icon,
 #toolbar #timer {
-    color: hsla(200, 40%, 20%, 0.50);
+    color: hsla(0, 0%, 20%, 0.50);
 }
 
 #toolbar .icon:hover {

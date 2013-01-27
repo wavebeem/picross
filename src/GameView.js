@@ -49,6 +49,7 @@ _.extend(GameView.prototype, {
     shouldShadeAllCells: false,
     shouldDrawCrosshair: false,
     shouldShadeX: true,
+    fontBaselineOffset: -1,
     init: function(opts) {
         var self = this;
         _.extend(this, opts);
@@ -132,12 +133,12 @@ _.extend(GameView.prototype, {
 
         var bgGrad = [
             [0.00, colors.hintsFade],
-            [0.90, colors.hintsBG  ],
+            [0.99, colors.hintsBG  ],
         ];
 
         var altGrad = [
             [0.00, colors.hintsAltFade],
-            [0.90, colors.hintsAltBG  ],
+            [0.99, colors.hintsAltBG  ],
 
             // [0.00, colors.hintsFade],
             // [0.50, colors.hintsBG  ],
@@ -245,7 +246,7 @@ _.extend(GameView.prototype, {
                 self.drawTextInsideRect(
                     ctx,
                     i * S,
-                    (F - T - T) - j * T,
+                    (F - T - G) - j * T,
                     T,
                     '' + hx[i][j],
                     sel
@@ -261,8 +262,9 @@ _.extend(GameView.prototype, {
                 ctx.fillStyle = textColors[sel];
                 self.drawTextInsideRect(
                     ctx,
-                    (F - T - T) - j * T,
-                    i * S,
+                    (F - T - G) - j * T,
+                    // i * S,
+                    i * S + self.fontBaselineOffset,
                     T,
                     '' + hy[i][j],
                     sel
@@ -290,6 +292,8 @@ _.extend(GameView.prototype, {
         var T = this.tileSize;
         var F = this.offset;
         var S = T + G;
+        // Extra padding for hints BG
+        var Q = 2;
         var i;
 
         var ctx = this.getContextByName('hintsBG');
@@ -303,18 +307,20 @@ _.extend(GameView.prototype, {
 
         var o = 3;
         ctx.translate(F, 0);
-        var odd = util.odd;
+        var alt = util.even;
         for (i = 0; i < N; i++) {
             sel = (cx === i);
-            if (! sel && odd(i)) {
+            if (! sel && alt(i)) {
+                ctx.fillStyle = colors.hintsAltBG;
+                ctx.fillRect(i * S - Q, 0, T + 2*Q, F);
                 ctx.fillStyle = this.gradients.alt.vertical;
-                ctx.fillRect(i * S, 0, T, F);
-                util.drawBorderInsideRect (ctx, i * S, 0, T, F, 1);
+                util.drawBorderInsideRect (ctx, i * S - Q, 0, T + 2*Q, F, 1);
             }
             else if (sel) {
+                ctx.fillStyle = colors.hintsBG;
+                ctx.fillRect(i * S - Q, 0, T + 2*Q, F);
                 ctx.fillStyle = this.gradients.bg.vertical;
-                ctx.fillRect(i * S, 0, T, F);
-                util.drawBorderInsideRect (ctx, i * S, 0, T, F, 1);
+                util.drawBorderInsideRect (ctx, i * S - Q, 0, T + 2*Q, F, 1);
             }
         }
         ctx.translate(-F, 0);
@@ -322,15 +328,17 @@ _.extend(GameView.prototype, {
         ctx.translate(0, F);
         for (i = 0; i < N; i++) {
             sel = (cy === i);
-            if (! sel && odd(i)) {
+            if (! sel && alt(i)) {
+                ctx.fillStyle = colors.hintsAltBG;
+                ctx.fillRect(0, i * S - Q, F, T + 2*Q);
                 ctx.fillStyle = this.gradients.alt.horizontal;
-                ctx.fillRect(0, i * S, F, T);
-                util.drawBorderInsideRect(ctx, 0, i * S, F, T, 1);
+                util.drawBorderInsideRect(ctx, 0, i * S - Q, F, T + 2*Q, 1);
             }
             else if (sel) {
+                ctx.fillStyle = colors.hintsBG;
+                ctx.fillRect(0, i * S - Q, F, T + 2*Q);
                 ctx.fillStyle = this.gradients.bg.horizontal;
-                ctx.fillRect(0, i * S, F, T);
-                util.drawBorderInsideRect(ctx, 0, i * S, F, T, 1);
+                util.drawBorderInsideRect(ctx, 0, i * S - Q, F, T + 2*Q, 1);
             }
         }
         ctx.translate(0, -F);
