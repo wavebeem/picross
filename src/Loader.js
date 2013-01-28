@@ -7,7 +7,6 @@ _.extend(Loader.prototype, {
     init: function(opts) {
         _.extend(this, opts);
         this.storage = window.localStorage;
-        this.load();
     },
     load: function() {
         var size = this.get('puzzle_size') | 0;

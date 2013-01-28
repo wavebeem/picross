@@ -8,7 +8,7 @@ var hsl       = util.hsl;
 var hsla      = util.hsla;
 
 var yellow  =  40;
-var cyan    = 160;
+var cyan    = 180;
 var blue    = 200;
 var purple  = 250;
 var green   =  70;
@@ -20,13 +20,13 @@ var aqua    = 100;
 
 var hue1 = yellow;
 var hue2 = blue;
-var hue3 = cyan;
+var hue3 = blue;
 
 return {
     highlight:      hsla(hue3, 0.5, 0.60, 0.75),
     cursorShadow:   hsla(hue3, 0.4, 0.40, 0.75),
-    crosshair:      hsla(hue1, 0.4, 0.40, 0.10),
-    crosshairShadow:hsla(hue1, 0.4, 0.40, 0.40),
+    crosshair:      hsla(hue3, 0.4, 0.40, 0.20),
+    crosshairShadow:hsla(hue3, 0.4, 0.40, 0.40),
     // cursorShadow:   alphaGray(0, 0.20),
     shadeCell:      alphaGray(0, 0.10),
     shadeLess:      alphaGray(0, 0.05),
@@ -39,8 +39,8 @@ return {
     majorLines:     hsl(hue1, 0.7, 0.60),
     // outsideBorder:  hsl(hue2, 0.4, 0.75),
     outsideBorder:  hsl(hue2, 0.0, 0.70),
-    insetShadow:    alphaGray(0, 0.00),
-    // insetShadow:    alphaGray(0, 0.40),
+    // insetShadow:    alphaGray(0, 0.00),
+    insetShadow:    alphaGray(0, 0.40),
     outerShadow:    hsla(0,    0.0, 0.3, 0.10),
     minimapBG:      hsl (0,    0.0, 0.93),
     innerShadow:    alphaGray(0, 0.20),

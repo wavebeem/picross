@@ -39,11 +39,17 @@ _(layers).each(function(name, i) {
 });
 
 _.extend(GameView.prototype, {
+    whichAltBG: 'odd',
+    // whichAltBG: 'even',
+    alwaysDrawHintsBorders: true,
+    paddingHintsBG: 1,
     incrementSize: 5,
     defaultTileSize: 25,
     borderSize: 3,
     fontBold: true,
-    fontName: 'Lucida Grande, Segoe UI, Verdana, sans-serif',
+    // fontName: 'Lucida Grande, Segoe UI, Verdana, sans-serif',
+    fontName: 'Candal, Georgia, serif',
+    // fontName: 'Nimbus Sans L, sans-serif',
     shouldShadeSubsections: false,
     shouldDrawCheckerboard: true,
     shouldShadeAllCells: false,
@@ -143,7 +149,6 @@ _.extend(GameView.prototype, {
             // [0.00, colors.hintsFade],
             // [0.50, colors.hintsBG  ],
         ];
-        window.AG=altGrad;
 
         var lightGrad = [
             [0.00, colors.lightFade],
@@ -183,6 +188,7 @@ _.extend(GameView.prototype, {
     draw_minimap: function() {
         var self = this;
         var N  = self.model.size;
+        if (N < 10) return;
         var S  = sizeMapping[N];
         var P  = 30;
         var CS = S * N;
@@ -292,8 +298,8 @@ _.extend(GameView.prototype, {
         var T = this.tileSize;
         var F = this.offset;
         var S = T + G;
-        // Extra padding for hints BG
-        var Q = 2;
+        var Q = this.paddingHintsBG;
+        var edgeWidth = 1.0;
         var i;
 
         var ctx = this.getContextByName('hintsBG');
@@ -307,20 +313,22 @@ _.extend(GameView.prototype, {
 
         var o = 3;
         ctx.translate(F, 0);
-        var alt = util.even;
+        var alt = util[this.whichAltBG];
         for (i = 0; i < N; i++) {
             sel = (cx === i);
             if (! sel && alt(i)) {
                 ctx.fillStyle = colors.hintsAltBG;
                 ctx.fillRect(i * S - Q, 0, T + 2*Q, F);
                 ctx.fillStyle = this.gradients.alt.vertical;
-                util.drawBorderInsideRect (ctx, i * S - Q, 0, T + 2*Q, F, 1);
+                util.drawBorderInsideRect (ctx, i * S - Q, 0, T + 2*Q, F, edgeWidth);
             }
             else if (sel) {
                 ctx.fillStyle = colors.hintsBG;
                 ctx.fillRect(i * S - Q, 0, T + 2*Q, F);
-                ctx.fillStyle = this.gradients.bg.vertical;
-                util.drawBorderInsideRect (ctx, i * S - Q, 0, T + 2*Q, F, 1);
+                if (this.alwaysDrawHintsBorders || alt(i)) {
+                    ctx.fillStyle = this.gradients.bg.vertical;
+                    util.drawBorderInsideRect (ctx, i * S - Q, 0, T + 2*Q, F, edgeWidth);
+                }
             }
         }
         ctx.translate(-F, 0);
@@ -332,13 +340,15 @@ _.extend(GameView.prototype, {
                 ctx.fillStyle = colors.hintsAltBG;
                 ctx.fillRect(0, i * S - Q, F, T + 2*Q);
                 ctx.fillStyle = this.gradients.alt.horizontal;
-                util.drawBorderInsideRect(ctx, 0, i * S - Q, F, T + 2*Q, 1);
+                util.drawBorderInsideRect(ctx, 0, i * S - Q, F, T + 2*Q, edgeWidth);
             }
             else if (sel) {
                 ctx.fillStyle = colors.hintsBG;
                 ctx.fillRect(0, i * S - Q, F, T + 2*Q);
-                ctx.fillStyle = this.gradients.bg.horizontal;
-                util.drawBorderInsideRect(ctx, 0, i * S - Q, F, T + 2*Q, 1);
+                if (this.alwaysDrawHintsBorders || alt(i)) {
+                    ctx.fillStyle = this.gradients.bg.horizontal;
+                    util.drawBorderInsideRect(ctx, 0, i * S - Q, F, T + 2*Q, edgeWidth);
+                }
             }
         }
         ctx.translate(0, -F);
