@@ -1,3 +1,4 @@
+(function() {
 var startGame = function(opts) {
     opts = opts || {};
     var model      = new GameModel();
@@ -50,4 +51,7 @@ var startGame = function(opts) {
     window.$M = model;
     window.$V = view;
 };
-// $(document).read(startGame);
+var docReady = $.Deferred();
+$(document).ready(docReady.resolve);
+$.when(fontsLoaded, docReady).then(startGame);
+})();
