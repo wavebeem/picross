@@ -31,7 +31,7 @@ var startGame = function(opts) {
         + '##.............\n'
     );
 
-    var useLoader = false;
+    var useLoader = true;
     if (useLoader) {
         loader.load();
     }

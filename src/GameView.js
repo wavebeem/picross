@@ -26,7 +26,6 @@ var layers = [
 var groups = {
     hints:  ['hintsBG', 'hintsText'],
     data:   ['squares', 'minimap'  ],
-    // cursor: ['cursor',  'crosshair'],
     // cursor: ['cursor',  'crosshair', 'hintsText', 'hintsBG'],
     cursor: ['cursor',  'crosshair', 'hintsBG'],
 };
@@ -47,9 +46,7 @@ _.extend(GameView.prototype, {
     defaultTileSize: 25,
     borderSize: 3,
     fontBold: true,
-    // fontName: 'Lucida Grande, Segoe UI, Verdana, sans-serif',
     fontName: 'Candal, Georgia, serif',
-    // fontName: 'Nimbus Sans L, sans-serif',
     shouldShadeSubsections: false,
     shouldDrawCheckerboard: true,
     shouldShadeAllCells: false,
@@ -91,7 +88,7 @@ _.extend(GameView.prototype, {
         _(numLayers).times(function(i) {
             var canvas = $('<canvas>')
                 .css('zIndex', 100 + i)
-                .addClass('layer-' + i);
+                .addClass('layer layer-' + i);
             self.canvases[i] = canvas;
             self.contexts[i] = canvas[0].getContext('2d');
             self.container.append(canvas);
@@ -106,7 +103,7 @@ _.extend(GameView.prototype, {
     growBy: function(k) { this.setTileSize(this.tileSize + k*this.incrementSize) },
     resetTileSize: function() { this.setTileSize(this.defaultTileSize) },
     setTileSize: function(x) {
-        this.tileSize = util.clamp(x, 15, 60);
+        this.tileSize = util.clamp(x, 20, 60);
         var TS = this.tileSize;
         var BS = this.borderSize;
         var MS = this.model.size;
