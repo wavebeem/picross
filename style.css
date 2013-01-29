@@ -116,7 +116,7 @@ canvas {
     /* top: -2px;*/
 
     border-top: 1px solid rgba(0, 0, 0, 0.10);
-    box-shadow: 0px -1px 0px rgba(255, 255, 255, 0.75);
+    box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.75);
 
     padding-top: 5px;
     margin-top:  5px;

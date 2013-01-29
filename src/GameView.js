@@ -76,7 +76,11 @@ _.extend(GameView.prototype, {
         _(layers).each(self.drawLayer, self);
     },
     drawLayer: function(layer) {
+        var ctx = this.getContextByName(layer);
+        ctx.save();
+        this.scale(ctx);
         this['draw_' + layer]();
+        ctx.restore();
     },
     drawGroup: function(group) {
         _(groups[group]).each(this.drawLayer, this);
@@ -110,13 +114,21 @@ _.extend(GameView.prototype, {
         var HS = this.model.hintsSize;
         var SC = MS/5;
         var CS = (TS + BS) * (MS + HS);
+        var PS = window.devicePixelRatio;
+        if (PS && PS !== 1) {
+            console.log('Scaling ' + PS + 'x');
+        }
+        else {
+            PS = 2;
+        }
+        this.pixelRatio = PS;
         var offset = (TS + BS) * HS;
         this.offset = offset;
         this.canvasSize = CS;
         _(this.canvases).each(function(canvas) {
             canvas.prop({
-                width:  CS,
-                height: CS,
+                width:  CS * PS,
+                height: CS * PS,
             });
         });
         this.container.css({
@@ -125,7 +137,12 @@ _.extend(GameView.prototype, {
         });
         this.subsectionCount = SC;
         this.fontSize = Math.round(0.55 * TS);
-        $('#content').css('width', CS + 'px');
+        var dimensions = {
+            width:  CS + 'px',
+            height: CS + 'px',
+        };
+        $('#content').css(dimensions);
+        $('.layer'  ).css(dimensions);
         this.constructGradients();
         this.draw();
     },
@@ -181,6 +198,12 @@ _.extend(GameView.prototype, {
     offsetContext: function(ctx, factor) {
         var F = factor * this.offset;
         ctx.translate(F, F);
+    },
+    scale: function(ctx) {
+        var PS = this.pixelRatio;
+        if (PS !== 1) {
+            ctx.scale(PS, PS);
+        }
     },
     draw_minimap: function() {
         var self = this;
@@ -281,7 +304,7 @@ _.extend(GameView.prototype, {
         ctx.textAlign    = 'center';
         ctx.textBaseline = 'middle';
 
-        var w= ctx.measureText(text).width;
+        var w = ctx.measureText(text).width;
 
         // var X = x + s/2;
         var X = x + s/2;
@@ -353,6 +376,7 @@ _.extend(GameView.prototype, {
     draw_background: function() {
         var ctx = this.getContextByName('background');
         this.clearContext(ctx);
+        // this.scale(ctx);
         this.offsetContext(ctx, +1);
 
         var TS = this.tileSize;

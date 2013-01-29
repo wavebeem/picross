@@ -1,3 +1,5 @@
+window.console =
+window.console || { log: function(){} };
 (function() {
 var def = $.Deferred();
 window.fontsLoaded = def.promise();

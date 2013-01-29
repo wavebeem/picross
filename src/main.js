@@ -10,9 +10,6 @@ var startGame = function(opts) {
 
     _(view).extend(opts.view);
 
-    window.console =
-    window.console || { log: function(){} };
-
     // window.localStorage.puzzle_goal = (''
     model.goal = (''
         + '...............\n'
