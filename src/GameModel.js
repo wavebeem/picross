@@ -19,7 +19,7 @@ var charToCellState = _.invert(cellStateToChar);
 
 _.extend(GameModel.prototype, {
     eraser: false,
-    mode: 'none',
+    mode: 'empty',
     stroking: false,
     size: 15,
     x: 0,
@@ -36,6 +36,14 @@ _.extend(GameModel.prototype, {
         this.hintsX = [];
         this.hintsY = [];
         this.events = new Events();
+        this.events.register('update', function(info) {
+            if (info.group !== 'data')
+                return;
+
+            if (self.serializedPuzzleState(true) === self.goal) {
+                $('#copyright').text('You win!');
+            }
+        });
 
         this.goal = (new Array(S*S + 1)).join('.');
         console.log(this.goal);
@@ -68,32 +76,25 @@ _.extend(GameModel.prototype, {
         var P = this.puzzle;
         var cell   = P[y][x];
         var state  = cell.state;
-        var flow   = {
-            fill: {
-                filled: 'filled',
-                marked: 'marked',
-                empty:  'filled',
-            },
-            mark: {
-                filled: 'filled',
-                marked: 'marked',
-                empty:  'marked',
-            },
-            none: {
-                filled: 'filled',
-                marked: 'marked',
-                empty:  'empty',
-            }
-        };
-        var result  = flow[mode][state];
-        this.mode   = mode;
+        var result;
+        console.log('state ', state);
+        console.log('mode  ', mode);
+        if (mode === state) {
+            result = 'empty';
+            this.mode = 'empty';
+        }
+        else if (state === 'empty') {
+            result = mode;
+            this.mode = mode;
+        }
+        else {
+            result = state;
+            this.mode = mode;
+        }
 
         if (result !== state) {
-            cell.state  = result;
+            cell.state = result;
             this.events.fire('update', { group: 'data' });
-            if (this.serializedPuzzleState(true) === this.goal) {
-                $('#copyright').text('You win!');
-            }
         }
     },
     moveTo: function(x, y) {
@@ -111,7 +112,8 @@ _.extend(GameModel.prototype, {
         if (y === Y && x === X)
             return;
 
-        var state = P[y][x].state;
+        var cell  = P[y][x];
+        var state = cell.state;
         var mode  = this.mode;
 
         this.lastPosition = {x: X, y: Y};
@@ -119,7 +121,11 @@ _.extend(GameModel.prototype, {
         this.x = x;
         this.y = y;
         this.events.fire('update', { group: 'cursor' });
-        this.startMode(this.mode);
+        if (state === 'empty' && mode !== 'empty' && state !== mode) {
+            cell.state = mode;
+            this.events.fire('update', { group: 'data' });
+        }
+        // this.startMode(this.mode);
     },
     cellStateAt: function(x, y) {
         return this.puzzle[y][x].state;

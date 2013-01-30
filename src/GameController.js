@@ -39,12 +39,12 @@ var mungeKeymap = function(keymapName) {
 
 _.extend(GameController.prototype, {
     buttonDownMap: {
-        1: function() { this.startMode('fill') },
-        3: function() { this.startMode('mark') },
+        1: function() { this.startMode('filled') },
+        3: function() { this.startMode('marked') },
     },
     buttonUpMap: {
-        1: function() { this.startMode('none') },
-        3: function() { this.startMode('none') },
+        1: function() { this.startMode('empty') },
+        3: function() { this.startMode('empty') },
     },
     keyDownMap: {
         I: function() { this.view.resetTileSize() },
@@ -56,14 +56,14 @@ _.extend(GameController.prototype, {
         LEFT:  function() { this.walkDirection('left') },
         RIGHT: function() { this.walkDirection('right') },
 
-        Z:     function() { this.startMode('mark') },
-        SPACE: function() { this.startMode('fill') },
+        Z:     function() { this.startMode('marked') },
+        SPACE: function() { this.startMode('filled') },
 
         U:     function() { this.model.undo() },
     },
     keyUpMap: {
-        Z:     function() { this.startMode('none') },
-        SPACE: function() { this.startMode('none') },
+        Z:     function() { this.startMode('empty') },
+        SPACE: function() { this.startMode('empty') },
     },
     repeatInterval: 100,
     repeatDelay: 300,
@@ -102,11 +102,6 @@ _.extend(GameController.prototype, {
     startMode: function(mode) {
         if (mode !== 'none') {
             this.model.pushUndoHistory();
-            this.drawingLine = true;
-        }
-        else {
-            this.drawingLine = false;
-            this.lineOrientation = undefined;
         }
 
         this.model.startMode(mode);
@@ -148,7 +143,7 @@ _.extend(GameController.prototype, {
     fitPointToCurrentLine: function(p) {
         var p1 = this.p1;
         var p2 = this.p2;
-        if (this.drawingLine) {
+        if (this.model.mode !== 'empty') {
             if (! p1) {
                 this.p1 = p;
             }
