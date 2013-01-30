@@ -91,7 +91,7 @@ _.extend(GameModel.prototype, {
         if (result !== state) {
             cell.state  = result;
             this.events.fire('update', { group: 'data' });
-            if (this.serializedPuzzleState() === this.goal) {
+            if (this.serializedPuzzleState(true) === this.goal) {
                 $('#copyright').text('You win!');
             }
         }
@@ -131,15 +131,23 @@ _.extend(GameModel.prototype, {
         }
         this.moveTo(this.x + d.dx, this.y + d.dy);
     },
-    serializedPuzzleState: function() {
+    serializedPuzzleState: function(excludeMarks) {
         var self = this;
         var txt = '';
-        var S = self.size - 1;
-        self.eachCell(function(x, y, cell) {
-            txt += cellStateToChar[cell.state];
-            if (y === S) {
-                txt += '\n';
-            }
+        var S = self.size;
+        _(S).times(function(y) {
+            _(S).times(function(x) {
+                var cell   = self.puzzle[y][x];
+                var state  = cell.state
+                var marked = state === 'marked';
+                var charzy = cellStateToChar[
+                    (excludeMarks && marked)
+                    ? 'empty'
+                    : state
+                ];
+                txt += charzy;
+            });
+            txt += '\n';
         });
         return txt;
     },
@@ -167,7 +175,7 @@ _.extend(GameModel.prototype, {
         _(S).times(function(y) {
             _(S).times(function(x) {
                 self.puzzle[y][x] = {
-                    state: charToCellState[lines[x][y]]
+                    state: charToCellState[lines[y][x]]
                 };
             });
         });

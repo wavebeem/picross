@@ -12,6 +12,9 @@ var startGame = function(opts) {
 
     // window.localStorage.puzzle_goal = (''
     model.goal = (''
+        + '###.........###\n'
+        + '#.............#\n'
+        + '#.............#\n'
         + '...............\n'
         + '...............\n'
         + '...............\n'
@@ -24,17 +27,14 @@ var startGame = function(opts) {
         + '...............\n'
         + '...............\n'
         + '...............\n'
-        + '...............\n'
-        + '#..............\n'
-        + '##.............\n'
     );
 
-    var useLoader = true;
-    if (useLoader) {
+    Loader.shouldSave = true;
+    if (Loader.shouldSave) {
         loader.load();
     }
     $(window).unload(function() {
-        loader[useLoader
+        loader[Loader.shouldSave
             ? 'save'
             : 'erase'
         ]();
