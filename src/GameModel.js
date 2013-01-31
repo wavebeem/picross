@@ -21,7 +21,7 @@ _.extend(GameModel.prototype, {
     eraser: false,
     mode: 'empty',
     stroking: false,
-    size: 15,
+    size: 10,
     x: 0,
     y: 0,
     init: function(opts) {
@@ -38,27 +38,57 @@ _.extend(GameModel.prototype, {
 
             if (self.serializedPuzzleState(true) === self.goal) {
                 $('#copyright').text('You win!');
+                setTimeout(function() {
+                    alert('You win!');
+                }, 0);
             }
         });
 
         this.initPuzzle();
         this.initHints();
     },
+    getRow: function(M, x) {
+        var self = this;
+        var S = this.size;
+        var row = [];
+        _(S).times(function(y) {
+            row.push(M[y][x]);
+        });
+        return row;
+    },
+    getCol: function(M, y) {
+        var self = this;
+        var S = this.size;
+        var col = [];
+        _(S).times(function(x) {
+            col.push(M[y][x]);
+        });
+        return col;
+    },
+    getRuns: function(str) {
+        var runs = _(str.split(/[^#]/)).foldl(function(arr, run) {
+            var n = run.length;
+            if (n > 0) {
+                arr.push(n);
+            }
+            return arr;
+        }, []);
+        runs.reverse();
+        return runs.length === 0
+            ? [0]
+            : runs;
+    },
     initHints: function() {
         var self = this;
         var S = this.size;
         this.hintsX = [];
         this.hintsY = [];
-        _(S).times(function() {
-            var xs = [];
-            var ys = [];
-            _(_.random(1, self.hintsSize)).times(function() {
-                xs.push(_.random(1, self.hintsSize));
-                ys.push(_.random(1, self.hintsSize));
-
-                // xs.push(_.random(1, 25));
-                // ys.push(_.random(1, 25));
-            });
+        var goalMatrix = this.goal.split('\n');
+        _(S).times(function(i) {
+            var row = self.getRow(goalMatrix, i).join('');
+            var col = self.getCol(goalMatrix, i).join('');
+            var xs  = self.getRuns(row);
+            var ys  = self.getRuns(col);
             self.hintsX.push(xs);
             self.hintsY.push(ys);
         });
