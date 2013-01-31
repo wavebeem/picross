@@ -100,7 +100,7 @@ _.extend(GameController.prototype, {
         });
     },
     startMode: function(mode) {
-        if (mode !== 'none') {
+        if (mode !== 'empty') {
             this.model.pushUndoHistory();
         }
 

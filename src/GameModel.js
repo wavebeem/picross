@@ -77,8 +77,6 @@ _.extend(GameModel.prototype, {
         var cell   = P[y][x];
         var state  = cell.state;
         var result;
-        console.log('state ', state);
-        console.log('mode  ', mode);
         if (mode === state) {
             result = 'empty';
             this.mode = 'empty';
