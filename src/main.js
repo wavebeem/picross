@@ -1,17 +1,6 @@
 (function() {
 var startGame = function(opts) {
-    opts = opts || {};
-    var model      = new GameModel();
-    var view       = new GameView({model: model});
-    var controller = new GameController({model: model, view: view});
-    var timer      = new Timer();
-    var loader     = new Loader({ model: model });
-    var toolbar    = new Toolbar({ model: model });
-
-    _(view).extend(opts.view);
-
-    // window.localStorage.puzzle_goal = (''
-    model.goal = (''
+    var goal = (''
         + '###.........###\n'
         + '#.............#\n'
         + '#.............#\n'
@@ -28,6 +17,15 @@ var startGame = function(opts) {
         + '...............\n'
         + '...............\n'
     );
+    opts = opts || {};
+    var model      = new GameModel({ goal: goal });
+    var view       = new GameView({model: model});
+    var controller = new GameController({model: model, view: view});
+    var timer      = new Timer();
+    var loader     = new Loader({ model: model });
+    var toolbar    = new Toolbar({ model: model });
+
+    _(view).extend(opts.view);
 
     Loader.shouldSave = true;
     if (Loader.shouldSave) {

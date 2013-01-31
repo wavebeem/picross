@@ -1,6 +1,6 @@
 var GameModel = (function() {
-function GameModel() {
-    this.init();
+function GameModel(opts) {
+    this.init(opts);
 }
 
 var directionDeltas = {
@@ -24,17 +24,13 @@ _.extend(GameModel.prototype, {
     size: 15,
     x: 0,
     y: 0,
-    init: function() {
+    init: function(opts) {
         var self = this;
         var S = this.size;
-        var puzzle = [];
-
-        this.puzzle = puzzle;
+        _(this).extend(opts);
         this.undoHistory = [];
         this.lastPosition = {x: 0, y: 0};
         this.hintsSize = Math.floor(S/2) + 1;
-        this.hintsX = [];
-        this.hintsY = [];
         this.events = new Events();
         this.events.register('update', function(info) {
             if (info.group !== 'data')
@@ -45,17 +41,14 @@ _.extend(GameModel.prototype, {
             }
         });
 
-        this.goal = (new Array(S*S + 1)).join('.');
-        console.log(this.goal);
-
-        _(S).times(function() {
-            var row = [];
-            _(S).times(function() {
-                row.push({ state: 'empty' });
-            });
-            puzzle.push(row);
-        });
-
+        this.initPuzzle();
+        this.initHints();
+    },
+    initHints: function() {
+        var self = this;
+        var S = this.size;
+        this.hintsX = [];
+        this.hintsY = [];
         _(S).times(function() {
             var xs = [];
             var ys = [];
@@ -68,6 +61,18 @@ _.extend(GameModel.prototype, {
             });
             self.hintsX.push(xs);
             self.hintsY.push(ys);
+        });
+    },
+    initPuzzle: function() {
+        this.puzzle = [];
+        var S = this.size;
+        var puzzle = this.puzzle;
+        _(S).times(function() {
+            var row = [];
+            _(S).times(function() {
+                row.push({ state: 'empty' });
+            });
+            puzzle.push(row);
         });
     },
     startMode: function(mode) {
