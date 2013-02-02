@@ -9,7 +9,7 @@ _.extend(Loader.prototype, {
         this.storage = window.localStorage;
     },
     load: function() {
-        var size = this.get('puzzle_size') | 0;
+        var size = this.get('puzzle_size');
         var save = this.get('puzzle_save');
         var goal = this.get('puzzle_goal');
         if (save && goal) {
@@ -32,10 +32,12 @@ _.extend(Loader.prototype, {
         delete this.storage['puzzle_goal'];
     },
     get: function(key) {
-        return this.storage[key];
+        var val = this.storage[key];
+        return val && JSON.parse(val);
     },
     set: function(key, val) {
-        return this.storage[key] = val;
+        this.storage[key] = JSON.stringify(val);
+        return this;
     },
 });
 
