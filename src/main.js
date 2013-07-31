@@ -30,8 +30,8 @@ var startGame = function(opts) {
     );
     opts = opts || {};
     var model      = new GameModel({ goal: goal });
-    var view       = new GameView({model: model});
-    var controller = new GameController({model: model, view: view});
+    var view       = new GameView({ model: model });
+    var controller = new GameController({ model: model, view: view });
     var timer      = new Timer();
     var loader     = new Loader({ model: model });
     var toolbar    = new Toolbar({ model: model });
@@ -43,10 +43,11 @@ var startGame = function(opts) {
         loader.load();
     }
     $(window).unload(function() {
-        loader[Loader.shouldSave
+        var method = Loader.shouldSave
             ? 'save'
-            : 'erase'
-        ]();
+            : 'erase';
+
+        loader[method]();
     });
 
     $('#content').show();
