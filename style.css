@@ -22,8 +22,9 @@
 
 html {
     background-color: hsl(40, 30%, 95%);
+    /* background-color: hsl(40, 30%, 95%);*/
     /* background-image: url(bg/checks.png);*/
-    background-image: url(textures/grid.png);
+    /* background-image: url(textures/grid.png);*/
     color: #333;
     font-family:
         'Lucida Grande',
@@ -33,9 +34,9 @@ html {
 }
 
 #content {
-    background-color: #f4f4f4;
-    background-color: hsl(200, 90%, 99%);
-    background-image: url(textures/debut_light.png);
+    /* background-color: #f4f4f4;*/
+    /* background-color: hsl(200, 90%, 99%);*/
+    /* background-image: url(textures/debut_light.png);*/
     color: #333;
     position: relative;
     border-top-width: 0px;
@@ -49,8 +50,10 @@ body {
 }
 
 body {
-    padding-left:  30px;
-    padding-right: 30px;
+    padding-left:   30px;
+    padding-right:  30px;
+    padding-top:    20px;
+    padding-bottom: 20px;
 }
 
 html,
@@ -81,14 +84,6 @@ body {
 #content {
     margin-left:  auto;
     margin-right: auto;
-    /* padding: 10px;*/
-    padding: 0px;
-    padding-bottom: 10px;
-    padding-right:  10px;
-
-    border: 1px solid rgba(0, 0, 0, 0.35);
-    border-top-width: 0px;
-    box-shadow: 0px 0px 0px 3px rgba(0, 0, 0, 0.10);
 
     display: none;
 }
@@ -106,8 +101,8 @@ canvas {
 }
 
 #timer {
-    text-align: center;
-    /* text-align: left;*/
+    /* text-align: center;*/
+    text-align: left;
 
     /* display: inline-block;*/
     display: block;
@@ -115,11 +110,13 @@ canvas {
     position: relative;
     /* top: -2px;*/
 
-    border-top: 1px solid rgba(0, 0, 0, 0.10);
-    box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.75);
+    /* border-top: 1px solid rgba(0, 0, 0, 0.10);*/
+    /* box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.75);*/
 
-    padding-top: 5px;
-    margin-top:  5px;
+    padding-top: 10px;
+    margin-top:  10px;
+
+    padding-left: 10px;
 
     font-weight: bold;
     color: rgba(0, 0, 0, 0.50);
@@ -129,6 +126,12 @@ canvas {
 
     /* padding-left:  10px;*/
     /* padding-right: 10px;*/
+}
+
+#minimap {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
 }
 
 .wf-active #timer {
@@ -144,6 +147,12 @@ canvas {
     padding-right: 8px;
 
     margin: 6px;
+
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: 200px;
 
     /* background: rgba(255, 255, 255, 0.10);*/
     /* border: 1px solid rgba(0, 0, 0, 0.10);*/
@@ -183,6 +192,7 @@ canvas {
 #toolbar .icon,
 #toolbar #timer {
     color: hsla(0, 0%, 20%, 0.50);
+    font-size: 32px;
 }
 
 #toolbar .icon:hover {

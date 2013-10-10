@@ -193,6 +193,15 @@ _.extend(GameModel.prototype, {
     undo: function() {
         this.popUndoHistory();
     },
+    pause: function() {
+        this.timer.pause();
+    },
+    start: function() {
+        this.timer.start();
+    },
+    playPause: function() {
+        this.timer[this.timer.paused ? 'start' : 'pause']();
+    },
     pushUndoHistory: function() {
         // console.log('PUSHING UNDO HISTORY');
         var state = this.serializedPuzzleState();

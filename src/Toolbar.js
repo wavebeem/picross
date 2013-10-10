@@ -8,6 +8,7 @@ _.extend(Toolbar.prototype, {
         _.extend(this, opts);
         var m = this.model;
         $('#undo-button').on('click', function() { m.undo() });
+        $('#pause-button').on('click', function() { m.playPause() });
     },
 });
 

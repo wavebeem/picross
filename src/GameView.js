@@ -37,18 +37,21 @@ _(layers).each(function(name, i) {
     nameToLayerNum[name] = i;
 });
 
+var LS = localStorage;
+
 _.extend(GameView.prototype, {
-    whichAltBG: 'odd',
-    // whichAltBG: 'even',
+    // whichAltBG: 'odd',
+    whichAltBG: 'even',
     alwaysDrawHintsBorders: true,
-    paddingHintsBG: 1,
+    paddingHintsBG: 2,
     incrementSize: 5,
-    defaultTileSize: 25,
+    defaultTileSize: +LS.tile_size || 45,
+    // defaultTileSize: 45,
     borderSize: 3,
     fontBold: true,
     fontName: 'Candal, Georgia, serif',
     shouldShadeSubsections: false,
-    shouldDrawCheckerboard: true,
+    shouldDrawCheckerboard: false,
     shouldShadeAllCells: false,
     shouldDrawCrosshair: false,
     shouldShadeX: true,
@@ -108,6 +111,7 @@ _.extend(GameView.prototype, {
     resetTileSize: function() { this.setTileSize(this.defaultTileSize) },
     setTileSize: function(x) {
         this.tileSize = util.clamp(x, 20, 60);
+        LS.tile_size = this.tileSize;
         var TS = this.tileSize;
         var BS = this.borderSize;
         var MS = this.model.size;
@@ -158,7 +162,7 @@ _.extend(GameView.prototype, {
 
         var altGrad = [
             [0.00, colors.hintsAltFade],
-            [0.99, colors.hintsAltBG  ],
+            [0.90, colors.hintsAltBG  ],
 
             // [0.00, colors.hintsFade],
             // [0.50, colors.hintsBG  ],

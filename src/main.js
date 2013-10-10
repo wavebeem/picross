@@ -29,10 +29,10 @@ var startGame = function(opts) {
         + '##.#####.#\n'
     );
     opts = opts || {};
-    var model      = new GameModel({ goal: goal });
+    var timer      = new Timer();
+    var model      = new GameModel({ goal: goal, timer: timer });
     var view       = new GameView({ model: model });
     var controller = new GameController({ model: model, view: view });
-    var timer      = new Timer();
     var loader     = new Loader({ model: model });
     var toolbar    = new Toolbar({ model: model });
 
