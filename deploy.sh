@@ -13,4 +13,4 @@ files=(
 rm -rf dist
 mkdir dist
 cp -r "${files[@]}" dist/
-s3cmd sync -P dist/ s3://mockbrian-picross/
+s3cmd sync -P --no-progress dist/ s3://mockbrian.com/picross/
